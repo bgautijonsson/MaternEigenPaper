@@ -1,5 +1,5 @@
 ---
-title: "A Fast Algorithm for Computing Multivariate Normal Densities using Matérn-like Precision Structures with Unit Marginal Variances"
+title: "A Fast Algorithm for Computing Multivariate Normal Densities using Matérn-like Precision Matrices with Unit Marginal Variances"
 author: 
   name: Brynjólfur Gauti Guðrúnar Jónsson
   affiliation: University of Iceland
