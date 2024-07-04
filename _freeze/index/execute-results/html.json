@@ -1,0 +1,15 @@
+{
+  "hash": "5775ed0a8e03773c73de8108b23c5aad",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"A Fast Algorithm for Computing Multivariate Normal Densities using Matérn-like Precision Structures with Unit Marginal Variances\"\nformat: html\nauthor: \n  name: Brynjólfur Gauti Guðrúnar Jónsson\n  affiliation: University of Iceland\n  email: brynjolfur@hi.is\n  url: bggj.is\nbibliography: references.bib\nnumber-sections: false\ncode-block-border-left: true\n---\n\n\n\n# Introduction\n\n### Eigendecomposition of Kronecker Sums\n\nLet $A \\in \\mathbb{R}^{n \\times n}$ have eigenvalues $\\lambda_i$, $i \\in \\{1, \\ldots, n\\}$, and let $B \\in \\mathbb{R}^{m \\times m}$ have eigenvalues $\\mu_j$, $j \\in \\{1, \\ldots, m\\}$. Then the Kronecker sum $A \\oplus B = (I_m \\otimes A) + (B \\otimes I_n)$ has eigenvalues $\\lambda_i + \\mu_j$, $i \\in \\{1, \\ldots, n\\}, j \\in \\{1, \\ldots, m\\}$.\n\nMoreover, if $x_1, \\ldots, x_p$ are linearly independent right eigenvectors of $A$ corresponding to $\\lambda_1, \\ldots, \\lambda_p$ ($p \\leq n$), and $z_1, \\ldots, z_q$ are linearly independent right eigenvectors of $B$ corresponding to $\\mu_1, \\ldots, \\mu_q$ ($q \\leq m$), then $z_j \\otimes x_i \\in \\mathbb{R}^{mn}$ are linearly independent right eigenvectors of $A \\oplus B$ corresponding to $\\lambda_i + \\mu_j$, $i \\in \\{1, \\ldots, p\\}, j \\in \\{1, \\ldots, q\\}$.\n\n\n# Methods\n\n## Precision Matrix Construction\n\nWe begin by constructing a one-dimensional autoregressive (AR) precision matrix, which serves as the building block for the higher-dimensional Matérn precision matrix.\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n// Function to create a 1-dimensional AR(1) precision matrix\n// [[Rcpp::export]]\nEigen::SparseMatrix<double> make_AR_prec_matrix(int dim, double rho) {\n    double scaling = 1.0 / (1.0 - rho * rho);\n    double off_diags = -rho * scaling;\n    double diag = (1.0 + rho * rho) * scaling;\n\n    Eigen::SparseMatrix<double> Q(dim, dim);\n    Q.reserve(Eigen::VectorXi::Constant(dim, 3)); \n\n    for (int i = 0; i < dim; ++i) {\n        Q.insert(i, i) = (i == 0 || i == dim - 1) ? scaling : diag;\n        if (i > 0) Q.insert(i, i-1) = off_diags;\n        if (i < dim - 1) Q.insert(i, i+1) = off_diags;\n    }\n\n    Q.makeCompressed();\n    return Q;\n}\n```\n:::",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
