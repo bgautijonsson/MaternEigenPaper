@@ -1,0 +1,1009 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving
+and Interchange DTD v1.2 20190208//EN" "JATS-archivearticle1.dtd">
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.2" article-type="other">
+  <front>
+    <article-meta>
+      <title-group>
+        <article-title>A Fast Algorithm for Computing Multivariate Normal
+Densities using Matérn-like Precision Matrices with Unit Marginal
+Variances</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <name>
+            <surname>Jónsson</surname>
+            <given-names>Brynjólfur Gauti Guðrúnar</given-names>
+          </name>
+          <string-name>Brynjólfur Gauti Guðrúnar Jónsson</string-name>
+          <email>brynjolfur@hi.is</email>
+          <xref ref-type="aff" rid="aff-1">a</xref>
+        </contrib>
+      </contrib-group>
+      <aff id="aff-1">
+        <institution-wrap>
+          <institution>University of Iceland</institution>
+        </institution-wrap>
+      </aff>
+      <history/>
+    </article-meta>
+  </front>
+  <body>
+    <sec id="introduction">
+      <title>Introduction</title>
+      <p>Let <inline-formula><alternatives><tex-math><![CDATA[\mathbf{X} = (X_1, X_2, \ldots, X_n)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>𝐗</mml:mi><mml:mo>=</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>X</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:msub><mml:mi>X</mml:mi><mml:mn>2</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>X</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>
+  be a multivariate random vector with marginal distribution functions
+  <inline-formula><alternatives><tex-math><![CDATA[F_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>F</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+  for <inline-formula><alternatives><tex-math><![CDATA[i = 1, 2, \ldots, n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>i</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mn>2</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>.
+  The joint distribution function of <inline-formula><alternatives><tex-math><![CDATA[\mathbf{X}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐗</mml:mi></mml:math></alternatives></inline-formula>
+  can be written as:</p>
+      <p>
+        <disp-formula>
+          <alternatives>
+            <tex-math><![CDATA[
+  F_{\mathbf{X}}(\mathbf{x}) = C(F_1(x_1), F_2(x_2), \ldots, F_n(x_n)),
+  ]]></tex-math>
+            <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+              <mml:mrow>
+                <mml:msub>
+                  <mml:mi>F</mml:mi>
+                  <mml:mi>𝐗</mml:mi>
+                </mml:msub>
+                <mml:mrow>
+                  <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                  <mml:mi>𝐱</mml:mi>
+                  <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                </mml:mrow>
+                <mml:mo>=</mml:mo>
+                <mml:mi>C</mml:mi>
+                <mml:mrow>
+                  <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                  <mml:msub>
+                    <mml:mi>F</mml:mi>
+                    <mml:mn>1</mml:mn>
+                  </mml:msub>
+                  <mml:mrow>
+                    <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                    <mml:msub>
+                      <mml:mi>x</mml:mi>
+                      <mml:mn>1</mml:mn>
+                    </mml:msub>
+                    <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                  </mml:mrow>
+                  <mml:mo>,</mml:mo>
+                  <mml:msub>
+                    <mml:mi>F</mml:mi>
+                    <mml:mn>2</mml:mn>
+                  </mml:msub>
+                  <mml:mrow>
+                    <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                    <mml:msub>
+                      <mml:mi>x</mml:mi>
+                      <mml:mn>2</mml:mn>
+                    </mml:msub>
+                    <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                  </mml:mrow>
+                  <mml:mo>,</mml:mo>
+                  <mml:mi>…</mml:mi>
+                  <mml:mo>,</mml:mo>
+                  <mml:msub>
+                    <mml:mi>F</mml:mi>
+                    <mml:mi>n</mml:mi>
+                  </mml:msub>
+                  <mml:mrow>
+                    <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                    <mml:msub>
+                      <mml:mi>x</mml:mi>
+                      <mml:mi>n</mml:mi>
+                    </mml:msub>
+                    <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                  </mml:mrow>
+                  <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                </mml:mrow>
+                <mml:mo>,</mml:mo>
+              </mml:mrow>
+            </mml:math>
+          </alternatives>
+        </disp-formula>
+      </p>
+      <p>where <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>
+  is the Gaussian copula defined by the GMRF precision matrix
+  <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>.</p>
+      <p>The Gaussian copula <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>
+  is given by:</p>
+      <p>
+        <disp-formula>
+          <alternatives>
+            <tex-math><![CDATA[
+  C(u_1, u_2, \ldots, u_n) = \Phi_Q(\Phi^{-1}(u_1), \Phi^{-1}(u_2), \ldots, \Phi^{-1}(u_n)),
+  ]]></tex-math>
+            <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+              <mml:mrow>
+                <mml:mi>C</mml:mi>
+                <mml:mrow>
+                  <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                  <mml:msub>
+                    <mml:mi>u</mml:mi>
+                    <mml:mn>1</mml:mn>
+                  </mml:msub>
+                  <mml:mo>,</mml:mo>
+                  <mml:msub>
+                    <mml:mi>u</mml:mi>
+                    <mml:mn>2</mml:mn>
+                  </mml:msub>
+                  <mml:mo>,</mml:mo>
+                  <mml:mi>…</mml:mi>
+                  <mml:mo>,</mml:mo>
+                  <mml:msub>
+                    <mml:mi>u</mml:mi>
+                    <mml:mi>n</mml:mi>
+                  </mml:msub>
+                  <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                </mml:mrow>
+                <mml:mo>=</mml:mo>
+                <mml:msub>
+                  <mml:mi>Φ</mml:mi>
+                  <mml:mi>Q</mml:mi>
+                </mml:msub>
+                <mml:mrow>
+                  <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                  <mml:msup>
+                    <mml:mi>Φ</mml:mi>
+                    <mml:mrow>
+                      <mml:mi>−</mml:mi>
+                      <mml:mn>1</mml:mn>
+                    </mml:mrow>
+                  </mml:msup>
+                  <mml:mrow>
+                    <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                    <mml:msub>
+                      <mml:mi>u</mml:mi>
+                      <mml:mn>1</mml:mn>
+                    </mml:msub>
+                    <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                  </mml:mrow>
+                  <mml:mo>,</mml:mo>
+                  <mml:msup>
+                    <mml:mi>Φ</mml:mi>
+                    <mml:mrow>
+                      <mml:mi>−</mml:mi>
+                      <mml:mn>1</mml:mn>
+                    </mml:mrow>
+                  </mml:msup>
+                  <mml:mrow>
+                    <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                    <mml:msub>
+                      <mml:mi>u</mml:mi>
+                      <mml:mn>2</mml:mn>
+                    </mml:msub>
+                    <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                  </mml:mrow>
+                  <mml:mo>,</mml:mo>
+                  <mml:mi>…</mml:mi>
+                  <mml:mo>,</mml:mo>
+                  <mml:msup>
+                    <mml:mi>Φ</mml:mi>
+                    <mml:mrow>
+                      <mml:mi>−</mml:mi>
+                      <mml:mn>1</mml:mn>
+                    </mml:mrow>
+                  </mml:msup>
+                  <mml:mrow>
+                    <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                    <mml:msub>
+                      <mml:mi>u</mml:mi>
+                      <mml:mi>n</mml:mi>
+                    </mml:msub>
+                    <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                  </mml:mrow>
+                  <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                </mml:mrow>
+                <mml:mo>,</mml:mo>
+              </mml:mrow>
+            </mml:math>
+          </alternatives>
+        </disp-formula>
+      </p>
+      <p>where <inline-formula><alternatives><tex-math><![CDATA[\Phi_Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Φ</mml:mi><mml:mi>Q</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+  is the joint cumulative distribution function of a multivariate normal
+  distribution with mean vector <inline-formula><alternatives><tex-math><![CDATA[\mathbf{0}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mn>𝟎</mml:mn></mml:math></alternatives></inline-formula>
+  and precision matrix <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>,
+  and <inline-formula><alternatives><tex-math><![CDATA[\Phi^{-1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:math></alternatives></inline-formula>
+  is the inverse of the standard normal cumulative distribution
+  function.</p>
+      <p>It is imperative that the precision matrix
+  <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+  governing the GMRF Copula, <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>,
+  has marginal variance equal to 1 so that is it on the same scale as
+  the transformed data, <inline-formula><alternatives><tex-math><![CDATA[\Phi^{-1}(u_i)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>u</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>.
+  This can be troublesome because GMRFs are defined in terms of their
+  precision matrices, <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>,
+  which more often than not have marginal variances that are different
+  from 1.</p>
+      <p>This paper presents an fast and efficient algorithm for creating a
+  Matérn-like precision matrix, Q, with unit marginal variance, and
+  computing the multivariate Gaussian copula density of
+  <inline-formula><alternatives><tex-math><![CDATA[Z = \Phi^{-1}(u)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>Z</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>u</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>
+  where <inline-formula><alternatives><tex-math><![CDATA[u \sim \mathrm{Uniform}(0, 1)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>u</mml:mi><mml:mo>∼</mml:mo><mml:mrow><mml:mi mathvariant="normal">U</mml:mi><mml:mi mathvariant="normal">n</mml:mi><mml:mi mathvariant="normal">i</mml:mi><mml:mi mathvariant="normal">f</mml:mi><mml:mi mathvariant="normal">o</mml:mi><mml:mi mathvariant="normal">r</mml:mi><mml:mi mathvariant="normal">m</mml:mi></mml:mrow><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mn>1</mml:mn><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>.</p>
+      <p>The matrix, Q, is defined as</p>
+      <p>
+        <disp-formula>
+          <alternatives>
+            <tex-math><![CDATA[
+  Q = Q_1 \otimes I + I \otimes Q_1,
+  ]]></tex-math>
+            <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+              <mml:mrow>
+                <mml:mi>Q</mml:mi>
+                <mml:mo>=</mml:mo>
+                <mml:msub>
+                  <mml:mi>Q</mml:mi>
+                  <mml:mn>1</mml:mn>
+                </mml:msub>
+                <mml:mo>⊗</mml:mo>
+                <mml:mi>I</mml:mi>
+                <mml:mo>+</mml:mo>
+                <mml:mi>I</mml:mi>
+                <mml:mo>⊗</mml:mo>
+                <mml:msub>
+                  <mml:mi>Q</mml:mi>
+                  <mml:mn>1</mml:mn>
+                </mml:msub>
+                <mml:mo>,</mml:mo>
+              </mml:mrow>
+            </mml:math>
+          </alternatives>
+        </disp-formula>
+      </p>
+      <p>where <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+  is the precision matrix of a standardized one-dimensional AR(1)
+  process and <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
+  is the kronecker product.</p>
+      <p>The method leverages the special structure of
+  <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+  and the use of a kronecker sum in the definitionto avoid explicit
+  formation and inversion of the larger matrix, Q, making it
+  particularly suitable for high-dimensional spatial data.</p>
+    </sec>
+    <sec id="methods">
+      <title>Methods</title>
+      <sec id="theory">
+        <title>Theory</title>
+      </sec>
+      <sec id="one-dimensional-ar1-matrix">
+        <title>One-Dimensional AR(1) Matrix</title>
+        <p>The core of our approach is based on the eigendecomposition of an
+    AR(1) precision matrix, which forms the building block of our
+    Matérn-like precision structure. For a one-dimensional AR(1) process
+    with parameter <inline-formula><alternatives><tex-math><![CDATA[\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ρ</mml:mi></mml:math></alternatives></inline-formula>,
+    the precision matrix <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+    has a tridiagonal structure:</p>
+        <p>
+          <disp-formula>
+            <alternatives>
+              <tex-math><![CDATA[
+    Q = \frac{1}{1 - \rho^2} \begin{bmatrix}
+    1 & -\rho & 0 & \cdots & 0 & 0 \\
+    -\rho & 1+\rho^2 & -\rho & \cdots & 0 & 0 \\
+    0 & -\rho & 1+\rho^2 & \cdots & 0 & 0 \\
+    \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+    0 & 0 & 0 & \cdots & 1+\rho^2 & -\rho \\
+    0 & 0 & 0 & \cdots & -\rho & 1 \\
+    \end{bmatrix}
+    ]]></tex-math>
+              <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                <mml:mrow>
+                  <mml:mi>Q</mml:mi>
+                  <mml:mo>=</mml:mo>
+                  <mml:mfrac>
+                    <mml:mn>1</mml:mn>
+                    <mml:mrow>
+                      <mml:mn>1</mml:mn>
+                      <mml:mo>−</mml:mo>
+                      <mml:msup>
+                        <mml:mi>ρ</mml:mi>
+                        <mml:mn>2</mml:mn>
+                      </mml:msup>
+                    </mml:mrow>
+                  </mml:mfrac>
+                  <mml:mrow>
+                    <mml:mo stretchy="true" form="prefix">[</mml:mo>
+                    <mml:mtable>
+                      <mml:mtr>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>1</mml:mn>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>−</mml:mi>
+                          <mml:mi>ρ</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>0</mml:mn>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>⋯</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>0</mml:mn>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>0</mml:mn>
+                        </mml:mtd>
+                      </mml:mtr>
+                      <mml:mtr>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>−</mml:mi>
+                          <mml:mi>ρ</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>1</mml:mn>
+                          <mml:mo>+</mml:mo>
+                          <mml:msup>
+                            <mml:mi>ρ</mml:mi>
+                            <mml:mn>2</mml:mn>
+                          </mml:msup>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>−</mml:mi>
+                          <mml:mi>ρ</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>⋯</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>0</mml:mn>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>0</mml:mn>
+                        </mml:mtd>
+                      </mml:mtr>
+                      <mml:mtr>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>0</mml:mn>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>−</mml:mi>
+                          <mml:mi>ρ</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>1</mml:mn>
+                          <mml:mo>+</mml:mo>
+                          <mml:msup>
+                            <mml:mi>ρ</mml:mi>
+                            <mml:mn>2</mml:mn>
+                          </mml:msup>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>⋯</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>0</mml:mn>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>0</mml:mn>
+                        </mml:mtd>
+                      </mml:mtr>
+                      <mml:mtr>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>⋮</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>⋮</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>⋮</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mo>⋱</mml:mo>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>⋮</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>⋮</mml:mi>
+                        </mml:mtd>
+                      </mml:mtr>
+                      <mml:mtr>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>0</mml:mn>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>0</mml:mn>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>0</mml:mn>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>⋯</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>1</mml:mn>
+                          <mml:mo>+</mml:mo>
+                          <mml:msup>
+                            <mml:mi>ρ</mml:mi>
+                            <mml:mn>2</mml:mn>
+                          </mml:msup>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>−</mml:mi>
+                          <mml:mi>ρ</mml:mi>
+                        </mml:mtd>
+                      </mml:mtr>
+                      <mml:mtr>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>0</mml:mn>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>0</mml:mn>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>0</mml:mn>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>⋯</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mi>−</mml:mi>
+                          <mml:mi>ρ</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="center" style="text-align: center">
+                          <mml:mn>1</mml:mn>
+                        </mml:mtd>
+                      </mml:mtr>
+                      <mml:mtr>
+                        <mml:mtd columnalign="center" style="text-align: center"/>
+                      </mml:mtr>
+                    </mml:mtable>
+                    <mml:mo stretchy="true" form="postfix">]</mml:mo>
+                  </mml:mrow>
+                </mml:mrow>
+              </mml:math>
+            </alternatives>
+          </disp-formula>
+        </p>
+      </sec>
+      <sec id="matérn-like-precision-matrix">
+        <title>Matérn-like Precision Matrix</title>
+        <p>For two-dimensional spatial fields, we construct a Matérn-like
+    precision matrix <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+    using Kronecker products:</p>
+        <p>
+          <disp-formula>
+            <alternatives>
+              <tex-math><![CDATA[
+    Q = Q_1 \otimes I + I \otimes Q_1
+    ]]></tex-math>
+              <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                <mml:mrow>
+                  <mml:mi>Q</mml:mi>
+                  <mml:mo>=</mml:mo>
+                  <mml:msub>
+                    <mml:mi>Q</mml:mi>
+                    <mml:mn>1</mml:mn>
+                  </mml:msub>
+                  <mml:mo>⊗</mml:mo>
+                  <mml:mi>I</mml:mi>
+                  <mml:mo>+</mml:mo>
+                  <mml:mi>I</mml:mi>
+                  <mml:mo>⊗</mml:mo>
+                  <mml:msub>
+                    <mml:mi>Q</mml:mi>
+                    <mml:mn>1</mml:mn>
+                  </mml:msub>
+                </mml:mrow>
+              </mml:math>
+            </alternatives>
+          </disp-formula>
+        </p>
+        <p>where <inline-formula><alternatives><tex-math><![CDATA[I]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>I</mml:mi></mml:math></alternatives></inline-formula>
+    is the identity matrix and <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
+    denotes the Kronecker product The eigenvalues
+    <inline-formula><alternatives><tex-math><![CDATA[(\lambda_k)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>λ</mml:mi><mml:mi>k</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:math></alternatives></inline-formula>
+    and eigenvectors <inline-formula><alternatives><tex-math><![CDATA[(v_k)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>v</mml:mi><mml:mi>k</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:math></alternatives></inline-formula>
+    of <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+    can be calculated numerically and used to evaluate the multivariate
+    Gaussian density, letting us skip out on forming
+    <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+    entirely. This is due to the following theorem:</p>
+      </sec>
+      <sec id="eigendecomposition-of-kronecker-sums">
+        <title>Eigendecomposition of Kronecker Sums</title>
+        <sec id="theorem">
+          <title>Theorem</title>
+          <p>Let <inline-formula><alternatives><tex-math><![CDATA[A \in \mathbb{R}^{n \times n}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>A</mml:mi><mml:mo>∈</mml:mo><mml:msup><mml:mi>ℝ</mml:mi><mml:mrow><mml:mi>n</mml:mi><mml:mo>×</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:msup></mml:mrow></mml:math></alternatives></inline-formula>
+      have eigenvalues <inline-formula><alternatives><tex-math><![CDATA[\lambda_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>λ</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>,
+      <inline-formula><alternatives><tex-math><![CDATA[i \in \{1, \ldots, n\}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>i</mml:mi><mml:mo>∈</mml:mo><mml:mo stretchy="false" form="prefix">{</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:mi>n</mml:mi><mml:mo stretchy="false" form="postfix">}</mml:mo></mml:mrow></mml:math></alternatives></inline-formula>,
+      and let <inline-formula><alternatives><tex-math><![CDATA[B \in \mathbb{R}^{m \times m}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>B</mml:mi><mml:mo>∈</mml:mo><mml:msup><mml:mi>ℝ</mml:mi><mml:mrow><mml:mi>m</mml:mi><mml:mo>×</mml:mo><mml:mi>m</mml:mi></mml:mrow></mml:msup></mml:mrow></mml:math></alternatives></inline-formula>
+      have eigenvalues <inline-formula><alternatives><tex-math><![CDATA[\mu_j]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>μ</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>,
+      <inline-formula><alternatives><tex-math><![CDATA[j \in \{1, \ldots, m\}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>j</mml:mi><mml:mo>∈</mml:mo><mml:mo stretchy="false" form="prefix">{</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:mi>m</mml:mi><mml:mo stretchy="false" form="postfix">}</mml:mo></mml:mrow></mml:math></alternatives></inline-formula>.
+      Then the Kronecker sum <inline-formula><alternatives><tex-math><![CDATA[A \oplus B = (I_m \otimes A) + (B \otimes I_n)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>A</mml:mi><mml:mo>⊕</mml:mo><mml:mi>B</mml:mi><mml:mo>=</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>I</mml:mi><mml:mi>m</mml:mi></mml:msub><mml:mo>⊗</mml:mo><mml:mi>A</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>B</mml:mi><mml:mo>⊗</mml:mo><mml:msub><mml:mi>I</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>
+      has eigenvalues <inline-formula><alternatives><tex-math><![CDATA[\lambda_i + \mu_j]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>λ</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mi>μ</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>,
+      <inline-formula><alternatives><tex-math><![CDATA[i \in \{1, \ldots, n\}, j \in \{1, \ldots, m\}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>i</mml:mi><mml:mo>∈</mml:mo><mml:mo stretchy="false" form="prefix">{</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:mi>n</mml:mi><mml:mo stretchy="false" form="postfix">}</mml:mo><mml:mo>,</mml:mo><mml:mi>j</mml:mi><mml:mo>∈</mml:mo><mml:mo stretchy="false" form="prefix">{</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:mi>m</mml:mi><mml:mo stretchy="false" form="postfix">}</mml:mo></mml:mrow></mml:math></alternatives></inline-formula>.</p>
+          <p>Moreover, if <inline-formula><alternatives><tex-math><![CDATA[x_1, \ldots, x_p]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>x</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mi>p</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
+      are linearly independent right eigenvectors of
+      <inline-formula><alternatives><tex-math><![CDATA[A]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>A</mml:mi></mml:math></alternatives></inline-formula>
+      corresponding to <inline-formula><alternatives><tex-math><![CDATA[\lambda_1, \ldots, \lambda_p]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>λ</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>λ</mml:mi><mml:mi>p</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
+      (<inline-formula><alternatives><tex-math><![CDATA[p \leq n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>p</mml:mi><mml:mo>≤</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>),
+      and <inline-formula><alternatives><tex-math><![CDATA[z_1, \ldots, z_q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>z</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>z</mml:mi><mml:mi>q</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
+      are linearly independent right eigenvectors of
+      <inline-formula><alternatives><tex-math><![CDATA[B]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>B</mml:mi></mml:math></alternatives></inline-formula>
+      corresponding to <inline-formula><alternatives><tex-math><![CDATA[\mu_1, \ldots, \mu_q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>μ</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>μ</mml:mi><mml:mi>q</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
+      (<inline-formula><alternatives><tex-math><![CDATA[q \leq m]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>q</mml:mi><mml:mo>≤</mml:mo><mml:mi>m</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>),
+      then <inline-formula><alternatives><tex-math><![CDATA[z_j \otimes x_i \in \mathbb{R}^{mn}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>z</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>∈</mml:mo><mml:msup><mml:mi>ℝ</mml:mi><mml:mrow><mml:mi>m</mml:mi><mml:mi>n</mml:mi></mml:mrow></mml:msup></mml:mrow></mml:math></alternatives></inline-formula>
+      are linearly independent right eigenvectors of
+      <inline-formula><alternatives><tex-math><![CDATA[A \oplus B]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>A</mml:mi><mml:mo>⊕</mml:mo><mml:mi>B</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+      corresponding to <inline-formula><alternatives><tex-math><![CDATA[\lambda_i + \mu_j]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>λ</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mi>μ</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>,
+      <inline-formula><alternatives><tex-math><![CDATA[i \in \{1, \ldots, p\}, j \in \{1, \ldots, q\}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>i</mml:mi><mml:mo>∈</mml:mo><mml:mo stretchy="false" form="prefix">{</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:mi>p</mml:mi><mml:mo stretchy="false" form="postfix">}</mml:mo><mml:mo>,</mml:mo><mml:mi>j</mml:mi><mml:mo>∈</mml:mo><mml:mo stretchy="false" form="prefix">{</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:mi>q</mml:mi><mml:mo stretchy="false" form="postfix">}</mml:mo></mml:mrow></mml:math></alternatives></inline-formula>.</p>
+        </sec>
+        <sec id="discussion">
+          <title>Discussion</title>
+          <p>This theorem provides a crucial insight that allows us to
+      efficiently construct the eigendecomposition of the full precision
+      matrix <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+      for two-dimensional spatial fields by leveraging the
+      eigendecomposition of the one-dimensional precision matrix
+      <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>,
+      avoiding the computationally intensive process of explicitly
+      forming and inverting the large matrix
+      <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>.</p>
+          <p>Furthermore, we can compute the log-density of an observation x
+      directly by using just the eigenvalues and eigenvectors og
+      <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>,
+      thereby enabling efficient computation of the log-density of the
+      multivariate normal distribution even for large spatial
+      fields.</p>
+        </sec>
+      </sec>
+      <sec id="example-calculating-eigenvalues-and-eigenvectors-for-q-using-q_1">
+        <title>Example: Calculating Eigenvalues and Eigenvectors for
+    <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+    Using <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula></title>
+        <p>To illustrate the application of Theorem 13.16, consider the
+    one-dimensional precision matrix <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+    with known eigendecomposition. Suppose
+    <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+    has eigenvalues <inline-formula><alternatives><tex-math><![CDATA[\lambda_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>λ</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+    and corresponding eigenvectors <inline-formula><alternatives><tex-math><![CDATA[v_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>v</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>.
+    For a two-dimensional spatial field, we construct the Matérn-like
+    precision matrix <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+    using Kronecker products as follows:</p>
+        <p>
+          <disp-formula>
+            <alternatives>
+              <tex-math><![CDATA[
+    Q = Q_1 \otimes I + I \otimes Q_1,
+    ]]></tex-math>
+              <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                <mml:mrow>
+                  <mml:mi>Q</mml:mi>
+                  <mml:mo>=</mml:mo>
+                  <mml:msub>
+                    <mml:mi>Q</mml:mi>
+                    <mml:mn>1</mml:mn>
+                  </mml:msub>
+                  <mml:mo>⊗</mml:mo>
+                  <mml:mi>I</mml:mi>
+                  <mml:mo>+</mml:mo>
+                  <mml:mi>I</mml:mi>
+                  <mml:mo>⊗</mml:mo>
+                  <mml:msub>
+                    <mml:mi>Q</mml:mi>
+                    <mml:mn>1</mml:mn>
+                  </mml:msub>
+                  <mml:mo>,</mml:mo>
+                </mml:mrow>
+              </mml:math>
+            </alternatives>
+          </disp-formula>
+        </p>
+        <p>where <inline-formula><alternatives><tex-math><![CDATA[I]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>I</mml:mi></mml:math></alternatives></inline-formula>
+    is the identity matrix and <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
+    denotes the Kronecker product.</p>
+        <sec id="eigenvalues">
+          <title>Eigenvalues</title>
+          <p>The eigenvalues of <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+      can be determined from the eigenvalues of
+      <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>.
+      If <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+      has eigenvalues <inline-formula><alternatives><tex-math><![CDATA[\lambda_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>λ</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      for <inline-formula><alternatives><tex-math><![CDATA[i = 1, 2, \ldots, n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>i</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mn>2</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>,
+      then the eigenvalues of <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+      are given by:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      \lambda_{ij} = \lambda_i + \lambda_j \quad \text{for} \quad i, j = 1, 2, \ldots, n.
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:msub>
+                      <mml:mi>λ</mml:mi>
+                      <mml:mrow>
+                        <mml:mi>i</mml:mi>
+                        <mml:mi>j</mml:mi>
+                      </mml:mrow>
+                    </mml:msub>
+                    <mml:mo>=</mml:mo>
+                    <mml:msub>
+                      <mml:mi>λ</mml:mi>
+                      <mml:mi>i</mml:mi>
+                    </mml:msub>
+                    <mml:mo>+</mml:mo>
+                    <mml:msub>
+                      <mml:mi>λ</mml:mi>
+                      <mml:mi>j</mml:mi>
+                    </mml:msub>
+                    <mml:mspace width="1.0em"/>
+                    <mml:mtext mathvariant="normal">for</mml:mtext>
+                    <mml:mspace width="1.0em"/>
+                    <mml:mi>i</mml:mi>
+                    <mml:mo>,</mml:mo>
+                    <mml:mi>j</mml:mi>
+                    <mml:mo>=</mml:mo>
+                    <mml:mn>1</mml:mn>
+                    <mml:mo>,</mml:mo>
+                    <mml:mn>2</mml:mn>
+                    <mml:mo>,</mml:mo>
+                    <mml:mi>…</mml:mi>
+                    <mml:mo>,</mml:mo>
+                    <mml:mi>n</mml:mi>
+                    <mml:mi>.</mml:mi>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+        </sec>
+        <sec id="eigenvectors">
+          <title>Eigenvectors</title>
+          <p>Similarly, the eigenvectors of <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+      can be constructed from the eigenvectors of
+      <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>.
+      If <inline-formula><alternatives><tex-math><![CDATA[v_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>v</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      and <inline-formula><alternatives><tex-math><![CDATA[v_j]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>v</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      are eigenvectors of <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+      corresponding to eigenvalues <inline-formula><alternatives><tex-math><![CDATA[\lambda_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>λ</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      and <inline-formula><alternatives><tex-math><![CDATA[\lambda_j]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>λ</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      respectively, then the eigenvectors of
+      <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+      are given by:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      v_{ij} = v_i \otimes v_j \quad \text{for} \quad i, j = 1, 2, \ldots, n.
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:msub>
+                      <mml:mi>v</mml:mi>
+                      <mml:mrow>
+                        <mml:mi>i</mml:mi>
+                        <mml:mi>j</mml:mi>
+                      </mml:mrow>
+                    </mml:msub>
+                    <mml:mo>=</mml:mo>
+                    <mml:msub>
+                      <mml:mi>v</mml:mi>
+                      <mml:mi>i</mml:mi>
+                    </mml:msub>
+                    <mml:mo>⊗</mml:mo>
+                    <mml:msub>
+                      <mml:mi>v</mml:mi>
+                      <mml:mi>j</mml:mi>
+                    </mml:msub>
+                    <mml:mspace width="1.0em"/>
+                    <mml:mtext mathvariant="normal">for</mml:mtext>
+                    <mml:mspace width="1.0em"/>
+                    <mml:mi>i</mml:mi>
+                    <mml:mo>,</mml:mo>
+                    <mml:mi>j</mml:mi>
+                    <mml:mo>=</mml:mo>
+                    <mml:mn>1</mml:mn>
+                    <mml:mo>,</mml:mo>
+                    <mml:mn>2</mml:mn>
+                    <mml:mo>,</mml:mo>
+                    <mml:mi>…</mml:mi>
+                    <mml:mo>,</mml:mo>
+                    <mml:mi>n</mml:mi>
+                    <mml:mi>.</mml:mi>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>Here, <inline-formula><alternatives><tex-math><![CDATA[v_{ij}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>v</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub></mml:math></alternatives></inline-formula>
+      is the Kronecker product of <inline-formula><alternatives><tex-math><![CDATA[v_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>v</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      and <inline-formula><alternatives><tex-math><![CDATA[v_j]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>v</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>.</p>
+          <p>These relationships allow us to efficiently compute the
+      eigendecomposition of the full precision matrix
+      <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+      using the eigendecomposition of the smaller matrix
+      <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>,
+      significantly reducing the computational complexity.</p>
+        </sec>
+      </sec>
+      <sec id="efficient-density-calculation-using-eigendecomposition">
+        <title>Efficient Density Calculation Using
+    Eigendecomposition</title>
+        <p>Given the eigendecomposition of Q1, we can efficiently compute
+    the multivariate normal density with respect to the precision matrix
+    Q. Let <inline-formula><alternatives><tex-math><![CDATA[\lambda_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>λ</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+    and <inline-formula><alternatives><tex-math><![CDATA[v_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>v</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+    be the eigenvalues and eigenvectors of Q1, respectively. The
+    log-density of a multivariate normal distribution with precision
+    matrix Q is given by:</p>
+        <p><disp-formula><alternatives><tex-math><![CDATA[
+    \log p(x) = -\frac{1}{2} (n \log(2\pi) + \log|Q| + x^T Q x)
+    ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:mo>log</mml:mo><mml:mi>p</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>x</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mi>−</mml:mi><mml:mfrac><mml:mn>1</mml:mn><mml:mn>2</mml:mn></mml:mfrac><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>n</mml:mi><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mn>2</mml:mn><mml:mi>π</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mi>Q</mml:mi><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:msup><mml:mi>x</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>Q</mml:mi><mml:mi>x</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></disp-formula>
+    where <inline-formula><alternatives><tex-math><![CDATA[n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>n</mml:mi></mml:math></alternatives></inline-formula>
+    is the dimension of <inline-formula><alternatives><tex-math><![CDATA[x]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>x</mml:mi></mml:math></alternatives></inline-formula>,
+    <inline-formula><alternatives><tex-math><![CDATA[|Q|]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mi>Q</mml:mi><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow></mml:math></alternatives></inline-formula>
+    is the determinant of Q, and <inline-formula><alternatives><tex-math><![CDATA[x^T Q x]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>x</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>Q</mml:mi><mml:mi>x</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+    is the quadratic form.</p>
+        <sec id="log-determinant-calculation">
+          <title>Log-Determinant Calculation</title>
+          <p>The log-determinant of Q can be computed efficiently using the
+      eigenvalues of Q1:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      \log|Q| = \sum_{i=1}^d \sum_{j=1}^d \log(\lambda_i + \lambda_j)
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:mo>log</mml:mo>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">|</mml:mo>
+                      <mml:mi>Q</mml:mi>
+                      <mml:mo stretchy="true" form="postfix">|</mml:mo>
+                    </mml:mrow>
+                    <mml:mo>=</mml:mo>
+                    <mml:munderover>
+                      <mml:mo>∑</mml:mo>
+                      <mml:mrow>
+                        <mml:mi>i</mml:mi>
+                        <mml:mo>=</mml:mo>
+                        <mml:mn>1</mml:mn>
+                      </mml:mrow>
+                      <mml:mi>d</mml:mi>
+                    </mml:munderover>
+                    <mml:munderover>
+                      <mml:mo>∑</mml:mo>
+                      <mml:mrow>
+                        <mml:mi>j</mml:mi>
+                        <mml:mo>=</mml:mo>
+                        <mml:mn>1</mml:mn>
+                      </mml:mrow>
+                      <mml:mi>d</mml:mi>
+                    </mml:munderover>
+                    <mml:mo>log</mml:mo>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                      <mml:msub>
+                        <mml:mi>λ</mml:mi>
+                        <mml:mi>i</mml:mi>
+                      </mml:msub>
+                      <mml:mo>+</mml:mo>
+                      <mml:msub>
+                        <mml:mi>λ</mml:mi>
+                        <mml:mi>j</mml:mi>
+                      </mml:msub>
+                      <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                    </mml:mrow>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>where <inline-formula><alternatives><tex-math><![CDATA[d]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>d</mml:mi></mml:math></alternatives></inline-formula>
+      is the dimension of Q1.</p>
+        </sec>
+        <sec id="quadratic-form-calculation">
+          <title>Quadratic Form Calculation</title>
+          <p>First, we define the product of the eigenvector and the data
+      vector <inline-formula><alternatives><tex-math><![CDATA[x]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>x</mml:mi></mml:math></alternatives></inline-formula>
+      as:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      y_{ij} = (v_i \otimes v_j)^T x,
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:msub>
+                      <mml:mi>y</mml:mi>
+                      <mml:mrow>
+                        <mml:mi>i</mml:mi>
+                        <mml:mi>j</mml:mi>
+                      </mml:mrow>
+                    </mml:msub>
+                    <mml:mo>=</mml:mo>
+                    <mml:msup>
+                      <mml:mrow>
+                        <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                        <mml:msub>
+                          <mml:mi>v</mml:mi>
+                          <mml:mi>i</mml:mi>
+                        </mml:msub>
+                        <mml:mo>⊗</mml:mo>
+                        <mml:msub>
+                          <mml:mi>v</mml:mi>
+                          <mml:mi>j</mml:mi>
+                        </mml:msub>
+                        <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                      </mml:mrow>
+                      <mml:mi>T</mml:mi>
+                    </mml:msup>
+                    <mml:mi>x</mml:mi>
+                    <mml:mo>,</mml:mo>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>where <inline-formula><alternatives><tex-math><![CDATA[v_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>v</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      and <inline-formula><alternatives><tex-math><![CDATA[v_j]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>v</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      are the eigenvectors of <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+      and <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
+      denotes the Kronecker product.</p>
+          <p>Next, we define the eigenvalue sum as:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      \mu_{ij} = \lambda_i + \lambda_j,
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:msub>
+                      <mml:mi>μ</mml:mi>
+                      <mml:mrow>
+                        <mml:mi>i</mml:mi>
+                        <mml:mi>j</mml:mi>
+                      </mml:mrow>
+                    </mml:msub>
+                    <mml:mo>=</mml:mo>
+                    <mml:msub>
+                      <mml:mi>λ</mml:mi>
+                      <mml:mi>i</mml:mi>
+                    </mml:msub>
+                    <mml:mo>+</mml:mo>
+                    <mml:msub>
+                      <mml:mi>λ</mml:mi>
+                      <mml:mi>j</mml:mi>
+                    </mml:msub>
+                    <mml:mo>,</mml:mo>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>where <inline-formula><alternatives><tex-math><![CDATA[\lambda_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>λ</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      and <inline-formula><alternatives><tex-math><![CDATA[\lambda_j]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>λ</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      are the eigenvalues of <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>.
+      Using these definitions, the quadratic form can be expressed
+      as:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      x^T Q x = \sum_{i=1}^d \sum_{j=1}^d \mu_{ij} y_{ij}^2.
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:msup>
+                      <mml:mi>x</mml:mi>
+                      <mml:mi>T</mml:mi>
+                    </mml:msup>
+                    <mml:mi>Q</mml:mi>
+                    <mml:mi>x</mml:mi>
+                    <mml:mo>=</mml:mo>
+                    <mml:munderover>
+                      <mml:mo>∑</mml:mo>
+                      <mml:mrow>
+                        <mml:mi>i</mml:mi>
+                        <mml:mo>=</mml:mo>
+                        <mml:mn>1</mml:mn>
+                      </mml:mrow>
+                      <mml:mi>d</mml:mi>
+                    </mml:munderover>
+                    <mml:munderover>
+                      <mml:mo>∑</mml:mo>
+                      <mml:mrow>
+                        <mml:mi>j</mml:mi>
+                        <mml:mo>=</mml:mo>
+                        <mml:mn>1</mml:mn>
+                      </mml:mrow>
+                      <mml:mi>d</mml:mi>
+                    </mml:munderover>
+                    <mml:msub>
+                      <mml:mi>μ</mml:mi>
+                      <mml:mrow>
+                        <mml:mi>i</mml:mi>
+                        <mml:mi>j</mml:mi>
+                      </mml:mrow>
+                    </mml:msub>
+                    <mml:msubsup>
+                      <mml:mi>y</mml:mi>
+                      <mml:mrow>
+                        <mml:mi>i</mml:mi>
+                        <mml:mi>j</mml:mi>
+                      </mml:mrow>
+                      <mml:mn>2</mml:mn>
+                    </mml:msubsup>
+                    <mml:mi>.</mml:mi>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>In this way, we calculate the quadratic form without having to
+      form the matrix Q or its full set of eigenvectors or values.</p>
+        </sec>
+        <sec id="scaling-the-input-x">
+          <title>Scaling the Input x</title>
+          <p>The input vector <inline-formula><alternatives><tex-math><![CDATA[x = \Phi^{-1}(u)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>x</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>u</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>
+      has zero mean and unit marginal variance. Instead of scaling the
+      precision matrix to have <inline-formula><alternatives><tex-math><![CDATA[(Q^{-1})_{ii} = 1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>,
+      we calculate the marginal standard deviations,
+      <inline-formula><alternatives><tex-math><![CDATA[\sigma_k]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>σ</mml:mi><mml:mi>k</mml:mi></mml:msub></mml:math></alternatives></inline-formula>,
+      implied by <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+      using the eigenstructure of <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>,
+      then scale the input vector <inline-formula><alternatives><tex-math><![CDATA[x]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>x</mml:mi></mml:math></alternatives></inline-formula>
+      using those standard deviations. First we compute the marginal
+      standard deviations: <disp-formula><alternatives><tex-math><![CDATA[
+      \sigma_k = \sqrt{\sum_{i=1}^d \sum_{j=1}^d \frac{(v_i \otimes v_j)_k^2}{\lambda_i + \lambda_j}}
+      ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:msub><mml:mi>σ</mml:mi><mml:mi>k</mml:mi></mml:msub><mml:mo>=</mml:mo><mml:msqrt><mml:mrow><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>i</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:mi>d</mml:mi></mml:munderover><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>j</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow><mml:mi>d</mml:mi></mml:munderover><mml:mfrac><mml:msubsup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>v</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mi>v</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mi>k</mml:mi><mml:mn>2</mml:mn></mml:msubsup><mml:mrow><mml:msub><mml:mi>λ</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mi>λ</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:mrow></mml:mfrac></mml:mrow></mml:msqrt></mml:mrow></mml:math></alternatives></disp-formula></p>
+          <p>where <inline-formula><alternatives><tex-math><![CDATA[(v_i \otimes v_j)_k]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>v</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mi>v</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mi>k</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      is the <inline-formula><alternatives><tex-math><![CDATA[k]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>k</mml:mi></mml:math></alternatives></inline-formula>-th
+      element of the Kronecker product <inline-formula><alternatives><tex-math><![CDATA[v_i \otimes v_j]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>v</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mi>v</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>.</p>
+        </sec>
+      </sec>
+      <sec id="algorithm-implementation">
+        <title>Algorithm Implementation</title>
+        <p>The density calculation is implemented as follows:</p>
+        <list list-type="bullet">
+          <list-item>
+            <p>Compute the eigendecomposition of
+        <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>.</p>
+          </list-item>
+          <list-item>
+            <p>Calculate the marginal standard deviations
+        <inline-formula><alternatives><tex-math><![CDATA[\sigma_k]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>σ</mml:mi><mml:mi>k</mml:mi></mml:msub></mml:math></alternatives></inline-formula>.</p>
+          </list-item>
+          <list-item>
+            <p>For each observation <inline-formula><alternatives><tex-math><![CDATA[x]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>x</mml:mi></mml:math></alternatives></inline-formula>:</p>
+            <list list-type="alpha-lower">
+              <list-item>
+                <p>Standardize <inline-formula><alternatives><tex-math><![CDATA[x]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>x</mml:mi></mml:math></alternatives></inline-formula>
+            by element-wise multiplication with
+            <inline-formula><alternatives><tex-math><![CDATA[\sigma_k]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>σ</mml:mi><mml:mi>k</mml:mi></mml:msub></mml:math></alternatives></inline-formula>.</p>
+              </list-item>
+              <list-item>
+                <p>Compute the log-determinant and quadratic form using the
+            formulas above.</p>
+              </list-item>
+              <list-item>
+                <p>Combine the terms to get the log-density.</p>
+              </list-item>
+            </list>
+          </list-item>
+        </list>
+        <p>This approach avoids explicit formation and inversion of the full
+    precision matrix Q, allowing for efficient computation even for
+    large spatial fields. This method has been implemented in C++ code
+    that can perform a full set of computations for a
+    <inline-formula><alternatives><tex-math><![CDATA[200\times 200]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mn>200</mml:mn><mml:mo>×</mml:mo><mml:mn>200</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>
+    spatial grid (i.e. <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+    would be <inline-formula><alternatives><tex-math><![CDATA[40.000 \times 40.000]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mn>40.000</mml:mn><mml:mo>×</mml:mo><mml:mn>40.000</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>)
+    in just over one second.</p>
+      </sec>
+    </sec>
+  </body>
+  <back>
+</back>
+</article>
