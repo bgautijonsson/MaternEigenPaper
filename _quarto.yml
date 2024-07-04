@@ -5,7 +5,10 @@ manuscript:
   article: index.qmd
 
 format:
-  html: default
+  html: 
+    toc: true
+    comments:
+      hypothesis: true
   docx: default
   jats: default
   acs-pdf: default
