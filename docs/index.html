@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Brynjólfur Gauti Guðrúnar Jónsson">
-<meta name="dcterms.date" content="2024-07-24">
+<meta name="dcterms.date" content="2024-08-09">
 
-<title>Bridging Gaussian Markov Random Fields and Copulas: A Fast Algorithm for Efficient Gaussian Copula Density Computation with Matérn-like Precision Matrices</title>
+<title>Efficient Gaussian Copula Density Computation for Large-Scale Spatial Data: A Matérn-like GMRF Approach with Circulant and Folded Circulant Approximations</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -72,13 +72,13 @@ window.Quarto = {
 };
 </script>
 
-<meta name="citation_title" content="Bridging Gaussian Markov Random Fields and Copulas: A Fast Algorithm for Efficient Gaussian Copula Density Computation with Matérn-like Precision Matrices">
-<meta name="citation_abstract" content="Gaussian Markov Random Fields (GMRFs) have long been a powerful tool for modeling spatial and temporal dependencies in various fields. Similarly, copulas have proven invaluable for modeling complex dependency structures in multivariate data. However, the combination of these two approaches - using GMRFs within copula models - has historically been computationally inefficient, limiting their joint application to smaller datasets or simpler models. This work presents a novel algorithm that overcomes these limitations, allowing for fast and efficient computation of Gaussian Copula densities using GMRF precision structures. By bridging the gap between GMRFs and copulas, this method opens up new possibilities for analyzing large-scale, high-dimensional spatial and spatio-temporal data with complex dependency structures.">
+<meta name="citation_title" content="Efficient Gaussian Copula Density Computation for Large-Scale Spatial Data: A Matérn-like GMRF Approach with Circulant and Folded Circulant Approximations">
+<meta name="citation_abstract" content="This paper presents an algorithm for efficient computation of Gaussian copula densities using Gaussian Markov Random Field (GMRF) precision structures. We introduce a Matérn-like precision matrix with unit marginal variance, leveraging a Kronecker sum structure that allows for fast eigendecomposition. The method avoids explicit formation and inversion of large precision matrices, making it particularly suitable for high-dimensional spatial data. We propose two approximation methods: circulant and folded circulant, which utilize the computational efficiency of Fast Fourier Transforms (FFTs). The circulant approximation treats the spatial field as if it were on a torus, where opposite edges are connected. The folded circulant approximation, however, uses a reflection boundary condition, effectively doubling the size of the field by reflecting the data along each coordinate axis. This approach potentially offers improved accuracy near field edges, addressing a common limitation of periodic boundary conditions.">
 <meta name="citation_author" content="Brynjólfur Gauti Guðrúnar Jónsson">
-<meta name="citation_publication_date" content="2024-07-24">
-<meta name="citation_cover_date" content="2024-07-24">
+<meta name="citation_publication_date" content="2024-08-09">
+<meta name="citation_cover_date" content="2024-08-09">
 <meta name="citation_year" content="2024">
-<meta name="citation_online_date" content="2024-07-24">
+<meta name="citation_online_date" content="2024-08-09">
 <meta name="citation_language" content="en">
 </head>
 
@@ -87,7 +87,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Bridging Gaussian Markov Random Fields and Copulas: A Fast Algorithm for Efficient Gaussian Copula Density Computation with Matérn-like Precision Matrices</h1>
+      <h1 class="title">Efficient Gaussian Copula Density Computation for Large-Scale Spatial Data: A Matérn-like GMRF Approach with Circulant and Folded Circulant Approximations</h1>
           </div>
 
     
@@ -113,7 +113,7 @@ window.Quarto = {
                 <div>
             <div class="quarto-title-meta-heading">Published</div>
             <div class="quarto-title-meta-contents">
-              <p class="date">July 24, 2024</p>
+              <p class="date">August 9, 2024</p>
             </div>
           </div>
           
@@ -127,7 +127,7 @@ window.Quarto = {
     <div>
       <div class="abstract">
         <div class="block-title">Abstract</div>
-        Gaussian Markov Random Fields (GMRFs) have long been a powerful tool for modeling spatial and temporal dependencies in various fields. Similarly, copulas have proven invaluable for modeling complex dependency structures in multivariate data. However, the combination of these two approaches - using GMRFs within copula models - has historically been computationally inefficient, limiting their joint application to smaller datasets or simpler models. This work presents a novel algorithm that overcomes these limitations, allowing for fast and efficient computation of Gaussian Copula densities using GMRF precision structures. By bridging the gap between GMRFs and copulas, this method opens up new possibilities for analyzing large-scale, high-dimensional spatial and spatio-temporal data with complex dependency structures.
+        This paper presents an algorithm for efficient computation of Gaussian copula densities using Gaussian Markov Random Field (GMRF) precision structures. We introduce a Matérn-like precision matrix with unit marginal variance, leveraging a Kronecker sum structure that allows for fast eigendecomposition. The method avoids explicit formation and inversion of large precision matrices, making it particularly suitable for high-dimensional spatial data. We propose two approximation methods: circulant and folded circulant, which utilize the computational efficiency of Fast Fourier Transforms (FFTs). The circulant approximation treats the spatial field as if it were on a torus, where opposite edges are connected. The folded circulant approximation, however, uses a reflection boundary condition, effectively doubling the size of the field by reflecting the data along each coordinate axis. This approach potentially offers improved accuracy near field edges, addressing a common limitation of periodic boundary conditions.
       </div>
     </div>
 

@@ -5,9 +5,9 @@ and Interchange DTD v1.2 20190208//EN" "JATS-archivearticle1.dtd">
   <front>
     <article-meta>
       <title-group>
-        <article-title>Bridging Gaussian Markov Random Fields and Copulas: A
-Fast Algorithm for Efficient Gaussian Copula Density Computation with
-Matérn-like Precision Matrices</article-title>
+        <article-title>Efficient Gaussian Copula Density Computation for
+Large-Scale Spatial Data: A Matérn-like GMRF Approach with Circulant and
+Folded Circulant Approximations</article-title>
       </title-group>
       <contrib-group>
         <contrib contrib-type="author">
@@ -27,18 +27,21 @@ Matérn-like Precision Matrices</article-title>
       </aff>
       <history/>
       <abstract>
-Gaussian Markov Random Fields (GMRFs) have long been a powerful tool for
-modeling spatial and temporal dependencies in various fields. Similarly,
-copulas have proven invaluable for modeling complex dependency
-structures in multivariate data. However, the combination of these two
-approaches - using GMRFs within copula models - has historically been
-computationally inefficient, limiting their joint application to smaller
-datasets or simpler models. This work presents a novel algorithm that
-overcomes these limitations, allowing for fast and efficient computation
-of Gaussian Copula densities using GMRF precision structures. By
-bridging the gap between GMRFs and copulas, this method opens up new
-possibilities for analyzing large-scale, high-dimensional spatial and
-spatio-temporal data with complex dependency structures.
+This paper presents an algorithm for efficient computation of Gaussian
+copula densities using Gaussian Markov Random Field (GMRF) precision
+structures. We introduce a Matérn-like precision matrix with unit
+marginal variance, leveraging a Kronecker sum structure that allows for
+fast eigendecomposition. The method avoids explicit formation and
+inversion of large precision matrices, making it particularly suitable
+for high-dimensional spatial data. We propose two approximation methods:
+circulant and folded circulant, which utilize the computational
+efficiency of Fast Fourier Transforms (FFTs). The circulant
+approximation treats the spatial field as if it were on a torus, where
+opposite edges are connected. The folded circulant approximation,
+however, uses a reflection boundary condition, effectively doubling the
+size of the field by reflecting the data along each coordinate axis.
+This approach potentially offers improved accuracy near field edges,
+addressing a common limitation of periodic boundary conditions.
 </abstract>
     </article-meta>
   </front>
