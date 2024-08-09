@@ -335,7 +335,7 @@ spatio-temporal data with complex dependency structures.
               <alternatives>
                 <tex-math><![CDATA[
       \begin{aligned}
-      \mathbf{Q} &= \mathbf{\tilde{Q}^\nu}, \quad\nu \in \{0, 1, 2\}  \\
+      \mathbf{Q} &= \mathbf{\tilde{Q}^{(\nu + 1)}}, \quad\nu \in \{0, 1, 2\}  \\
       \mathbf{\tilde Q} &= \mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1,
       \end{aligned}
       ]]></tex-math>
@@ -352,7 +352,13 @@ spatio-temporal data with complex dependency structures.
                             <mml:mi>𝐐</mml:mi>
                             <mml:mo accent="true">̃</mml:mo>
                           </mml:mover>
-                          <mml:mi>𝛎</mml:mi>
+                          <mml:mrow>
+                            <mml:mo stretchy="true" form="prefix" mathvariant="bold">(</mml:mo>
+                            <mml:mi>𝛎</mml:mi>
+                            <mml:mo mathvariant="bold">+</mml:mo>
+                            <mml:mn>𝟏</mml:mn>
+                            <mml:mo stretchy="true" form="postfix" mathvariant="bold">)</mml:mo>
+                          </mml:mrow>
                         </mml:msup>
                         <mml:mo>,</mml:mo>
                         <mml:mspace width="1.0em"/>
@@ -569,7 +575,7 @@ spatio-temporal data with complex dependency structures.
           <disp-formula>
             <alternatives>
               <tex-math><![CDATA[
-    \mathbf{Q} = (\mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1)^\nu, \quad \nu \in \{0, 1, 2\}
+    \mathbf{Q} = (\mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1)^{(\nu + 1)}, \quad \nu \in \{0, 1, 2\}
     ]]></tex-math>
               <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                 <mml:mrow>
@@ -593,7 +599,13 @@ spatio-temporal data with complex dependency structures.
                       </mml:msub>
                       <mml:mo stretchy="true" form="postfix">)</mml:mo>
                     </mml:mrow>
-                    <mml:mi>ν</mml:mi>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                      <mml:mi>ν</mml:mi>
+                      <mml:mo>+</mml:mo>
+                      <mml:mn>1</mml:mn>
+                      <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                    </mml:mrow>
                   </mml:msup>
                   <mml:mo>,</mml:mo>
                   <mml:mspace width="1.0em"/>
@@ -656,7 +668,7 @@ spatio-temporal data with complex dependency structures.
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \mathbf{Q} = (\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T.
+      \mathbf{Q} = (\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^{(\nu + 1)}(\mathbf{V} \otimes \mathbf{V})^T.
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
@@ -681,7 +693,13 @@ spatio-temporal data with complex dependency structures.
                         <mml:mi>𝚲</mml:mi>
                         <mml:mo stretchy="true" form="postfix">)</mml:mo>
                       </mml:mrow>
-                      <mml:mi>ν</mml:mi>
+                      <mml:mrow>
+                        <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                        <mml:mi>ν</mml:mi>
+                        <mml:mo>+</mml:mo>
+                        <mml:mn>1</mml:mn>
+                        <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                      </mml:mrow>
                     </mml:msup>
                     <mml:msup>
                       <mml:mrow>
@@ -787,7 +805,7 @@ spatio-temporal data with complex dependency structures.
                 <tex-math><![CDATA[
       \begin{aligned}
       \mathbf{D}\mathbf{Q}\mathbf{D} &= \mathbf{D}(\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T\mathbf{D} \\
-      &= (\mathbf{\tilde V} \otimes \mathbf{\tilde V})(\mathbf{\tilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\tilde \Lambda})^\nu(\mathbf{\tilde V} \otimes \mathbf{\tilde V})^T
+      &= (\mathbf{\tilde V} \otimes \mathbf{\tilde V})(\mathbf{\tilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\tilde \Lambda})(\mathbf{\tilde V} \otimes \mathbf{\tilde V})^T
       \end{aligned}
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
@@ -852,26 +870,23 @@ spatio-temporal data with complex dependency structures.
                           </mml:mover>
                           <mml:mo stretchy="true" form="postfix">)</mml:mo>
                         </mml:mrow>
-                        <mml:msup>
-                          <mml:mrow>
-                            <mml:mo stretchy="true" form="prefix">(</mml:mo>
-                            <mml:mover>
-                              <mml:mi>𝚲</mml:mi>
-                              <mml:mo accent="true">̃</mml:mo>
-                            </mml:mover>
-                            <mml:mo>⊗</mml:mo>
-                            <mml:mi>𝐈</mml:mi>
-                            <mml:mo>+</mml:mo>
-                            <mml:mi>𝐈</mml:mi>
-                            <mml:mo>⊗</mml:mo>
-                            <mml:mover>
-                              <mml:mi>𝚲</mml:mi>
-                              <mml:mo accent="true">̃</mml:mo>
-                            </mml:mover>
-                            <mml:mo stretchy="true" form="postfix">)</mml:mo>
-                          </mml:mrow>
-                          <mml:mi>ν</mml:mi>
-                        </mml:msup>
+                        <mml:mrow>
+                          <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                          <mml:mover>
+                            <mml:mi>𝚲</mml:mi>
+                            <mml:mo accent="true">̃</mml:mo>
+                          </mml:mover>
+                          <mml:mo>⊗</mml:mo>
+                          <mml:mi>𝐈</mml:mi>
+                          <mml:mo>+</mml:mo>
+                          <mml:mi>𝐈</mml:mi>
+                          <mml:mo>⊗</mml:mo>
+                          <mml:mover>
+                            <mml:mi>𝚲</mml:mi>
+                            <mml:mo accent="true">̃</mml:mo>
+                          </mml:mover>
+                          <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                        </mml:mrow>
                         <mml:msup>
                           <mml:mrow>
                             <mml:mo stretchy="true" form="prefix">(</mml:mo>
@@ -904,10 +919,10 @@ spatio-temporal data with complex dependency structures.
       compute:</p>
           <list list-type="order">
             <list-item>
-              <p>Log-determinant: <inline-formula><alternatives><tex-math><![CDATA[\log|\mathbf{D}\mathbf{Q}\mathbf{D}| = \sum_{i,j} \nu \log(\tilde\lambda_i + \tilde\lambda_j)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mi>𝐃</mml:mi><mml:mi>𝐐</mml:mi><mml:mi>𝐃</mml:mi><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:msub><mml:mo>∑</mml:mo><mml:mrow><mml:mi>i</mml:mi><mml:mo>,</mml:mo><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mi>ν</mml:mi><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
+              <p>Log-determinant: <inline-formula><alternatives><tex-math><![CDATA[\log|\mathbf{D}\mathbf{Q}\mathbf{D}| = \sum_{i,j} \log(\tilde\lambda_i + \tilde\lambda_j)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mi>𝐃</mml:mi><mml:mi>𝐐</mml:mi><mml:mi>𝐃</mml:mi><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:msub><mml:mo>∑</mml:mo><mml:mrow><mml:mi>i</mml:mi><mml:mo>,</mml:mo><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
             </list-item>
             <list-item>
-              <p>Quadratic form: <inline-formula><alternatives><tex-math><![CDATA[\mathbf{z}^T\mathbf{D}\mathbf{Q}\mathbf{D}\mathbf{z} = \sum_{i,j} (\tilde\lambda_i + \tilde\lambda_j)^\nu y_{ij}^2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>𝐳</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>𝐃</mml:mi><mml:mi>𝐐</mml:mi><mml:mi>𝐃</mml:mi><mml:mi>𝐳</mml:mi><mml:mo>=</mml:mo><mml:msub><mml:mo>∑</mml:mo><mml:mrow><mml:mi>i</mml:mi><mml:mo>,</mml:mo><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mi>ν</mml:mi></mml:msup><mml:msubsup><mml:mi>y</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow><mml:mn>2</mml:mn></mml:msubsup></mml:mrow></mml:math></alternatives></inline-formula>,
+              <p>Quadratic form: <inline-formula><alternatives><tex-math><![CDATA[\mathbf{z}^T\mathbf{D}\mathbf{Q}\mathbf{D}\mathbf{z} = \sum_{i,j} (\tilde\lambda_i + \tilde\lambda_j) y_{ij}^2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>𝐳</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>𝐃</mml:mi><mml:mi>𝐐</mml:mi><mml:mi>𝐃</mml:mi><mml:mi>𝐳</mml:mi><mml:mo>=</mml:mo><mml:msub><mml:mo>∑</mml:mo><mml:mrow><mml:mi>i</mml:mi><mml:mo>,</mml:mo><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:msubsup><mml:mi>y</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow><mml:mn>2</mml:mn></mml:msubsup></mml:mrow></mml:math></alternatives></inline-formula>,
           where <inline-formula><alternatives><tex-math><![CDATA[y_{ij} = (\mathbf{\tilde v}_j \otimes \mathbf{\tilde v}_i)^T\mathbf{z}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>y</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>𝐯</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>j</mml:mi></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mover><mml:mi>𝐯</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>i</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mi>T</mml:mi></mml:msup><mml:mi>𝐳</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
             </list-item>
           </list>
@@ -917,6 +932,1876 @@ spatio-temporal data with complex dependency structures.
       precision matrix <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
       or its inverse <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\Sigma}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝚺</mml:mi></mml:math></alternatives></inline-formula>.</p>
         </sec>
+      </sec>
+      <sec id="circulant-and-folded-circulant-approximations">
+        <title>Circulant and Folded Circulant Approximations</title>
+        <p>While the eigendecomposition method provides an exact solution,
+    it can be computationally expensive for very large spatial fields.
+    To address this, we introduce circulant and folded circulant
+    approximations that offer potential computational advantages.</p>
+        <sec id="circulant-matrices">
+          <title>Circulant Matrices</title>
+          <p>A circulant matrix C is a special kind of matrix where each row
+      is a cyclic shift of the row above it. It can be fully specified
+      by its first row or column, called the base c:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      C = \begin{pmatrix}
+      c_0 & c_1 & c_2 & \cdots & c_{n-1} \\
+      c_{n-1} & c_0 & c_1 & \cdots & c_{n-2} \\
+      c_{n-2} & c_{n-1} & c_0 & \cdots & c_{n-3} \\
+      \vdots & \vdots & \vdots & \ddots & \vdots \\
+      c_1 & c_2 & c_3 & \cdots & c_0
+      \end{pmatrix} = (c_{j-i \mod n})
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:mi>C</mml:mi>
+                    <mml:mo>=</mml:mo>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                      <mml:mtable>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>n</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>1</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>n</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>1</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>n</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>2</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>n</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>2</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>n</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>1</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>n</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>3</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mo>⋱</mml:mo>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>3</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                      </mml:mtable>
+                      <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                    </mml:mrow>
+                    <mml:mo>=</mml:mo>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                      <mml:msub>
+                        <mml:mi>c</mml:mi>
+                        <mml:mrow>
+                          <mml:mi>j</mml:mi>
+                          <mml:mo>−</mml:mo>
+                          <mml:mi>i</mml:mi>
+                          <mml:mrow>
+                            <mml:mspace width="0.444em"/>
+                            <mml:mo>mod</mml:mo>
+                            <mml:mspace width="0.222em"/>
+                            <mml:mi>n</mml:mi>
+                          </mml:mrow>
+                        </mml:mrow>
+                      </mml:msub>
+                      <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                    </mml:mrow>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>The key property of circulant matrices is that they are
+      diagonalized by the Discrete Fourier Transform (DFT) matrix. If F
+      is the DFT matrix, then for any circulant matrix C:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      C = F \Lambda F^H
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:mi>C</mml:mi>
+                    <mml:mo>=</mml:mo>
+                    <mml:mi>F</mml:mi>
+                    <mml:mi>Λ</mml:mi>
+                    <mml:msup>
+                      <mml:mi>F</mml:mi>
+                      <mml:mi>H</mml:mi>
+                    </mml:msup>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>where <inline-formula><alternatives><tex-math><![CDATA[\Lambda]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Λ</mml:mi></mml:math></alternatives></inline-formula>
+      is a diagonal matrix of eigenvalues and
+      <inline-formula><alternatives><tex-math><![CDATA[F^H]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>F</mml:mi><mml:mi>H</mml:mi></mml:msup></mml:math></alternatives></inline-formula>
+      is the conjugate transpose of F.</p>
+        </sec>
+        <sec id="block-circulant-matrices">
+          <title>Block Circulant Matrices</title>
+          <p>For two-dimensional spatial fields, we use block circulant
+      matrices with circulant blocks (BCCB). An Nn × Nn matrix C is
+      block circulant if it has the form:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      C = \begin{pmatrix}
+      C_0 & C_1 & C_2 & \cdots & C_{N-1} \\
+      C_{N-1} & C_0 & C_1 & \cdots & C_{N-2} \\
+      C_{N-2} & C_{N-1} & C_0 & \cdots & C_{N-3} \\
+      \vdots & \vdots & \vdots & \ddots & \vdots \\
+      C_1 & C_2 & C_3 & \cdots & C_0
+      \end{pmatrix} = (C_{j-i \mod N})
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:mi>C</mml:mi>
+                    <mml:mo>=</mml:mo>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                      <mml:mtable>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>N</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>1</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>N</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>1</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>N</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>2</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>N</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>2</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>N</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>1</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>N</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>3</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mo>⋱</mml:mo>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mn>3</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>C</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                      </mml:mtable>
+                      <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                    </mml:mrow>
+                    <mml:mo>=</mml:mo>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                      <mml:msub>
+                        <mml:mi>C</mml:mi>
+                        <mml:mrow>
+                          <mml:mi>j</mml:mi>
+                          <mml:mo>−</mml:mo>
+                          <mml:mi>i</mml:mi>
+                          <mml:mrow>
+                            <mml:mspace width="0.444em"/>
+                            <mml:mo>mod</mml:mo>
+                            <mml:mspace width="0.222em"/>
+                            <mml:mi>N</mml:mi>
+                          </mml:mrow>
+                        </mml:mrow>
+                      </mml:msub>
+                      <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                    </mml:mrow>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>where each <inline-formula><alternatives><tex-math><![CDATA[C_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>C</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      is itself a circulant n × n matrix.</p>
+        </sec>
+        <sec id="computational-advantages">
+          <title>Computational Advantages</title>
+          <p>The circulant structure allows for efficient computation using
+      the Fast Fourier Transform (FFT):</p>
+          <list list-type="order">
+            <list-item>
+              <p>Matrix-vector multiplication: For a circulant matrix C with
+          base c and a vector v <disp-formula><alternatives><tex-math><![CDATA[
+          Cv = \sqrt{n} \text{DFT}(\text{DFT}(c) \odot \text{IDFT}(v)),
+          ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:mi>C</mml:mi><mml:mi>v</mml:mi><mml:mo>=</mml:mo><mml:msqrt><mml:mi>n</mml:mi></mml:msqrt><mml:mtext mathvariant="normal">DFT</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mtext mathvariant="normal">DFT</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>c</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>⊙</mml:mo><mml:mtext mathvariant="normal">IDFT</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>v</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>,</mml:mo></mml:mrow></mml:math></alternatives></disp-formula></p>
+            </list-item>
+            <list-item>
+              <p>Matrix inverse: The base of <inline-formula><alternatives><tex-math><![CDATA[C^{-1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>C</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:math></alternatives></inline-formula>
+          is given by <disp-formula><alternatives><tex-math><![CDATA[
+          \frac{1}{n} \text{IDFT}(\text{DFT}(c)^{-1}).
+          ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:mfrac><mml:mn>1</mml:mn><mml:mi>n</mml:mi></mml:mfrac><mml:mtext mathvariant="normal">IDFT</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mtext mathvariant="normal">DFT</mml:mtext><mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>c</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mi>.</mml:mi></mml:mrow></mml:math></alternatives></disp-formula></p>
+            </list-item>
+          </list>
+        </sec>
+        <sec id="approximations-for-q1">
+          <title>Approximations for Q1</title>
+          <p>Let <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+      be the precision matrix of a one-dimensional AR(1) process with n
+      observations. The exact form of <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+      is:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      \mathbf{Q}_1 = \frac{1}{1-\rho^2}
+      \begin{bmatrix}
+      1 & -\rho & 0 & \cdots & 0 \\
+      -\rho & 1+\rho^2 & -\rho & \cdots & 0 \\
+      0 & -\rho & 1+\rho^2 & \cdots & 0 \\
+      \vdots & \vdots & \vdots & \ddots & \vdots \\
+      0 & 0 & 0 & \cdots & 1
+      \end{bmatrix}
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:msub>
+                      <mml:mi>𝐐</mml:mi>
+                      <mml:mn>1</mml:mn>
+                    </mml:msub>
+                    <mml:mo>=</mml:mo>
+                    <mml:mfrac>
+                      <mml:mn>1</mml:mn>
+                      <mml:mrow>
+                        <mml:mn>1</mml:mn>
+                        <mml:mo>−</mml:mo>
+                        <mml:msup>
+                          <mml:mi>ρ</mml:mi>
+                          <mml:mn>2</mml:mn>
+                        </mml:msup>
+                      </mml:mrow>
+                    </mml:mfrac>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">[</mml:mo>
+                      <mml:mtable>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>1</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
+                            <mml:mi>ρ</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
+                            <mml:mi>ρ</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>1</mml:mn>
+                            <mml:mo>+</mml:mo>
+                            <mml:msup>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msup>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
+                            <mml:mi>ρ</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
+                            <mml:mi>ρ</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>1</mml:mn>
+                            <mml:mo>+</mml:mo>
+                            <mml:msup>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msup>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mo>⋱</mml:mo>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>1</mml:mn>
+                          </mml:mtd>
+                        </mml:mtr>
+                      </mml:mtable>
+                      <mml:mo stretchy="true" form="postfix">]</mml:mo>
+                    </mml:mrow>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <sec id="circulant-approximation">
+            <title>Circulant Approximation</title>
+            <p>The circulant approximation to <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>,
+        denoted as <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_1^{(circ)}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msubsup><mml:mi>𝐐</mml:mi><mml:mn>1</mml:mn><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>c</mml:mi><mml:mi>i</mml:mi><mml:mi>r</mml:mi><mml:mi>c</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:msubsup></mml:math></alternatives></inline-formula>,
+        is:</p>
+            <p>
+              <disp-formula>
+                <alternatives>
+                  <tex-math><![CDATA[
+        \mathbf{Q}_1^{(circ)} = \frac{1}{1-\rho^2}
+        \begin{bmatrix}
+        1+\rho^2 & -\rho & 0 & \cdots & 0 & -\rho \\
+        -\rho & 1+\rho^2 & -\rho & \cdots & 0 & 0 \\
+        0 & -\rho & 1+\rho^2 & \cdots & 0 & 0 \\
+        \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+        -\rho & 0 & 0 & \cdots & -\rho & 1+\rho^2
+        \end{bmatrix}
+        ]]></tex-math>
+                  <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                    <mml:mrow>
+                      <mml:msubsup>
+                        <mml:mi>𝐐</mml:mi>
+                        <mml:mn>1</mml:mn>
+                        <mml:mrow>
+                          <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                          <mml:mi>c</mml:mi>
+                          <mml:mi>i</mml:mi>
+                          <mml:mi>r</mml:mi>
+                          <mml:mi>c</mml:mi>
+                          <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                        </mml:mrow>
+                      </mml:msubsup>
+                      <mml:mo>=</mml:mo>
+                      <mml:mfrac>
+                        <mml:mn>1</mml:mn>
+                        <mml:mrow>
+                          <mml:mn>1</mml:mn>
+                          <mml:mo>−</mml:mo>
+                          <mml:msup>
+                            <mml:mi>ρ</mml:mi>
+                            <mml:mn>2</mml:mn>
+                          </mml:msup>
+                        </mml:mrow>
+                      </mml:mfrac>
+                      <mml:mrow>
+                        <mml:mo stretchy="true" form="prefix">[</mml:mo>
+                        <mml:mtable>
+                          <mml:mtr>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>1</mml:mn>
+                              <mml:mo>+</mml:mo>
+                              <mml:msup>
+                                <mml:mi>ρ</mml:mi>
+                                <mml:mn>2</mml:mn>
+                              </mml:msup>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>−</mml:mi>
+                              <mml:mi>ρ</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋯</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>−</mml:mi>
+                              <mml:mi>ρ</mml:mi>
+                            </mml:mtd>
+                          </mml:mtr>
+                          <mml:mtr>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>−</mml:mi>
+                              <mml:mi>ρ</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>1</mml:mn>
+                              <mml:mo>+</mml:mo>
+                              <mml:msup>
+                                <mml:mi>ρ</mml:mi>
+                                <mml:mn>2</mml:mn>
+                              </mml:msup>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>−</mml:mi>
+                              <mml:mi>ρ</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋯</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                          </mml:mtr>
+                          <mml:mtr>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>−</mml:mi>
+                              <mml:mi>ρ</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>1</mml:mn>
+                              <mml:mo>+</mml:mo>
+                              <mml:msup>
+                                <mml:mi>ρ</mml:mi>
+                                <mml:mn>2</mml:mn>
+                              </mml:msup>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋯</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                          </mml:mtr>
+                          <mml:mtr>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋮</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋮</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋮</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mo>⋱</mml:mo>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋮</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋮</mml:mi>
+                            </mml:mtd>
+                          </mml:mtr>
+                          <mml:mtr>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>−</mml:mi>
+                              <mml:mi>ρ</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋯</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>−</mml:mi>
+                              <mml:mi>ρ</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>1</mml:mn>
+                              <mml:mo>+</mml:mo>
+                              <mml:msup>
+                                <mml:mi>ρ</mml:mi>
+                                <mml:mn>2</mml:mn>
+                              </mml:msup>
+                            </mml:mtd>
+                          </mml:mtr>
+                        </mml:mtable>
+                        <mml:mo stretchy="true" form="postfix">]</mml:mo>
+                      </mml:mrow>
+                    </mml:mrow>
+                  </mml:math>
+                </alternatives>
+              </disp-formula>
+            </p>
+            <p>This approximation treats the first and last observations as
+        neighbors, effectively wrapping the data around a circle.</p>
+          </sec>
+          <sec id="folded-circulant-approximation">
+            <title>Folded Circulant Approximation</title>
+            <p>The folded circulant approximation,
+        <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_1^{(fold)}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msubsup><mml:mi>𝐐</mml:mi><mml:mn>1</mml:mn><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>f</mml:mi><mml:mi>o</mml:mi><mml:mi>l</mml:mi><mml:mi>d</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:msubsup></mml:math></alternatives></inline-formula>,
+        is based on a reflected version of the data. We double the data
+        by reflecting it, giving us the data
+        <inline-formula><alternatives><tex-math><![CDATA[x_1,  \dots, x_n, x_n, \dots, x_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>x</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>.
+        We then model this doubled data with a
+        <inline-formula><alternatives><tex-math><![CDATA[2n \times 2n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mn>2</mml:mn><mml:mi>n</mml:mi><mml:mo>×</mml:mo><mml:mn>2</mml:mn><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+        circulant matrix. If written out as an
+        <inline-formula><alternatives><tex-math><![CDATA[n \times n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>n</mml:mi><mml:mo>×</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+        matrix, it takes the form:</p>
+            <p>
+              <disp-formula>
+                <alternatives>
+                  <tex-math><![CDATA[
+        \mathbf{Q}_1^{(fold)} = \frac{1}{1-\rho^2}
+        \begin{bmatrix}
+        1-\rho+\rho^2 & -\rho & 0 & \cdots & 0 & 0 \\
+        -\rho & 1+\rho^2 & -\rho & \cdots & 0 & 0 \\
+        0 & -\rho & 1+\rho^2 & \cdots & 0 & 0 \\
+        \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+        0 & 0 & 0 & \cdots & -\rho & 1-\rho+\rho^2
+        \end{bmatrix}
+        ]]></tex-math>
+                  <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                    <mml:mrow>
+                      <mml:msubsup>
+                        <mml:mi>𝐐</mml:mi>
+                        <mml:mn>1</mml:mn>
+                        <mml:mrow>
+                          <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                          <mml:mi>f</mml:mi>
+                          <mml:mi>o</mml:mi>
+                          <mml:mi>l</mml:mi>
+                          <mml:mi>d</mml:mi>
+                          <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                        </mml:mrow>
+                      </mml:msubsup>
+                      <mml:mo>=</mml:mo>
+                      <mml:mfrac>
+                        <mml:mn>1</mml:mn>
+                        <mml:mrow>
+                          <mml:mn>1</mml:mn>
+                          <mml:mo>−</mml:mo>
+                          <mml:msup>
+                            <mml:mi>ρ</mml:mi>
+                            <mml:mn>2</mml:mn>
+                          </mml:msup>
+                        </mml:mrow>
+                      </mml:mfrac>
+                      <mml:mrow>
+                        <mml:mo stretchy="true" form="prefix">[</mml:mo>
+                        <mml:mtable>
+                          <mml:mtr>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>1</mml:mn>
+                              <mml:mo>−</mml:mo>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mo>+</mml:mo>
+                              <mml:msup>
+                                <mml:mi>ρ</mml:mi>
+                                <mml:mn>2</mml:mn>
+                              </mml:msup>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>−</mml:mi>
+                              <mml:mi>ρ</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋯</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                          </mml:mtr>
+                          <mml:mtr>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>−</mml:mi>
+                              <mml:mi>ρ</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>1</mml:mn>
+                              <mml:mo>+</mml:mo>
+                              <mml:msup>
+                                <mml:mi>ρ</mml:mi>
+                                <mml:mn>2</mml:mn>
+                              </mml:msup>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>−</mml:mi>
+                              <mml:mi>ρ</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋯</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                          </mml:mtr>
+                          <mml:mtr>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>−</mml:mi>
+                              <mml:mi>ρ</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>1</mml:mn>
+                              <mml:mo>+</mml:mo>
+                              <mml:msup>
+                                <mml:mi>ρ</mml:mi>
+                                <mml:mn>2</mml:mn>
+                              </mml:msup>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋯</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                          </mml:mtr>
+                          <mml:mtr>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋮</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋮</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋮</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mo>⋱</mml:mo>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋮</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋮</mml:mi>
+                            </mml:mtd>
+                          </mml:mtr>
+                          <mml:mtr>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>0</mml:mn>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>⋯</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mi>−</mml:mi>
+                              <mml:mi>ρ</mml:mi>
+                            </mml:mtd>
+                            <mml:mtd columnalign="center" style="text-align: center">
+                              <mml:mn>1</mml:mn>
+                              <mml:mo>−</mml:mo>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mo>+</mml:mo>
+                              <mml:msup>
+                                <mml:mi>ρ</mml:mi>
+                                <mml:mn>2</mml:mn>
+                              </mml:msup>
+                            </mml:mtd>
+                          </mml:mtr>
+                        </mml:mtable>
+                        <mml:mo stretchy="true" form="postfix">]</mml:mo>
+                      </mml:mrow>
+                    </mml:mrow>
+                  </mml:math>
+                </alternatives>
+              </disp-formula>
+            </p>
+            <p>This approximation modifies the first and last diagonal
+        elements to account for the reflection of the data. As
+        <inline-formula><alternatives><tex-math><![CDATA[x_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>x</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+        now is the first and last data point, then we avoid the circular
+        dependence from the regular circulant approximation.</p>
+          </sec>
+        </sec>
+        <sec id="extension-to-the-full-q-matrix">
+          <title>Extension to the Full Q Matrix</title>
+          <p>For a two-dimensional spatial field on an
+      <inline-formula><alternatives><tex-math><![CDATA[n \times n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>n</mml:mi><mml:mo>×</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+      grid, we construct the full precision matrix Q using a Kronecker
+      sum:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      \mathbf{Q} = (\mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1)^{(\nu + 1)}
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:mi>𝐐</mml:mi>
+                    <mml:mo>=</mml:mo>
+                    <mml:msup>
+                      <mml:mrow>
+                        <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                        <mml:msub>
+                          <mml:mi>𝐐</mml:mi>
+                          <mml:mn>1</mml:mn>
+                        </mml:msub>
+                        <mml:mo>⊗</mml:mo>
+                        <mml:mi>𝐈</mml:mi>
+                        <mml:mo>+</mml:mo>
+                        <mml:mi>𝐈</mml:mi>
+                        <mml:mo>⊗</mml:mo>
+                        <mml:msub>
+                          <mml:mi>𝐐</mml:mi>
+                          <mml:mn>1</mml:mn>
+                        </mml:msub>
+                        <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                      </mml:mrow>
+                      <mml:mrow>
+                        <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                        <mml:mi>ν</mml:mi>
+                        <mml:mo>+</mml:mo>
+                        <mml:mn>1</mml:mn>
+                        <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                      </mml:mrow>
+                    </mml:msup>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>where <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
+      denotes the Kronecker product, I is the
+      <inline-formula><alternatives><tex-math><![CDATA[n \times n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>n</mml:mi><mml:mo>×</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+      identity matrix, and <inline-formula><alternatives><tex-math><![CDATA[\nu]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ν</mml:mi></mml:math></alternatives></inline-formula>
+      is a smoothness parameter.</p>
+          <p>When we approximate <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+      with a circulant matrix, this Kronecker sum results in a
+      block-circulant matrix with circulant blocks (BCCB). To see this,
+      let’s consider the case where <inline-formula><alternatives><tex-math><![CDATA[\nu = 0]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>ν</mml:mi><mml:mo>=</mml:mo><mml:mn>0</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>
+      for simplicity:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      \mathbf{Q} = \mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:mi>𝐐</mml:mi>
+                    <mml:mo>=</mml:mo>
+                    <mml:msub>
+                      <mml:mi>𝐐</mml:mi>
+                      <mml:mn>1</mml:mn>
+                    </mml:msub>
+                    <mml:mo>⊗</mml:mo>
+                    <mml:mi>𝐈</mml:mi>
+                    <mml:mo>+</mml:mo>
+                    <mml:mi>𝐈</mml:mi>
+                    <mml:mo>⊗</mml:mo>
+                    <mml:msub>
+                      <mml:mi>𝐐</mml:mi>
+                      <mml:mn>1</mml:mn>
+                    </mml:msub>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>Now, let <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+      be approximated by a circulant matrix C with base vector c = [c0,
+      c1, …, cn-1]. Then:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      \mathbf{Q}_1 \approx \mathbf{C} = 
+      \begin{pmatrix}
+      c_0 & c_1 & \cdots & c_{n-1} \\
+      c_{n-1} & c_0 & \cdots & c_{n-2} \\
+      \vdots & \vdots & \ddots & \vdots \\
+      c_1 & c_2 & \cdots & c_0
+      \end{pmatrix}
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:msub>
+                      <mml:mi>𝐐</mml:mi>
+                      <mml:mn>1</mml:mn>
+                    </mml:msub>
+                    <mml:mo>≈</mml:mo>
+                    <mml:mi>𝐂</mml:mi>
+                    <mml:mo>=</mml:mo>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                      <mml:mtable>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>n</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>1</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>n</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>1</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>n</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>2</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mo>⋱</mml:mo>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                      </mml:mtable>
+                      <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                    </mml:mrow>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>The Kronecker product C ⊗ I results in a block matrix where
+      each block is a scalar multiple of I:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      \mathbf{C} \otimes \mathbf{I} = 
+      \begin{pmatrix}
+      c_0\mathbf{I} & c_1\mathbf{I} & \cdots & c_{n-1}\mathbf{I} \\
+      c_{n-1}\mathbf{I} & c_0\mathbf{I} & \cdots & c_{n-2}\mathbf{I} \\
+      \vdots & \vdots & \ddots & \vdots \\
+      c_1\mathbf{I} & c_2\mathbf{I} & \cdots & c_0\mathbf{I}
+      \end{pmatrix}
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:mi>𝐂</mml:mi>
+                    <mml:mo>⊗</mml:mo>
+                    <mml:mi>𝐈</mml:mi>
+                    <mml:mo>=</mml:mo>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                      <mml:mtable>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                            <mml:mi>𝐈</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                            <mml:mi>𝐈</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>n</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>1</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                            <mml:mi>𝐈</mml:mi>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>n</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>1</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                            <mml:mi>𝐈</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                            <mml:mi>𝐈</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>n</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>2</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                            <mml:mi>𝐈</mml:mi>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mo>⋱</mml:mo>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                            <mml:mi>𝐈</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msub>
+                            <mml:mi>𝐈</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>c</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                            <mml:mi>𝐈</mml:mi>
+                          </mml:mtd>
+                        </mml:mtr>
+                      </mml:mtable>
+                      <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                    </mml:mrow>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>Similarly, I ⊗ C results in a block matrix where each block is
+      a copy of C:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      \mathbf{I} \otimes \mathbf{C} = 
+      \begin{pmatrix}
+      \mathbf{C} & \mathbf{0} & \cdots & \mathbf{0} \\
+      \mathbf{0} & \mathbf{C} & \cdots & \mathbf{0} \\
+      \vdots & \vdots & \ddots & \vdots \\
+      \mathbf{0} & \mathbf{0} & \cdots & \mathbf{C}
+      \end{pmatrix}
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:mi>𝐈</mml:mi>
+                    <mml:mo>⊗</mml:mo>
+                    <mml:mi>𝐂</mml:mi>
+                    <mml:mo>=</mml:mo>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                      <mml:mtable>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>𝐂</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>𝟎</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>𝟎</mml:mn>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>𝟎</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>𝐂</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>𝟎</mml:mn>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mo>⋱</mml:mo>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>𝟎</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>𝟎</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>𝐂</mml:mi>
+                          </mml:mtd>
+                        </mml:mtr>
+                      </mml:mtable>
+                      <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                    </mml:mrow>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>The sum of these two matrices is a block-circulant matrix with
+      circulant blocks:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      \mathbf{Q} \approx \mathbf{C} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{C} = 
+      \begin{pmatrix}
+      \mathbf{B}_0 & \mathbf{B}_1 & \cdots & \mathbf{B}_{n-1} \\
+      \mathbf{B}_{n-1} & \mathbf{B}_0 & \cdots & \mathbf{B}_{n-2} \\
+      \vdots & \vdots & \ddots & \vdots \\
+      \mathbf{B}_1 & \mathbf{B}_2 & \cdots & \mathbf{B}_0
+      \end{pmatrix}
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:mi>𝐐</mml:mi>
+                    <mml:mo>≈</mml:mo>
+                    <mml:mi>𝐂</mml:mi>
+                    <mml:mo>⊗</mml:mo>
+                    <mml:mi>𝐈</mml:mi>
+                    <mml:mo>+</mml:mo>
+                    <mml:mi>𝐈</mml:mi>
+                    <mml:mo>⊗</mml:mo>
+                    <mml:mi>𝐂</mml:mi>
+                    <mml:mo>=</mml:mo>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                      <mml:mtable>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>𝐁</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>𝐁</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>𝐁</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>n</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>1</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>𝐁</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>n</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>1</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>𝐁</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>𝐁</mml:mi>
+                              <mml:mrow>
+                                <mml:mi>n</mml:mi>
+                                <mml:mo>−</mml:mo>
+                                <mml:mn>2</mml:mn>
+                              </mml:mrow>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mo>⋱</mml:mo>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>𝐁</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>𝐁</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:msub>
+                              <mml:mi>𝐁</mml:mi>
+                              <mml:mn>0</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                      </mml:mtable>
+                      <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                    </mml:mrow>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>where each Bi is a circulant matrix. Specifically, B0 = c0I +
+      C, and for i ≠ 0, Bi = ciI.</p>
+          <p>This BCCB structure allows us to use 2D FFT for efficient
+      computations. The base matrix c for this BCCB structure is:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      \mathbf{c} = \begin{bmatrix}
+      2+2\rho^2 & -\rho & 0 & \cdots & 0 & -\rho \\
+      -\rho & 0 & 0 & \cdots & 0 & 0 \\
+      0 & 0 & 0 & \cdots & 0 & 0 \\
+      \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+      -\rho & 0 & 0 & \cdots & 0 & 0
+      \end{bmatrix}
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:mi>𝐜</mml:mi>
+                    <mml:mo>=</mml:mo>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">[</mml:mo>
+                      <mml:mtable>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>2</mml:mn>
+                            <mml:mo>+</mml:mo>
+                            <mml:mn>2</mml:mn>
+                            <mml:msup>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msup>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
+                            <mml:mi>ρ</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
+                            <mml:mi>ρ</mml:mi>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
+                            <mml:mi>ρ</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mo>⋱</mml:mo>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
+                            <mml:mi>ρ</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                        </mml:mtr>
+                      </mml:mtable>
+                      <mml:mo stretchy="true" form="postfix">]</mml:mo>
+                    </mml:mrow>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>This base matrix c captures the structure of the precision
+      matrix Q and allows for efficient computation of eigenvalues using
+      the 2D Fast Fourier Transform (FFT), enabling rapid calculation of
+      the log-determinant and quadratic forms needed for the Gaussian
+      copula density.</p>
+        </sec>
+      </sec>
+    </sec>
+    <sec id="results">
+      <title>Results</title>
+      <p>To evaluate the computational efficiency of our proposed methods,
+  we conducted a benchmarking study comparing the exact solution with
+  the circulant and folded circulant approximations. We measured the
+  time taken to evaluate the density of a Gaussian copula for various
+  grid sizes, ranging from 100x100 to 40000x40000.</p>
+      <sec id="computational-efficiency">
+        <title>Computational Efficiency</title>
+        <p>Table 1 presents the results of a benchmark comparing the time it
+    takes to evaluate the gaussian copula density described above. For
+    each grid size, we report the computation time for the exact method
+    and the two approximations, along with the speed-up factor relative
+    to the exact method. Each calculation was performed twenty times and
+    the medians are shown in the table.</p>
+        <table-wrap>
+          <caption>
+            <p>Table 1. Benchmarking how long it takes to evaluate the
+        density of a Mátern(<inline-formula><alternatives><tex-math><![CDATA[\nu]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ν</mml:mi></mml:math></alternatives></inline-formula>)-like
+        field with correlation parameter <inline-formula><alternatives><tex-math><![CDATA[\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ρ</mml:mi></mml:math></alternatives></inline-formula>,
+        scaled to have unit marginal variance.</p>
+          </caption>
+          <table>
+            <thead>
+              <tr>
+                <th>Q_size</th>
+                <th>Exact</th>
+                <th>Circulant</th>
+                <th/>
+                <th>Folded</th>
+                <th/>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td/>
+                <td>Time</td>
+                <td>Time</td>
+                <td>Speed-Up</td>
+                <td>Time</td>
+                <td>Speed-Up</td>
+              </tr>
+              <tr>
+                <td>100x100</td>
+                <td>194.69μs</td>
+                <td>33.89μs</td>
+                <td>5.75x</td>
+                <td>44.77μs</td>
+                <td>4.35x</td>
+              </tr>
+              <tr>
+                <td>400x400</td>
+                <td>309.61μs</td>
+                <td>37.45μs</td>
+                <td>8.27x</td>
+                <td>122.78μs</td>
+                <td>2.52x</td>
+              </tr>
+              <tr>
+                <td>900x900</td>
+                <td>790.30μs</td>
+                <td>85.65μs</td>
+                <td>9.23x</td>
+                <td>155.47μs</td>
+                <td>5.08x</td>
+              </tr>
+              <tr>
+                <td>1600x1600</td>
+                <td>1.96ms</td>
+                <td>98.71μs</td>
+                <td>19.86x</td>
+                <td>243.64μs</td>
+                <td>8.05x</td>
+              </tr>
+              <tr>
+                <td>3600x3600</td>
+                <td>8.66ms</td>
+                <td>151.70μs</td>
+                <td>57.1x</td>
+                <td>484.07μs</td>
+                <td>17.89x</td>
+              </tr>
+              <tr>
+                <td>10000x10000</td>
+                <td>71.81ms</td>
+                <td>343.07μs</td>
+                <td>209.31x</td>
+                <td>1.36ms</td>
+                <td>52.76x</td>
+              </tr>
+              <tr>
+                <td>19600x19600</td>
+                <td>246.40ms</td>
+                <td>667.58μs</td>
+                <td>369.09x</td>
+                <td>2.89ms</td>
+                <td>85.32x</td>
+              </tr>
+              <tr>
+                <td>40000x40000</td>
+                <td>997.32ms</td>
+                <td>1.44ms</td>
+                <td>694.46x</td>
+                <td>7.69ms</td>
+                <td>129.69x</td>
+              </tr>
+            </tbody>
+          </table>
+        </table-wrap>
+        <p>The results demonstrate significant computational gains from both
+    approximation methods, with the efficiency advantage increasing for
+    larger grid sizes. Key observations include:</p>
+        <list list-type="order">
+          <list-item>
+            <p><bold>Scalability</bold>: Both approximation methods show
+        superior scalability compared to the exact method. As the grid
+        size increases, the speed-up factor generally increases,
+        indicating that the approximations become increasingly
+        advantageous for larger spatial fields.</p>
+          </list-item>
+          <list-item>
+            <p><bold>Circulant Approximation Performance</bold>: The
+        circulant approximation consistently outperforms the folded
+        circulant approximation in terms of speed. For the largest grid
+        size (40000x40000), it achieves a remarkable 694.46x speed-up
+        over the exact method.</p>
+          </list-item>
+          <list-item>
+            <p><bold>Folded Circulant Approximation</bold>: While not as
+        fast as the circulant approximation, the folded circulant method
+        still offers substantial speed improvements, reaching a 129.69x
+        speed-up for the 40000x40000 grid.</p>
+          </list-item>
+          <list-item>
+            <p><bold>Trade-off Considerations</bold>: The choice between the
+        circulant and folded circulant approximations may depend on the
+        specific requirements of the application. While the circulant
+        approximation is faster, the folded circulant method may offer
+        better accuracy, particularly near the edges of the spatial
+        field.</p>
+          </list-item>
+        </list>
+        <p>These results underscore the practical value of our approximation
+    methods, especially for large-scale spatial analyses where
+    computational efficiency is crucial. The substantial speed-ups
+    achieved, particularly for larger grids, demonstrate the potential
+    of these methods to enable the analysis of much larger spatial
+    datasets than previously feasible with exact methods.</p>
       </sec>
     </sec>
   </body>

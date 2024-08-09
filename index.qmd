@@ -59,7 +59,7 @@ We use a Matérn-like precision matrix structure defined as:
 
 $$
 \begin{aligned}
-\mathbf{Q} &= \mathbf{\tilde{Q}^\nu}, \quad\nu \in \{0, 1, 2\}  \\
+\mathbf{Q} &= \mathbf{\tilde{Q}^{(\nu + 1)}}, \quad\nu \in \{0, 1, 2\}  \\
 \mathbf{\tilde Q} &= \mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1,
 \end{aligned}
 $$
@@ -107,7 +107,7 @@ Our goal is to efficiently compute this log-density for large spatial fields.
 We define the precision matrix $\mathbf{Q}$ as:
 
 $$
-\mathbf{Q} = (\mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1)^\nu, \quad \nu \in \{0, 1, 2\}
+\mathbf{Q} = (\mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1)^{(\nu + 1)}, \quad \nu \in \{0, 1, 2\}
 $$
 
 where $\mathbf{Q}_1$ is the precision matrix of a one-dimensional AR(1) process. This matrix is then scaled so that it implied unit marginal variances.
@@ -125,7 +125,7 @@ $$
 where $\mathbf{V}$ is the matrix of eigenvectors and $\mathbf{\Lambda}$ is the diagonal matrix of eigenvalues. Then, the eigendecomposition of $\mathbf{Q}$ is:
 
 $$
-\mathbf{Q} = (\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T.
+\mathbf{Q} = (\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^{(\nu + 1)}(\mathbf{V} \otimes \mathbf{V})^T.
 $$
 
 This means that the eigenvectors of $\mathbf{Q}$ are $\mathbf{v}_j \otimes \mathbf{v}_i$ and the corresponding eigenvalues are $\lambda_i + \lambda_j$.
@@ -147,7 +147,7 @@ We scale the eigendecomposition of $\mathbf{Q}$ using the marginal standard devi
 $$
 \begin{aligned}
 \mathbf{D}\mathbf{Q}\mathbf{D} &= \mathbf{D}(\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T\mathbf{D} \\
-&= (\mathbf{\tilde V} \otimes \mathbf{\tilde V})(\mathbf{\tilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\tilde \Lambda})^\nu(\mathbf{\tilde V} \otimes \mathbf{\tilde V})^T
+&= (\mathbf{\tilde V} \otimes \mathbf{\tilde V})(\mathbf{\tilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\tilde \Lambda})(\mathbf{\tilde V} \otimes \mathbf{\tilde V})^T
 \end{aligned}
 $$
 
@@ -157,9 +157,229 @@ where $\mathbf{D}$ is a diagonal matrix with $D_{ii} = \sigma_i$.
 
 Using this scaled eigendecomposition, we efficiently compute:
 
-1. Log-determinant: $\log|\mathbf{D}\mathbf{Q}\mathbf{D}| = \sum_{i,j} \nu \log(\tilde\lambda_i + \tilde\lambda_j)$
+1. Log-determinant: $\log|\mathbf{D}\mathbf{Q}\mathbf{D}| = \sum_{i,j} \log(\tilde\lambda_i + \tilde\lambda_j)$
 
-2. Quadratic form: $\mathbf{z}^T\mathbf{D}\mathbf{Q}\mathbf{D}\mathbf{z} = \sum_{i,j} (\tilde\lambda_i + \tilde\lambda_j)^\nu y_{ij}^2$, where $y_{ij} = (\mathbf{\tilde v}_j \otimes \mathbf{\tilde v}_i)^T\mathbf{z}$
+2. Quadratic form: $\mathbf{z}^T\mathbf{D}\mathbf{Q}\mathbf{D}\mathbf{z} = \sum_{i,j} (\tilde\lambda_i + \tilde\lambda_j) y_{ij}^2$, where $y_{ij} = (\mathbf{\tilde v}_j \otimes \mathbf{\tilde v}_i)^T\mathbf{z}$
 
 This approach allows for efficient computation of the Gaussian copula density without explicitly forming the full $n^2 \times n^2$ precision matrix $\mathbf{Q}$ or its inverse $\mathbf{\Sigma}$.
 
+## Circulant and Folded Circulant Approximations
+
+While the eigendecomposition method provides an exact solution, it can be computationally expensive for very large spatial fields. To address this, we introduce circulant and folded circulant approximations that offer potential computational advantages.
+
+### Circulant Matrices
+
+A circulant matrix C is a special kind of matrix where each row is a cyclic shift of the row above it. It can be fully specified by its first row or column, called the base c:
+
+$$
+C = \begin{pmatrix}
+c_0 & c_1 & c_2 & \cdots & c_{n-1} \\
+c_{n-1} & c_0 & c_1 & \cdots & c_{n-2} \\
+c_{n-2} & c_{n-1} & c_0 & \cdots & c_{n-3} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+c_1 & c_2 & c_3 & \cdots & c_0
+\end{pmatrix} = (c_{j-i \mod n})
+$$
+
+The key property of circulant matrices is that they are diagonalized by the Discrete Fourier Transform (DFT) matrix. If F is the DFT matrix, then for any circulant matrix C:
+
+$$
+C = F \Lambda F^H
+$$
+
+where $\Lambda$ is a diagonal matrix of eigenvalues and $F^H$ is the conjugate transpose of F.
+
+### Block Circulant Matrices
+
+For two-dimensional spatial fields, we use block circulant matrices with circulant blocks (BCCB). An Nn × Nn matrix C is block circulant if it has the form:
+
+$$
+C = \begin{pmatrix}
+C_0 & C_1 & C_2 & \cdots & C_{N-1} \\
+C_{N-1} & C_0 & C_1 & \cdots & C_{N-2} \\
+C_{N-2} & C_{N-1} & C_0 & \cdots & C_{N-3} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+C_1 & C_2 & C_3 & \cdots & C_0
+\end{pmatrix} = (C_{j-i \mod N})
+$$
+
+where each $C_i$ is itself a circulant n × n matrix.
+
+### Computational Advantages
+
+The circulant structure allows for efficient computation using the Fast Fourier Transform (FFT):
+
+1. Matrix-vector multiplication: For a circulant matrix C with base c and a vector v
+$$
+Cv = \sqrt{n} \text{DFT}(\text{DFT}(c) \odot \text{IDFT}(v)),
+$$
+
+2. Matrix inverse: The base of $C^{-1}$ is given by
+$$
+\frac{1}{n} \text{IDFT}(\text{DFT}(c)^{-1}).
+$$
+
+### Approximations for Q1
+
+Let $Q_1$ be the precision matrix of a one-dimensional AR(1) process with n observations. The exact form of $Q_1$ is:
+
+$$
+\mathbf{Q}_1 = \frac{1}{1-\rho^2}
+\begin{bmatrix}
+1 & -\rho & 0 & \cdots & 0 \\
+-\rho & 1+\rho^2 & -\rho & \cdots & 0 \\
+0 & -\rho & 1+\rho^2 & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \cdots & 1
+\end{bmatrix}
+$$
+
+#### Circulant Approximation
+
+The circulant approximation to $Q_1$, denoted as $\mathbf{Q}_1^{(circ)}$, is:
+
+$$
+\mathbf{Q}_1^{(circ)} = \frac{1}{1-\rho^2}
+\begin{bmatrix}
+1+\rho^2 & -\rho & 0 & \cdots & 0 & -\rho \\
+-\rho & 1+\rho^2 & -\rho & \cdots & 0 & 0 \\
+0 & -\rho & 1+\rho^2 & \cdots & 0 & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+-\rho & 0 & 0 & \cdots & -\rho & 1+\rho^2
+\end{bmatrix}
+$$
+
+This approximation treats the first and last observations as neighbors, effectively wrapping the data around a circle.
+
+#### Folded Circulant Approximation
+
+The folded circulant approximation, $\mathbf{Q}_1^{(fold)}$, is based on a reflected version of the data. We double the data by reflecting it, giving us the data $x_1,  \dots, x_n, x_n, \dots, x_1$. We then model this doubled data with a $2n \times 2n$ circulant matrix. If written out as an $n \times n$ matrix, it takes the form:
+
+$$
+\mathbf{Q}_1^{(fold)} = \frac{1}{1-\rho^2}
+\begin{bmatrix}
+1-\rho+\rho^2 & -\rho & 0 & \cdots & 0 & 0 \\
+-\rho & 1+\rho^2 & -\rho & \cdots & 0 & 0 \\
+0 & -\rho & 1+\rho^2 & \cdots & 0 & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+0 & 0 & 0 & \cdots & -\rho & 1-\rho+\rho^2
+\end{bmatrix}
+$$
+
+This approximation modifies the first and last diagonal elements to account for the reflection of the data. As $x_1$ now is the first and last data point, then we avoid the circular dependence from the regular circulant approximation.
+
+### Extension to the Full Q Matrix
+
+For a two-dimensional spatial field on an $n \times n$ grid, we construct the full precision matrix Q using a Kronecker sum:
+
+$$
+\mathbf{Q} = (\mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1)^{(\nu + 1)}
+$$
+
+where $\otimes$ denotes the Kronecker product, I is the $n \times n$ identity matrix, and $\nu$ is a smoothness parameter.
+
+When we approximate $Q_1$ with a circulant matrix, this Kronecker sum results in a block-circulant matrix with circulant blocks (BCCB). To see this, let's consider the case where $\nu = 0$ for simplicity:
+
+$$
+\mathbf{Q} = \mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1
+$$
+
+Now, let $Q_1$ be approximated by a circulant matrix C with base vector c = [c0, c1, ..., cn-1]. Then:
+
+$$
+\mathbf{Q}_1 \approx \mathbf{C} = 
+\begin{pmatrix}
+c_0 & c_1 & \cdots & c_{n-1} \\
+c_{n-1} & c_0 & \cdots & c_{n-2} \\
+\vdots & \vdots & \ddots & \vdots \\
+c_1 & c_2 & \cdots & c_0
+\end{pmatrix}
+$$
+
+The Kronecker product C ⊗ I results in a block matrix where each block is a scalar multiple of I:
+
+$$
+\mathbf{C} \otimes \mathbf{I} = 
+\begin{pmatrix}
+c_0\mathbf{I} & c_1\mathbf{I} & \cdots & c_{n-1}\mathbf{I} \\
+c_{n-1}\mathbf{I} & c_0\mathbf{I} & \cdots & c_{n-2}\mathbf{I} \\
+\vdots & \vdots & \ddots & \vdots \\
+c_1\mathbf{I} & c_2\mathbf{I} & \cdots & c_0\mathbf{I}
+\end{pmatrix}
+$$
+
+Similarly, I ⊗ C results in a block matrix where each block is a copy of C:
+
+$$
+\mathbf{I} \otimes \mathbf{C} = 
+\begin{pmatrix}
+\mathbf{C} & \mathbf{0} & \cdots & \mathbf{0} \\
+\mathbf{0} & \mathbf{C} & \cdots & \mathbf{0} \\
+\vdots & \vdots & \ddots & \vdots \\
+\mathbf{0} & \mathbf{0} & \cdots & \mathbf{C}
+\end{pmatrix}
+$$
+
+The sum of these two matrices is a block-circulant matrix with circulant blocks:
+
+$$
+\mathbf{Q} \approx \mathbf{C} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{C} = 
+\begin{pmatrix}
+\mathbf{B}_0 & \mathbf{B}_1 & \cdots & \mathbf{B}_{n-1} \\
+\mathbf{B}_{n-1} & \mathbf{B}_0 & \cdots & \mathbf{B}_{n-2} \\
+\vdots & \vdots & \ddots & \vdots \\
+\mathbf{B}_1 & \mathbf{B}_2 & \cdots & \mathbf{B}_0
+\end{pmatrix}
+$$
+
+where each Bi is a circulant matrix. Specifically, B0 = c0I + C, and for i ≠ 0, Bi = ciI.
+
+This BCCB structure allows us to use 2D FFT for efficient computations. The base matrix c for this BCCB structure is:
+
+$$
+\mathbf{c} = \begin{bmatrix}
+2+2\rho^2 & -\rho & 0 & \cdots & 0 & -\rho \\
+-\rho & 0 & 0 & \cdots & 0 & 0 \\
+0 & 0 & 0 & \cdots & 0 & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+-\rho & 0 & 0 & \cdots & 0 & 0
+\end{bmatrix}
+$$
+
+This base matrix c captures the structure of the precision matrix Q and allows for efficient computation of eigenvalues using the 2D Fast Fourier Transform (FFT), enabling rapid calculation of the log-determinant and quadratic forms needed for the Gaussian copula density.
+
+# Results
+
+To evaluate the computational efficiency of our proposed methods, we conducted a benchmarking study comparing the exact solution with the circulant and folded circulant approximations. We measured the time taken to evaluate the density of a Gaussian copula for various grid sizes, ranging from 100x100 to 40000x40000.
+
+## Computational Efficiency
+
+Table 1 presents the results of a benchmark comparing the time it takes to evaluate the gaussian copula density described above. For each grid size, we report the computation time for the exact method and the two approximations, along with the speed-up factor relative to the exact method. Each calculation was performed twenty times and the medians are shown in the table.
+
+
+
+| Q_size       | Exact    | Circulant |         | Folded    |         |
+|--------------|----------|-----------|---------|-----------|---------|
+|              | Time     | Time      | Speed-Up| Time      | Speed-Up|
+| 100x100      | 194.69μs | 33.89μs   | 5.75x   | 44.77μs   | 4.35x   |
+| 400x400      | 309.61μs | 37.45μs   | 8.27x   | 122.78μs  | 2.52x   |
+| 900x900      | 790.30μs | 85.65μs   | 9.23x   | 155.47μs  | 5.08x   |
+| 1600x1600    | 1.96ms   | 98.71μs   | 19.86x  | 243.64μs  | 8.05x   |
+| 3600x3600    | 8.66ms   | 151.70μs  | 57.1x   | 484.07μs  | 17.89x  |
+| 10000x10000  | 71.81ms  | 343.07μs  | 209.31x | 1.36ms    | 52.76x  |
+| 19600x19600  | 246.40ms | 667.58μs  | 369.09x | 2.89ms    | 85.32x  |
+| 40000x40000  | 997.32ms | 1.44ms    | 694.46x | 7.69ms    | 129.69x |
+
+: Table 1. Benchmarking how long it takes to evaluate the density of a Mátern($\nu$)-like field with correlation parameter $\rho$, scaled to have unit marginal variance.
+
+The results demonstrate significant computational gains from both approximation methods, with the efficiency advantage increasing for larger grid sizes. Key observations include:
+
+1. **Scalability**: Both approximation methods show superior scalability compared to the exact method. As the grid size increases, the speed-up factor generally increases, indicating that the approximations become increasingly advantageous for larger spatial fields.
+
+2. **Circulant Approximation Performance**: The circulant approximation consistently outperforms the folded circulant approximation in terms of speed. For the largest grid size (40000x40000), it achieves a remarkable 694.46x speed-up over the exact method.
+
+3. **Folded Circulant Approximation**: While not as fast as the circulant approximation, the folded circulant method still offers substantial speed improvements, reaching a 129.69x speed-up for the 40000x40000 grid.
+
+4. **Trade-off Considerations**: The choice between the circulant and folded circulant approximations may depend on the specific requirements of the application. While the circulant approximation is faster, the folded circulant method may offer better accuracy, particularly near the edges of the spatial field.
+
+These results underscore the practical value of our approximation methods, especially for large-scale spatial analyses where computational efficiency is crucial. The substantial speed-ups achieved, particularly for larger grids, demonstrate the potential of these methods to enable the analysis of much larger spatial datasets than previously feasible with exact methods.
