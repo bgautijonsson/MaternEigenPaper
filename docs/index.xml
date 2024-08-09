@@ -5,9 +5,9 @@ and Interchange DTD v1.2 20190208//EN" "JATS-archivearticle1.dtd">
   <front>
     <article-meta>
       <title-group>
-        <article-title>A Fast Algorithm for Computing Multivariate Normal
-Densities using Matérn-like Precision Matrices with Unit Marginal
-Variances</article-title>
+        <article-title>Bridging Gaussian Markov Random Fields and Copulas: A
+Fast Algorithm for Efficient Gaussian Copula Density Computation with
+Matérn-like Precision Matrices</article-title>
       </title-group>
       <contrib-group>
         <contrib contrib-type="author">
@@ -26,16 +26,44 @@ Variances</article-title>
         </institution-wrap>
       </aff>
       <history/>
+      <abstract>
+Gaussian Markov Random Fields (GMRFs) have long been a powerful tool for
+modeling spatial and temporal dependencies in various fields. Similarly,
+copulas have proven invaluable for modeling complex dependency
+structures in multivariate data. However, the combination of these two
+approaches - using GMRFs within copula models - has historically been
+computationally inefficient, limiting their joint application to smaller
+datasets or simpler models. This work presents a novel algorithm that
+overcomes these limitations, allowing for fast and efficient computation
+of Gaussian Copula densities using GMRF precision structures. By
+bridging the gap between GMRFs and copulas, this method opens up new
+possibilities for analyzing large-scale, high-dimensional spatial and
+spatio-temporal data with complex dependency structures.
+</abstract>
     </article-meta>
   </front>
   <body>
     <sec id="introduction">
       <title>Introduction</title>
+      <p>Gaussian Markov Random Fields (GMRFs) and Copulas are two powerful
+  tools in modern statistics, each with their own strengths in modeling
+  complex data structures. GMRFs have been widely used for modeling
+  spatial and temporal dependencies, particularly in fields such as
+  environmental science, epidemiology, and image analysis. Their ability
+  to capture local dependencies through a sparse precision matrix makes
+  them computationally attractive for high-dimensional problems.</p>
+      <p>Copulas, on the other hand, provide a flexible framework for
+  modeling multivariate dependencies, allowing for the separate
+  specification of marginal distributions and their joint behavior. The
+  Gaussian copula, in particular, has gained popularity due to its
+  interpretability and connection to the multivariate normal
+  distribution.</p>
       <p>Let <inline-formula><alternatives><tex-math><![CDATA[\mathbf{X} = (X_1, X_2, \ldots, X_n)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>𝐗</mml:mi><mml:mo>=</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>X</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:msub><mml:mi>X</mml:mi><mml:mn>2</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>X</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>
   be a multivariate random vector with marginal distribution functions
   <inline-formula><alternatives><tex-math><![CDATA[F_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>F</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
-  for <inline-formula><alternatives><tex-math><![CDATA[i = 1, 2, \ldots, n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>i</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mn>2</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>.
-  The joint distribution function of <inline-formula><alternatives><tex-math><![CDATA[\mathbf{X}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐗</mml:mi></mml:math></alternatives></inline-formula>
+  for <inline-formula><alternatives><tex-math><![CDATA[i = 1, 2, \ldots, n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>i</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mn>2</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+  and dependence that is governed by a GMRF copula. The joint
+  distribution function of <inline-formula><alternatives><tex-math><![CDATA[\mathbf{X}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐗</mml:mi></mml:math></alternatives></inline-formula>
   can be written as:</p>
       <p>
         <disp-formula>
@@ -210,7 +238,7 @@ Variances</article-title>
   and precision matrix <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>,
   and <inline-formula><alternatives><tex-math><![CDATA[\Phi^{-1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:math></alternatives></inline-formula>
   is the inverse of the standard normal cumulative distribution
-  function.</p>
+  function. Its density is</p>
       <p>It is imperative that the precision matrix
   <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
   governing the GMRF Copula, <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>,
@@ -220,53 +248,60 @@ Variances</article-title>
   precision matrices, <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>,
   which more often than not have marginal variances that are different
   from 1.</p>
-      <p>This paper presents an fast and efficient algorithm for creating a
-  Matérn-like precision matrix, Q, with unit marginal variance, and
-  computing the multivariate Gaussian copula density of
-  <inline-formula><alternatives><tex-math><![CDATA[Z = \Phi^{-1}(u)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>Z</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>u</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>
-  where <inline-formula><alternatives><tex-math><![CDATA[u \sim \mathrm{Uniform}(0, 1)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>u</mml:mi><mml:mo>∼</mml:mo><mml:mrow><mml:mi mathvariant="normal">U</mml:mi><mml:mi mathvariant="normal">n</mml:mi><mml:mi mathvariant="normal">i</mml:mi><mml:mi mathvariant="normal">f</mml:mi><mml:mi mathvariant="normal">o</mml:mi><mml:mi mathvariant="normal">r</mml:mi><mml:mi mathvariant="normal">m</mml:mi></mml:mrow><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mn>1</mml:mn><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>.</p>
-      <p>The matrix, Q, is defined as</p>
-      <p>
-        <disp-formula>
-          <alternatives>
-            <tex-math><![CDATA[
-  Q = Q_1 \otimes I + I \otimes Q_1,
-  ]]></tex-math>
-            <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
-              <mml:mrow>
-                <mml:mi>Q</mml:mi>
-                <mml:mo>=</mml:mo>
-                <mml:msub>
-                  <mml:mi>Q</mml:mi>
-                  <mml:mn>1</mml:mn>
-                </mml:msub>
-                <mml:mo>⊗</mml:mo>
-                <mml:mi>I</mml:mi>
-                <mml:mo>+</mml:mo>
-                <mml:mi>I</mml:mi>
-                <mml:mo>⊗</mml:mo>
-                <mml:msub>
-                  <mml:mi>Q</mml:mi>
-                  <mml:mn>1</mml:mn>
-                </mml:msub>
-                <mml:mo>,</mml:mo>
-              </mml:mrow>
-            </mml:math>
-          </alternatives>
-        </disp-formula>
-      </p>
-      <p>where <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
-  is the precision matrix of a standardized one-dimensional AR(1)
-  process and <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
-  is the kronecker product.</p>
-      <p>The method leverages the special structure of
-  <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
-  and the use of a kronecker sum in the definitionto avoid explicit
-  formation and inversion of the larger matrix, Q, making it
-  particularly suitable for high-dimensional spatial data.</p>
+      <p>This paper presents a fast and efficient algorithm for creating a
+  Matérn-like precision matrix, <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>,
+  with unit marginal variance, and computing the multivariate Gaussian
+  copula density of <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Z} = \Phi^{-1}(\mathbf{u})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>𝐙</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>𝐮</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>
+  where <inline-formula><alternatives><tex-math><![CDATA[\mathbf{u} \sim \text{Uniform}(0, 1)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>𝐮</mml:mi><mml:mo>∼</mml:mo><mml:mtext mathvariant="normal">Uniform</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mn>1</mml:mn><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>.
+  The method leverages the special structure of the precision matrix and
+  employs efficient eigendecomposition techniques to avoid explicit
+  formation and inversion of the large precision matrix Q.</p>
     </sec>
     <sec id="methods">
       <title>Methods</title>
+      <sec id="gmrf-copula">
+        <title>GMRF Copula</title>
+        <p>Let <inline-formula><alternatives><tex-math><![CDATA[\mathbf{X} = (X_1, X_2, \ldots, X_n)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>𝐗</mml:mi><mml:mo>=</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>X</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:msub><mml:mi>X</mml:mi><mml:mn>2</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>X</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>
+    be a multivariate random vector with marginal distribution functions
+    <inline-formula><alternatives><tex-math><![CDATA[F_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>F</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+    for <inline-formula><alternatives><tex-math><![CDATA[i = 1, 2, \ldots, n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>i</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mn>2</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+    and dependence that is governed by a Gaussian copula. We create the
+    vector</p>
+        <p>The matrix, Q, is defined as</p>
+        <p>
+          <disp-formula>
+            <alternatives>
+              <tex-math><![CDATA[
+    Q = Q_1 \otimes I + I \otimes Q_1,
+    ]]></tex-math>
+              <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                <mml:mrow>
+                  <mml:mi>Q</mml:mi>
+                  <mml:mo>=</mml:mo>
+                  <mml:msub>
+                    <mml:mi>Q</mml:mi>
+                    <mml:mn>1</mml:mn>
+                  </mml:msub>
+                  <mml:mo>⊗</mml:mo>
+                  <mml:mi>I</mml:mi>
+                  <mml:mo>+</mml:mo>
+                  <mml:mi>I</mml:mi>
+                  <mml:mo>⊗</mml:mo>
+                  <mml:msub>
+                    <mml:mi>Q</mml:mi>
+                    <mml:mn>1</mml:mn>
+                  </mml:msub>
+                  <mml:mo>,</mml:mo>
+                </mml:mrow>
+              </mml:math>
+            </alternatives>
+          </disp-formula>
+        </p>
+        <p>where <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+    is the precision matrix of a standardized one-dimensional AR(1)
+    process and <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
+    is the kronecker product.</p>
+      </sec>
       <sec id="theory">
         <title>Theory</title>
       </sec>
@@ -731,13 +766,62 @@ Variances</article-title>
     the multivariate normal density with respect to the precision matrix
     Q. Let <inline-formula><alternatives><tex-math><![CDATA[\lambda_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>λ</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
     and <inline-formula><alternatives><tex-math><![CDATA[v_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>v</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
-    be the eigenvalues and eigenvectors of Q1, respectively. The
-    log-density of a multivariate normal distribution with precision
-    matrix Q is given by:</p>
-        <p><disp-formula><alternatives><tex-math><![CDATA[
-    \log p(x) = -\frac{1}{2} (n \log(2\pi) + \log|Q| + x^T Q x)
-    ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:mo>log</mml:mo><mml:mi>p</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>x</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mi>−</mml:mi><mml:mfrac><mml:mn>1</mml:mn><mml:mn>2</mml:mn></mml:mfrac><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>n</mml:mi><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mn>2</mml:mn><mml:mi>π</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mi>Q</mml:mi><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:msup><mml:mi>x</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>Q</mml:mi><mml:mi>x</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></disp-formula>
-    where <inline-formula><alternatives><tex-math><![CDATA[n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>n</mml:mi></mml:math></alternatives></inline-formula>
+    be the eigenvalues and eigenvectors of Q1, respectively.</p>
+        <p>The log-density of a multivariate normal distribution with
+    precision matrix Q is given by:</p>
+        <p>
+          <disp-formula>
+            <alternatives>
+              <tex-math><![CDATA[
+    \log p(x) = -\frac{1}{2} (n \log(2\pi) - \log|Q| + x^T Q x)
+    ]]></tex-math>
+              <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                <mml:mrow>
+                  <mml:mo>log</mml:mo>
+                  <mml:mi>p</mml:mi>
+                  <mml:mrow>
+                    <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                    <mml:mi>x</mml:mi>
+                    <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                  </mml:mrow>
+                  <mml:mo>=</mml:mo>
+                  <mml:mi>−</mml:mi>
+                  <mml:mfrac>
+                    <mml:mn>1</mml:mn>
+                    <mml:mn>2</mml:mn>
+                  </mml:mfrac>
+                  <mml:mrow>
+                    <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                    <mml:mi>n</mml:mi>
+                    <mml:mo>log</mml:mo>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                      <mml:mn>2</mml:mn>
+                      <mml:mi>π</mml:mi>
+                      <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                    </mml:mrow>
+                    <mml:mo>−</mml:mo>
+                    <mml:mo>log</mml:mo>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">|</mml:mo>
+                      <mml:mi>Q</mml:mi>
+                      <mml:mo stretchy="true" form="postfix">|</mml:mo>
+                    </mml:mrow>
+                    <mml:mo>+</mml:mo>
+                    <mml:msup>
+                      <mml:mi>x</mml:mi>
+                      <mml:mi>T</mml:mi>
+                    </mml:msup>
+                    <mml:mi>Q</mml:mi>
+                    <mml:mi>x</mml:mi>
+                    <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                  </mml:mrow>
+                </mml:mrow>
+              </mml:math>
+            </alternatives>
+          </disp-formula>
+        </p>
+        <p>where <inline-formula><alternatives><tex-math><![CDATA[n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>n</mml:mi></mml:math></alternatives></inline-formula>
     is the dimension of <inline-formula><alternatives><tex-math><![CDATA[x]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>x</mml:mi></mml:math></alternatives></inline-formula>,
     <inline-formula><alternatives><tex-math><![CDATA[|Q|]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mi>Q</mml:mi><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow></mml:math></alternatives></inline-formula>
     is the determinant of Q, and <inline-formula><alternatives><tex-math><![CDATA[x^T Q x]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>x</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>Q</mml:mi><mml:mi>x</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>

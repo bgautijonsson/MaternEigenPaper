@@ -1,17 +1,23 @@
 ---
-title: "A Fast Algorithm for Computing Multivariate Normal Densities using Matérn-like Precision Matrices with Unit Marginal Variances"
+title: "Bridging Gaussian Markov Random Fields and Copulas: A Fast Algorithm for Efficient Gaussian Copula Density Computation with Matérn-like Precision Matrices"
 author: 
   name: Brynjólfur Gauti Guðrúnar Jónsson
   affiliation: University of Iceland
   email: brynjolfur@hi.is
   url: bggj.is
+date: 2024/07/24
 number-sections: false
 code-block-border-left: true
+abstract: "Gaussian Markov Random Fields (GMRFs) have long been a powerful tool for modeling spatial and temporal dependencies in various fields. Similarly, copulas have proven invaluable for modeling complex dependency structures in multivariate data. However, the combination of these two approaches - using GMRFs within copula models - has historically been computationally inefficient, limiting their joint application to smaller datasets or simpler models. This work presents a novel algorithm that overcomes these limitations, allowing for fast and efficient computation of Gaussian Copula densities using GMRF precision structures. By bridging the gap between GMRFs and copulas, this method opens up new possibilities for analyzing large-scale, high-dimensional spatial and spatio-temporal data with complex dependency structures."
 ---
 
 # Introduction
 
-Let $\mathbf{X} = (X_1, X_2, \ldots, X_n)$ be a multivariate random vector with marginal distribution functions $F_i$ for $i = 1, 2, \ldots, n$. The joint distribution function of $\mathbf{X}$ can be written as:
+Gaussian Markov Random Fields (GMRFs) and Copulas are two powerful tools in modern statistics, each with their own strengths in modeling complex data structures. GMRFs have been widely used for modeling spatial and temporal dependencies, particularly in fields such as environmental science, epidemiology, and image analysis. Their ability to capture local dependencies through a sparse precision matrix makes them computationally attractive for high-dimensional problems.
+
+Copulas, on the other hand, provide a flexible framework for modeling multivariate dependencies, allowing for the separate specification of marginal distributions and their joint behavior. The Gaussian copula, in particular, has gained popularity due to its interpretability and connection to the multivariate normal distribution.
+
+Let $\mathbf{X} = (X_1, X_2, \ldots, X_n)$ be a multivariate random vector with marginal distribution functions $F_i$ for $i = 1, 2, \ldots, n$ and dependence that is governed by a GMRF copula. The joint distribution function of $\mathbf{X}$ can be written as:
 
 $$
 F_{\mathbf{X}}(\mathbf{x}) = C(F_1(x_1), F_2(x_2), \ldots, F_n(x_n)),
@@ -21,15 +27,25 @@ where $C$ is the Gaussian copula defined by the GMRF precision matrix $Q$.
 
 The Gaussian copula $C$ is given by:
 
+
 $$
 C(u_1, u_2, \ldots, u_n) = \Phi_Q(\Phi^{-1}(u_1), \Phi^{-1}(u_2), \ldots, \Phi^{-1}(u_n)),
 $$
 
-where $\Phi_Q$ is the joint cumulative distribution function of a multivariate normal distribution with mean vector $\mathbf{0}$ and precision matrix $Q$, and $\Phi^{-1}$ is the inverse of the standard normal cumulative distribution function.
+where $\Phi_Q$ is the joint cumulative distribution function of a multivariate normal distribution with mean vector $\mathbf{0}$ and precision matrix $Q$, and $\Phi^{-1}$ is the inverse of the standard normal cumulative distribution function. Its density is 
+
 
 It is imperative that the precision matrix $Q$ governing the GMRF Copula, $C$, has marginal variance equal to 1 so that is it on the same scale as the transformed data, $\Phi^{-1}(u_i)$. This can be troublesome because GMRFs are defined in terms of their precision matrices, $Q$, which more often than not have marginal variances that are different from 1.
 
-This paper presents an fast and efficient algorithm for creating a Matérn-like precision matrix, Q, with unit marginal variance, and computing the multivariate Gaussian copula density of $Z = \Phi^{-1}(u)$ where $u \sim \mathrm{Uniform}(0, 1)$. 
+This paper presents a fast and efficient algorithm for creating a Matérn-like precision matrix, $\mathbf{Q}$, with unit marginal variance, and computing the multivariate Gaussian copula density of $\mathbf{Z} = \Phi^{-1}(\mathbf{u})$ where $\mathbf{u} \sim \text{Uniform}(0, 1)$. The method leverages the special structure of the precision matrix and employs efficient eigendecomposition techniques to avoid explicit formation and inversion of the large precision matrix Q.
+
+# Methods
+
+## GMRF Copula
+
+Let $\mathbf{X} = (X_1, X_2, \ldots, X_n)$ be a multivariate random vector with marginal distribution functions $F_i$ for $i = 1, 2, \ldots, n$ and dependence that is governed by a Gaussian copula. We create the vector 
+
+
 
 The matrix, Q, is defined as
 
@@ -38,10 +54,6 @@ Q = Q_1 \otimes I + I \otimes Q_1,
 $$
 
 where $Q_1$ is the precision matrix of a standardized one-dimensional AR(1) process and $\otimes$ is the kronecker product.
-
-The method leverages the special structure of $Q_1$ and the use of a kronecker sum in the definitionto avoid explicit formation and inversion of the larger matrix, Q, making it particularly suitable for high-dimensional spatial data.
-
-# Methods
 
 ## Theory
 
@@ -120,12 +132,15 @@ These relationships allow us to efficiently compute the eigendecomposition of th
 
 ## Efficient Density Calculation Using Eigendecomposition
 
-Given the eigendecomposition of Q1, we can efficiently compute the multivariate normal density with respect to the precision matrix Q. Let $\lambda_i$ and $v_i$ be the eigenvalues and eigenvectors of Q1, respectively. The log-density of a multivariate normal distribution with precision matrix Q is given by:
+Given the eigendecomposition of Q1, we can efficiently compute the multivariate normal density with respect to the precision matrix Q. Let $\lambda_i$ and $v_i$ be the eigenvalues and eigenvectors of Q1, respectively. 
+
+The log-density of a multivariate normal distribution with precision matrix Q is given by:
 
 $$
-\log p(x) = -\frac{1}{2} (n \log(2\pi) + \log|Q| + x^T Q x)
+\log p(x) = -\frac{1}{2} (n \log(2\pi) - \log|Q| + x^T Q x)
 $$
-where $n$ is the dimension of $x$, $|Q|$ is the determinant of Q, and $x^T Q x$ is the quadratic form.
+
+where $n$ is the dimension of $x$, $|Q|$ is the determinant of Q, and $x^T Q x$ is the quadratic form. 
 
 ### Log-Determinant Calculation
 

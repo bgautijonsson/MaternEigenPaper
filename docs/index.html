@@ -2,13 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.53">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Brynjólfur Gauti Guðrúnar Jónsson">
+<meta name="dcterms.date" content="2024-07-24">
 
-<title>A Fast Algorithm for Computing Multivariate Normal Densities using Matérn-like Precision Matrices with Unit Marginal Variances</title>
+<title>Bridging Gaussian Markov Random Fields and Copulas: A Fast Algorithm for Efficient Gaussian Copula Density Computation with Matérn-like Precision Matrices</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -71,8 +72,13 @@ window.Quarto = {
 };
 </script>
 
-<meta name="citation_title" content="A Fast Algorithm for Computing Multivariate Normal Densities using Matérn-like Precision Matrices with Unit Marginal Variances">
+<meta name="citation_title" content="Bridging Gaussian Markov Random Fields and Copulas: A Fast Algorithm for Efficient Gaussian Copula Density Computation with Matérn-like Precision Matrices">
+<meta name="citation_abstract" content="Gaussian Markov Random Fields (GMRFs) have long been a powerful tool for modeling spatial and temporal dependencies in various fields. Similarly, copulas have proven invaluable for modeling complex dependency structures in multivariate data. However, the combination of these two approaches - using GMRFs within copula models - has historically been computationally inefficient, limiting their joint application to smaller datasets or simpler models. This work presents a novel algorithm that overcomes these limitations, allowing for fast and efficient computation of Gaussian Copula densities using GMRF precision structures. By bridging the gap between GMRFs and copulas, this method opens up new possibilities for analyzing large-scale, high-dimensional spatial and spatio-temporal data with complex dependency structures.">
 <meta name="citation_author" content="Brynjólfur Gauti Guðrúnar Jónsson">
+<meta name="citation_publication_date" content="2024-07-24">
+<meta name="citation_cover_date" content="2024-07-24">
+<meta name="citation_year" content="2024">
+<meta name="citation_online_date" content="2024-07-24">
 <meta name="citation_language" content="en">
 </head>
 
@@ -81,7 +87,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">A Fast Algorithm for Computing Multivariate Normal Densities using Matérn-like Precision Matrices with Unit Marginal Variances</h1>
+      <h1 class="title">Bridging Gaussian Markov Random Fields and Copulas: A Fast Algorithm for Efficient Gaussian Copula Density Computation with Matérn-like Precision Matrices</h1>
           </div>
 
     
@@ -104,6 +110,12 @@ window.Quarto = {
         <div class="quarto-title-meta">
 
                       
+                <div>
+            <div class="quarto-title-meta-heading">Published</div>
+            <div class="quarto-title-meta-contents">
+              <p class="date">July 24, 2024</p>
+            </div>
+          </div>
           
                 
               </div>
@@ -112,6 +124,12 @@ window.Quarto = {
       <div class="quarto-alternate-formats"><div class="quarto-title-meta-heading">Other Formats</div><div class="quarto-title-meta-contents"><p><a href="index.docx"><i class="bi bi-file-word"></i>MS Word</a></p></div><div class="quarto-title-meta-contents"><p><a href="index.pdf"><i class="bi bi-file-pdf"></i>PDF (acs)</a></p></div><div class="quarto-title-meta-contents"><p><a href="index-meca.zip" data-meca-link="true"><i class="bi bi-archive"></i>MECA Bundle</a></p></div></div></div>
     </div>
 
+    <div>
+      <div class="abstract">
+        <div class="block-title">Abstract</div>
+        Gaussian Markov Random Fields (GMRFs) have long been a powerful tool for modeling spatial and temporal dependencies in various fields. Similarly, copulas have proven invaluable for modeling complex dependency structures in multivariate data. However, the combination of these two approaches - using GMRFs within copula models - has historically been computationally inefficient, limiting their joint application to smaller datasets or simpler models. This work presents a novel algorithm that overcomes these limitations, allowing for fast and efficient computation of Gaussian Copula densities using GMRF precision structures. By bridging the gap between GMRFs and copulas, this method opens up new possibilities for analyzing large-scale, high-dimensional spatial and spatio-temporal data with complex dependency structures.
+      </div>
+    </div>
 
 
     <div class="quarto-other-links-text-target">
@@ -125,6 +143,7 @@ window.Quarto = {
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
   <ul class="collapse">
+  <li><a href="#gmrf-copula" id="toc-gmrf-copula" class="nav-link" data-scroll-target="#gmrf-copula">GMRF Copula</a></li>
   <li><a href="#theory" id="toc-theory" class="nav-link" data-scroll-target="#theory">Theory</a></li>
   <li><a href="#one-dimensional-ar1-matrix" id="toc-one-dimensional-ar1-matrix" class="nav-link" data-scroll-target="#one-dimensional-ar1-matrix">One-Dimensional AR(1) Matrix</a></li>
   <li><a href="#matérn-like-precision-matrix" id="toc-matérn-like-precision-matrix" class="nav-link" data-scroll-target="#matérn-like-precision-matrix">Matérn-like Precision Matrix</a></li>
@@ -160,7 +179,9 @@ window.Quarto = {
 
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
-<p>Let <span class="math inline">\(\mathbf{X} = (X_1, X_2, \ldots, X_n)\)</span> be a multivariate random vector with marginal distribution functions <span class="math inline">\(F_i\)</span> for <span class="math inline">\(i = 1, 2, \ldots, n\)</span>. The joint distribution function of <span class="math inline">\(\mathbf{X}\)</span> can be written as:</p>
+<p>Gaussian Markov Random Fields (GMRFs) and Copulas are two powerful tools in modern statistics, each with their own strengths in modeling complex data structures. GMRFs have been widely used for modeling spatial and temporal dependencies, particularly in fields such as environmental science, epidemiology, and image analysis. Their ability to capture local dependencies through a sparse precision matrix makes them computationally attractive for high-dimensional problems.</p>
+<p>Copulas, on the other hand, provide a flexible framework for modeling multivariate dependencies, allowing for the separate specification of marginal distributions and their joint behavior. The Gaussian copula, in particular, has gained popularity due to its interpretability and connection to the multivariate normal distribution.</p>
+<p>Let <span class="math inline">\(\mathbf{X} = (X_1, X_2, \ldots, X_n)\)</span> be a multivariate random vector with marginal distribution functions <span class="math inline">\(F_i\)</span> for <span class="math inline">\(i = 1, 2, \ldots, n\)</span> and dependence that is governed by a GMRF copula. The joint distribution function of <span class="math inline">\(\mathbf{X}\)</span> can be written as:</p>
 <p><span class="math display">\[
 F_{\mathbf{X}}(\mathbf{x}) = C(F_1(x_1), F_2(x_2), \ldots, F_n(x_n)),
 \]</span></p>
@@ -169,18 +190,21 @@ F_{\mathbf{X}}(\mathbf{x}) = C(F_1(x_1), F_2(x_2), \ldots, F_n(x_n)),
 <p><span class="math display">\[
 C(u_1, u_2, \ldots, u_n) = \Phi_Q(\Phi^{-1}(u_1), \Phi^{-1}(u_2), \ldots, \Phi^{-1}(u_n)),
 \]</span></p>
-<p>where <span class="math inline">\(\Phi_Q\)</span> is the joint cumulative distribution function of a multivariate normal distribution with mean vector <span class="math inline">\(\mathbf{0}\)</span> and precision matrix <span class="math inline">\(Q\)</span>, and <span class="math inline">\(\Phi^{-1}\)</span> is the inverse of the standard normal cumulative distribution function.</p>
+<p>where <span class="math inline">\(\Phi_Q\)</span> is the joint cumulative distribution function of a multivariate normal distribution with mean vector <span class="math inline">\(\mathbf{0}\)</span> and precision matrix <span class="math inline">\(Q\)</span>, and <span class="math inline">\(\Phi^{-1}\)</span> is the inverse of the standard normal cumulative distribution function. Its density is</p>
 <p>It is imperative that the precision matrix <span class="math inline">\(Q\)</span> governing the GMRF Copula, <span class="math inline">\(C\)</span>, has marginal variance equal to 1 so that is it on the same scale as the transformed data, <span class="math inline">\(\Phi^{-1}(u_i)\)</span>. This can be troublesome because GMRFs are defined in terms of their precision matrices, <span class="math inline">\(Q\)</span>, which more often than not have marginal variances that are different from 1.</p>
-<p>This paper presents an fast and efficient algorithm for creating a Matérn-like precision matrix, Q, with unit marginal variance, and computing the multivariate Gaussian copula density of <span class="math inline">\(Z = \Phi^{-1}(u)\)</span> where <span class="math inline">\(u \sim \mathrm{Uniform}(0, 1)\)</span>.</p>
+<p>This paper presents a fast and efficient algorithm for creating a Matérn-like precision matrix, <span class="math inline">\(\mathbf{Q}\)</span>, with unit marginal variance, and computing the multivariate Gaussian copula density of <span class="math inline">\(\mathbf{Z} = \Phi^{-1}(\mathbf{u})\)</span> where <span class="math inline">\(\mathbf{u} \sim \text{Uniform}(0, 1)\)</span>. The method leverages the special structure of the precision matrix and employs efficient eigendecomposition techniques to avoid explicit formation and inversion of the large precision matrix Q.</p>
+</section>
+<section id="methods" class="level1">
+<h1>Methods</h1>
+<section id="gmrf-copula" class="level2">
+<h2 class="anchored" data-anchor-id="gmrf-copula">GMRF Copula</h2>
+<p>Let <span class="math inline">\(\mathbf{X} = (X_1, X_2, \ldots, X_n)\)</span> be a multivariate random vector with marginal distribution functions <span class="math inline">\(F_i\)</span> for <span class="math inline">\(i = 1, 2, \ldots, n\)</span> and dependence that is governed by a Gaussian copula. We create the vector</p>
 <p>The matrix, Q, is defined as</p>
 <p><span class="math display">\[
 Q = Q_1 \otimes I + I \otimes Q_1,
 \]</span></p>
 <p>where <span class="math inline">\(Q_1\)</span> is the precision matrix of a standardized one-dimensional AR(1) process and <span class="math inline">\(\otimes\)</span> is the kronecker product.</p>
-<p>The method leverages the special structure of <span class="math inline">\(Q_1\)</span> and the use of a kronecker sum in the definitionto avoid explicit formation and inversion of the larger matrix, Q, making it particularly suitable for high-dimensional spatial data.</p>
 </section>
-<section id="methods" class="level1">
-<h1>Methods</h1>
 <section id="theory" class="level2">
 <h2 class="anchored" data-anchor-id="theory">Theory</h2>
 </section>
@@ -245,10 +269,12 @@ v_{ij} = v_i \otimes v_j \quad \text{for} \quad i, j = 1, 2, \ldots, n.
 </section>
 <section id="efficient-density-calculation-using-eigendecomposition" class="level2">
 <h2 class="anchored" data-anchor-id="efficient-density-calculation-using-eigendecomposition">Efficient Density Calculation Using Eigendecomposition</h2>
-<p>Given the eigendecomposition of Q1, we can efficiently compute the multivariate normal density with respect to the precision matrix Q. Let <span class="math inline">\(\lambda_i\)</span> and <span class="math inline">\(v_i\)</span> be the eigenvalues and eigenvectors of Q1, respectively. The log-density of a multivariate normal distribution with precision matrix Q is given by:</p>
+<p>Given the eigendecomposition of Q1, we can efficiently compute the multivariate normal density with respect to the precision matrix Q. Let <span class="math inline">\(\lambda_i\)</span> and <span class="math inline">\(v_i\)</span> be the eigenvalues and eigenvectors of Q1, respectively.</p>
+<p>The log-density of a multivariate normal distribution with precision matrix Q is given by:</p>
 <p><span class="math display">\[
-\log p(x) = -\frac{1}{2} (n \log(2\pi) + \log|Q| + x^T Q x)
-\]</span> where <span class="math inline">\(n\)</span> is the dimension of <span class="math inline">\(x\)</span>, <span class="math inline">\(|Q|\)</span> is the determinant of Q, and <span class="math inline">\(x^T Q x\)</span> is the quadratic form.</p>
+\log p(x) = -\frac{1}{2} (n \log(2\pi) - \log|Q| + x^T Q x)
+\]</span></p>
+<p>where <span class="math inline">\(n\)</span> is the dimension of <span class="math inline">\(x\)</span>, <span class="math inline">\(|Q|\)</span> is the determinant of Q, and <span class="math inline">\(x^T Q x\)</span> is the quadratic form.</p>
 <section id="log-determinant-calculation" class="level3">
 <h3 class="anchored" data-anchor-id="log-determinant-calculation">Log-Determinant Calculation</h3>
 <p>The log-determinant of Q can be computed efficiently using the eigenvalues of Q1:</p>
