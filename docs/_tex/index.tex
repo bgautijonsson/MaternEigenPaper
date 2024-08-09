@@ -143,7 +143,7 @@
 \makeatletter
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, enhanced, borderline west={3pt}{0pt}{shadecolor}, frame hidden, boxrule=0pt, interior hidden, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, frame hidden, sharp corners, borderline west={3pt}{0pt}{shadecolor}, interior hidden, breakable, boxrule=0pt]}{\end{tcolorbox}}\fi
 \makeatother
 
 \ifLuaTeX
@@ -196,300 +196,257 @@ spatio-temporal data with complex dependency structures.
 
 \section{Introduction}\label{introduction}
 
-Gaussian Markov Random Fields (GMRFs) and Copulas are two powerful tools
-in modern statistics, each with their own strengths in modeling complex
-data structures. GMRFs have been widely used for modeling spatial and
-temporal dependencies, particularly in fields such as environmental
-science, epidemiology, and image analysis. Their ability to capture
-local dependencies through a sparse precision matrix makes them
-computationally attractive for high-dimensional problems.
+\subsection{Review}\label{review}
 
-Copulas, on the other hand, provide a flexible framework for modeling
-multivariate dependencies, allowing for the separate specification of
-marginal distributions and their joint behavior. The Gaussian copula, in
-particular, has gained popularity due to its interpretability and
-connection to the multivariate normal distribution.
+Gaussian Markov Random Fields (GMRFs) and copulas are two powerful
+statistical tools, each offering unique strengths in modeling complex
+data structures. GMRFs excel in capturing spatial and temporal
+dependencies, particularly in fields such as environmental science,
+epidemiology, and image analysis. Their ability to represent local
+dependencies through sparse precision matrices makes them
+computationally attractive for high-dimensional problems. Copulas, on
+the other hand, provide a flexible framework for modeling multivariate
+dependencies, allowing separate specification of marginal distributions
+and their joint behavior.
+
+The Gaussian copula, in particular, has gained popularity due to its
+interpretability and connection to the multivariate normal distribution.
+However, combining GMRFs with copulas has historically been
+computationally challenging, limiting their joint application to smaller
+datasets or simpler models.
 
 Let \(\mathbf{X} = (X_1, X_2, \ldots, X_n)\) be a multivariate random
 vector with marginal distribution functions \(F_i\) for
-\(i = 1, 2, \ldots, n\) and dependence that is governed by a GMRF
-copula. The joint distribution function of \(\mathbf{X}\) can be written
-as:
+\(i = 1, 2, \ldots, n\). The joint distribution function of
+\(\mathbf{X}\) can be written as:
 
 \[
 F_{\mathbf{X}}(\mathbf{x}) = C(F_1(x_1), F_2(x_2), \ldots, F_n(x_n)),
 \]
 
 where \(C\) is the Gaussian copula defined by the GMRF precision matrix
-\(Q\).
-
-The Gaussian copula \(C\) is given by:
+\(\mathbf{Q}\). The Gaussian copula \(C\) is given by:
 
 \[
-C(u_1, u_2, \ldots, u_n) = \Phi_Q(\Phi^{-1}(u_1), \Phi^{-1}(u_2), \ldots, \Phi^{-1}(u_n)),
+C(u_1, u_2, \ldots, u_n) = \Phi_\mathbf{Q}(\Phi^{-1}(u_1), \Phi^{-1}(u_2), \ldots, \Phi^{-1}(u_n)),
 \]
 
-where \(\Phi_Q\) is the joint cumulative distribution function of a
-multivariate normal distribution with mean vector \(\mathbf{0}\) and
-precision matrix \(Q\), and \(\Phi^{-1}\) is the inverse of the standard
-normal cumulative distribution function. Its density is
+where \(\Phi_\mathbf{Q}\) is the joint cumulative distribution function
+of a multivariate normal distribution with mean vector \(\mathbf{0}\)
+and precision matrix \(\mathbf{Q}\), and \(\Phi^{-1}\) is the inverse of
+the standard normal cumulative distribution function.
 
-It is imperative that the precision matrix \(Q\) governing the GMRF
-Copula, \(C\), has marginal variance equal to 1 so that is it on the
-same scale as the transformed data, \(\Phi^{-1}(u_i)\). This can be
-troublesome because GMRFs are defined in terms of their precision
-matrices, \(Q\), which more often than not have marginal variances that
-are different from 1.
+A critical requirement for the precision matrix \(\mathbf{Q}\) governing
+the GMRF copula \(C\) is that \(\mathbf{\Sigma} = \mathbf{Q}^{-1}\)
+should have a unit diagonal, i.e.~the marginal variance is equal to one
+everywhere.. This ensures it operates on the same scale as the
+transformed data, \(\Phi^{-1}(u_i)\). However, this can be challenging
+as GMRFs are typically defined in terms of precision matrices that often
+imply non-unit marginal variances.
 
-This paper presents a fast and efficient algorithm for creating a
-Matérn-like precision matrix, \(\mathbf{Q}\), with unit marginal
-variance, and computing the multivariate Gaussian copula density of
-\(\mathbf{Z} = \Phi^{-1}(\mathbf{u})\) where
-\(\mathbf{u} \sim \text{Uniform}(0, 1)\). The method leverages the
-special structure of the precision matrix and employs efficient
-eigendecomposition techniques to avoid explicit formation and inversion
-of the large precision matrix Q.
+This paper presents a novel algorithm that bridges the gap between GMRFs
+and copulas, allowing for fast and efficient computation of Gaussian
+copula densities using GMRF precision structures. Our method focuses on
+creating a Matérn-like precision matrix \(\mathbf{Q}\) with unit
+marginal variance and efficiently computing the multivariate Gaussian
+copula density of \(\mathbf{Z} = \Phi^{-1}(\mathbf{u})\), where
+\(u_i \sim \text{Uniform}(0, 1)\), \(i = 1, \dots, n\).
+
+The key innovation lies in leveraging the special structure of the
+precision matrix:
+
+\[
+\mathbf{Q} = \mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1,
+\]
+
+where \(\mathbf{Q}_1\) is the precision matrix of a standardized
+one-dimensional AR(1) process and \(\otimes\) denotes the Kronecker
+product. By employing efficient eigendecomposition techniques, our
+method avoids explicit formation and inversion of the large precision
+matrix \(\mathbf{Q}\), making it particularly suitable for
+high-dimensional spatial data. In additions to the exact method, we
+mention approximations to \(\mathbf{Q}\) using circuland and folded
+circulant matrices.
+
+\subsection{Problem Formulation}\label{problem-formulation}
+
+Consider a spatial field on a regular \(n \times n\) grid. Our objective
+is to compute the Gaussian copula density efficiently for this field.
+This computation involves:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Specifying a precision matrix \(\mathbf{Q}\) that represents the
+  spatial dependence structure.
+\item
+  Ensuring the implied covariance matrix
+  \(\mathbf{\Sigma} = \mathbf{Q}^{-1}\) has unit diagonal elements.
+\item
+  Computing the density for large spatial fields in a computationally
+  efficient manner.
+\end{enumerate}
+
+\subsubsection{Precision Matrix
+Structure}\label{precision-matrix-structure}
+
+We use a Matérn-like precision matrix structure defined as:
+
+\[
+\begin{aligned}
+\mathbf{Q} &= \mathbf{\tilde{Q}^\nu}, \quad\nu \in \{0, 1, 2\}  \\
+\mathbf{\tilde Q} &= \mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1,
+\end{aligned}
+\]
+
+where \(\mathbf{Q}_1\) is the precision matrix of a standardized
+one-dimensional AR(1) process, and \(\otimes\) denotes the Kronecker
+product.
+
+\subsubsection{Eigendecomposition
+Method}\label{eigendecomposition-method}
+
+The properties of Kronecker products and sums are utilized to compute
+the eigendecomposition of \(\mathbf{Q}\). This approach facilitates:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Calculation of \(\log |\mathbf{Q}|\).
+\item
+  Computation of quadratic forms \(\mathbf{x}^T\mathbf{Q}\mathbf{x}\).
+\item
+  Determination of the diagonal elements of
+  \(\mathbf{\Sigma} = \mathbf{Q}^{-1}\) without explicit matrix
+  inversion.
+\end{enumerate}
+
+\subsubsection{Unit Marginal Variance
+Adjustment}\label{unit-marginal-variance-adjustment}
+
+To ensure unit marginal variances, which is necessary for copula
+applications, we employ a scaling method for the precision matrix.
+
+\subsubsection{Approximation Methods}\label{approximation-methods}
+
+We introduce circulant and folded circulant approximations to
+\(\mathbf{Q}\). These approximations offer potential computational
+advantages, which we analyze in terms of efficiency and accuracy
+trade-offs.
 
 \section{Methods}\label{methods}
 
-\subsection{GMRF Copula}\label{gmrf-copula}
+\subsection{Gaussian Copula Density
+Computation}\label{gaussian-copula-density-computation}
 
-Let \(\mathbf{X} = (X_1, X_2, \ldots, X_n)\) be a multivariate random
-vector with marginal distribution functions \(F_i\) for
-\(i = 1, 2, \ldots, n\) and dependence that is governed by a Gaussian
-copula. We create the vector
-
-The matrix, Q, is defined as
+The Gaussian copula density for a random vector
+\(\mathbf{U} = (U_1, ..., U_n)\) with \(U_i \sim \text{Uniform}(0,1)\)
+is given by:
 
 \[
-Q = Q_1 \otimes I + I \otimes Q_1,
+c(\mathbf{u}) = |\mathbf{Q}|^{1/2} \exp\left(-\frac{1}{2}\mathbf{z}^T(\mathbf{Q} - \mathbf{I})\mathbf{z}\right)
 \]
 
-where \(Q_1\) is the precision matrix of a standardized one-dimensional
-AR(1) process and \(\otimes\) is the kronecker product.
+where \(\mathbf{z} = (z_1, ..., z_n)\) with \(z_i = \Phi^{-1}(u_i)\),
+\(\mathbf{Q}\) is the precision matrix, and \(\mathbf{I}\) is the
+identity matrix.
 
-\subsection{Theory}\label{theory}
-
-\subsection{One-Dimensional AR(1)
-Matrix}\label{one-dimensional-ar1-matrix}
-
-The core of our approach is based on the eigendecomposition of an AR(1)
-precision matrix, which forms the building block of our Matérn-like
-precision structure. For a one-dimensional AR(1) process with parameter
-\(\rho\), the precision matrix \(Q_1\) has a tridiagonal structure:
+The log-density can be expressed as:
 
 \[
-Q = \frac{1}{1 - \rho^2} \begin{bmatrix}
-1 & -\rho & 0 & \cdots & 0 & 0 \\
--\rho & 1+\rho^2 & -\rho & \cdots & 0 & 0 \\
-0 & -\rho & 1+\rho^2 & \cdots & 0 & 0 \\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
-0 & 0 & 0 & \cdots & 1+\rho^2 & -\rho \\
-0 & 0 & 0 & \cdots & -\rho & 1 \\
-\end{bmatrix}
+\log c(\mathbf{u}) = \frac{1}{2}\log|\mathbf{Q}| - \frac{1}{2}\mathbf{z}^T\mathbf{Q}\mathbf{z} + \frac{1}{2}\mathbf{z}^T\mathbf{z}
 \]
 
-\subsection{Matérn-like Precision
-Matrix}\label{matuxe9rn-like-precision-matrix}
+Our goal is to efficiently compute this log-density for large spatial
+fields.
 
-For two-dimensional spatial fields, we construct a Matérn-like precision
-matrix \(Q\) using Kronecker products:
+\subsection{Precision Matrix
+Structure}\label{precision-matrix-structure-1}
+
+We define the precision matrix \(\mathbf{Q}\) as:
 
 \[
-Q = Q_1 \otimes I + I \otimes Q_1
+\mathbf{Q} = (\mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1)^\nu, \quad \nu \in \{0, 1, 2\}
 \]
 
-where \(I\) is the identity matrix and \(\otimes\) denotes the Kronecker
-product The eigenvalues \((\lambda_k)\) and eigenvectors \((v_k)\) of
-\(Q_1\) can be calculated numerically and used to evaluate the
-multivariate Gaussian density, letting us skip out on forming \(Q\)
-entirely. This is due to the following theorem:
+where \(\mathbf{Q}_1\) is the precision matrix of a one-dimensional
+AR(1) process. This matrix is then scaled so that it implied unit
+marginal variances.
 
-\subsection{Eigendecomposition of Kronecker
-Sums}\label{eigendecomposition-of-kronecker-sums}
+\subsection{Computation Process}\label{computation-process}
 
-\subsubsection{Theorem}\label{theorem}
+\subsubsection{\texorpdfstring{Step 1: Eigendecomposition of
+\(\mathbf{Q}_1\)}{Step 1: Eigendecomposition of \textbackslash mathbf\{Q\}\_1}}\label{step-1-eigendecomposition-of-mathbfq_1}
 
-Let \(A \in \mathbb{R}^{n \times n}\) have eigenvalues \(\lambda_i\),
-\(i \in \{1, \ldots, n\}\), and let \(B \in \mathbb{R}^{m \times m}\)
-have eigenvalues \(\mu_j\), \(j \in \{1, \ldots, m\}\). Then the
-Kronecker sum \(A \oplus B = (I_m \otimes A) + (B \otimes I_n)\) has
-eigenvalues \(\lambda_i + \mu_j\),
-\(i \in \{1, \ldots, n\}, j \in \{1, \ldots, m\}\).
-
-Moreover, if \(x_1, \ldots, x_p\) are linearly independent right
-eigenvectors of \(A\) corresponding to \(\lambda_1, \ldots, \lambda_p\)
-(\(p \leq n\)), and \(z_1, \ldots, z_q\) are linearly independent right
-eigenvectors of \(B\) corresponding to \(\mu_1, \ldots, \mu_q\)
-(\(q \leq m\)), then \(z_j \otimes x_i \in \mathbb{R}^{mn}\) are
-linearly independent right eigenvectors of \(A \oplus B\) corresponding
-to \(\lambda_i + \mu_j\),
-\(i \in \{1, \ldots, p\}, j \in \{1, \ldots, q\}\).
-
-\subsubsection{Discussion}\label{discussion}
-
-This theorem provides a crucial insight that allows us to efficiently
-construct the eigendecomposition of the full precision matrix \(Q\) for
-two-dimensional spatial fields by leveraging the eigendecomposition of
-the one-dimensional precision matrix \(Q_1\), avoiding the
-computationally intensive process of explicitly forming and inverting
-the large matrix \(Q\).
-
-Furthermore, we can compute the log-density of an observation x directly
-by using just the eigenvalues and eigenvectors og \(Q_1\), thereby
-enabling efficient computation of the log-density of the multivariate
-normal distribution even for large spatial fields.
-
-\subsection{\texorpdfstring{Example: Calculating Eigenvalues and
-Eigenvectors for \(Q\) Using
-\(Q_1\)}{Example: Calculating Eigenvalues and Eigenvectors for Q Using Q\_1}}\label{example-calculating-eigenvalues-and-eigenvectors-for-q-using-q_1}
-
-To illustrate the application of Theorem 13.16, consider the
-one-dimensional precision matrix \(Q_1\) with known eigendecomposition.
-Suppose \(Q_1\) has eigenvalues \(\lambda_i\) and corresponding
-eigenvectors \(v_i\). For a two-dimensional spatial field, we construct
-the Matérn-like precision matrix \(Q\) using Kronecker products as
-follows:
+We first compute the eigendecomposition of \(\mathbf{Q}_1\):
 
 \[
-Q = Q_1 \otimes I + I \otimes Q_1,
+\mathbf{Q}_1 = \mathbf{V}\mathbf{\Lambda}\mathbf{V}^T
 \]
 
-where \(I\) is the identity matrix and \(\otimes\) denotes the Kronecker
-product.
-
-\subsubsection{Eigenvalues}\label{eigenvalues}
-
-The eigenvalues of \(Q\) can be determined from the eigenvalues of
-\(Q_1\). If \(Q_1\) has eigenvalues \(\lambda_i\) for
-\(i = 1, 2, \ldots, n\), then the eigenvalues of \(Q\) are given by:
+where \(\mathbf{V}\) is the matrix of eigenvectors and
+\(\mathbf{\Lambda}\) is the diagonal matrix of eigenvalues. Then, the
+eigendecomposition of \(\mathbf{Q}\) is:
 
 \[
-\lambda_{ij} = \lambda_i + \lambda_j \quad \text{for} \quad i, j = 1, 2, \ldots, n.
+\mathbf{Q} = (\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T.
 \]
 
-\subsubsection{Eigenvectors}\label{eigenvectors}
+This means that the eigenvectors of \(\mathbf{Q}\) are
+\(\mathbf{v}_j \otimes \mathbf{v}_i\) and the corresponding eigenvalues
+are \(\lambda_i + \lambda_j\).
 
-Similarly, the eigenvectors of \(Q\) can be constructed from the
-eigenvectors of \(Q_1\). If \(v_i\) and \(v_j\) are eigenvectors of
-\(Q_1\) corresponding to eigenvalues \(\lambda_i\) and \(\lambda_j\)
-respectively, then the eigenvectors of \(Q\) are given by:
+\subsubsection{Step 2: Computation of Marginal Standard
+Deviations}\label{step-2-computation-of-marginal-standard-deviations}
+
+Using the eigendecomposition of \(\mathbf{Q}_1\), we compute the
+marginal standard deviations and store them in a vector
+\(\mathbf{\sigma}\), i.e.~\(\sigma_i = \sqrt{\Sigma_{ii}}\):
 
 \[
-v_{ij} = v_i \otimes v_j \quad \text{for} \quad i, j = 1, 2, \ldots, n.
+\mathbf{\sigma} = \sqrt{\sum_{i,j} \frac{(\mathbf{v}_j \otimes \mathbf{v}_i)^2}{(\lambda_i + \lambda_j)^\nu}}
 \]
 
-Here, \(v_{ij}\) is the Kronecker product of \(v_i\) and \(v_j\).
+where \(\mathbf{v}_i\) are the eigenvectors and \(\lambda_i\) are the
+eigenvalues of \(\mathbf{Q}_1\).
 
-These relationships allow us to efficiently compute the
-eigendecomposition of the full precision matrix \(Q\) using the
-eigendecomposition of the smaller matrix \(Q_1\), significantly reducing
-the computational complexity.
+\subsubsection{Step 3: Scaling the
+Eigendecomposition}\label{step-3-scaling-the-eigendecomposition}
 
-\subsection{Efficient Density Calculation Using
-Eigendecomposition}\label{efficient-density-calculation-using-eigendecomposition}
-
-Given the eigendecomposition of Q1, we can efficiently compute the
-multivariate normal density with respect to the precision matrix Q. Let
-\(\lambda_i\) and \(v_i\) be the eigenvalues and eigenvectors of Q1,
-respectively.
-
-The log-density of a multivariate normal distribution with precision
-matrix Q is given by:
+We scale the eigendecomposition of \(\mathbf{Q}\) using the marginal
+standard deviations:
 
 \[
-\log p(x) = -\frac{1}{2} (n \log(2\pi) - \log|Q| + x^T Q x)
+\begin{aligned}
+\mathbf{D}\mathbf{Q}\mathbf{D} &= \mathbf{D}(\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T\mathbf{D} \\
+&= (\mathbf{\tilde V} \otimes \mathbf{\tilde V})(\mathbf{\tilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\tilde \Lambda})^\nu(\mathbf{\tilde V} \otimes \mathbf{\tilde V})^T
+\end{aligned}
 \]
 
-where \(n\) is the dimension of \(x\), \(|Q|\) is the determinant of Q,
-and \(x^T Q x\) is the quadratic form.
+where \(\mathbf{D}\) is a diagonal matrix with \(D_{ii} = \sigma_i\).
 
-\subsubsection{Log-Determinant
-Calculation}\label{log-determinant-calculation}
+\subsubsection{Step 4: Efficient Computation of
+Log-Density}\label{step-4-efficient-computation-of-log-density}
 
-The log-determinant of Q can be computed efficiently using the
-eigenvalues of Q1:
+Using this scaled eigendecomposition, we efficiently compute:
 
-\[
-\log|Q| = \sum_{i=1}^d \sum_{j=1}^d \log(\lambda_i + \lambda_j)
-\]
-
-where \(d\) is the dimension of Q1.
-
-\subsubsection{Quadratic Form
-Calculation}\label{quadratic-form-calculation}
-
-First, we define the product of the eigenvector and the data vector
-\(x\) as:
-
-\[
-y_{ij} = (v_i \otimes v_j)^T x,
-\]
-
-where \(v_i\) and \(v_j\) are the eigenvectors of \(Q_1\) and
-\(\otimes\) denotes the Kronecker product.
-
-Next, we define the eigenvalue sum as:
-
-\[
-\mu_{ij} = \lambda_i + \lambda_j,
-\]
-
-where \(\lambda_i\) and \(\lambda_j\) are the eigenvalues of \(Q_1\).
-Using these definitions, the quadratic form can be expressed as:
-
-\[
-x^T Q x = \sum_{i=1}^d \sum_{j=1}^d \mu_{ij} y_{ij}^2.
-\]
-
-In this way, we calculate the quadratic form without having to form the
-matrix Q or its full set of eigenvectors or values.
-
-\subsubsection{Scaling the Input x}\label{scaling-the-input-x}
-
-The input vector \(x = \Phi^{-1}(u)\) has zero mean and unit marginal
-variance. Instead of scaling the precision matrix to have
-\((Q^{-1})_{ii} = 1\), we calculate the marginal standard deviations,
-\(\sigma_k\), implied by \(Q\) using the eigenstructure of \(Q_1\), then
-scale the input vector \(x\) using those standard deviations. First we
-compute the marginal standard deviations: \[
-\sigma_k = \sqrt{\sum_{i=1}^d \sum_{j=1}^d \frac{(v_i \otimes v_j)_k^2}{\lambda_i + \lambda_j}}
-\]
-
-where \((v_i \otimes v_j)_k\) is the \(k\)-th element of the Kronecker
-product \(v_i \otimes v_j\).
-
-\subsection{Algorithm Implementation}\label{algorithm-implementation}
-
-The density calculation is implemented as follows:
-
-\begin{itemize}
-\tightlist
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
 \item
-  Compute the eigendecomposition of \(Q_1\).
+  Log-determinant:
+  \(\log|\mathbf{D}\mathbf{Q}\mathbf{D}| = \sum_{i,j} \nu \log(\tilde\lambda_i + \tilde\lambda_j)\)
 \item
-  Calculate the marginal standard deviations \(\sigma_k\).
-\item
-  For each observation \(x\):
+  Quadratic form:
+  \(\mathbf{z}^T\mathbf{D}\mathbf{Q}\mathbf{D}\mathbf{z} = \sum_{i,j} (\tilde\lambda_i + \tilde\lambda_j)^\nu y_{ij}^2\),
+  where
+  \(y_{ij} = (\mathbf{\tilde v}_j \otimes \mathbf{\tilde v}_i)^T\mathbf{z}\)
+\end{enumerate}
 
-  \begin{enumerate}
-  \def\labelenumi{\alph{enumi}.}
-  \tightlist
-  \item
-    Standardize \(x\) by element-wise multiplication with \(\sigma_k\).
-  \item
-    Compute the log-determinant and quadratic form using the formulas
-    above.
-  \item
-    Combine the terms to get the log-density.
-  \end{enumerate}
-\end{itemize}
-
-This approach avoids explicit formation and inversion of the full
-precision matrix Q, allowing for efficient computation even for large
-spatial fields. This method has been implemented in C++ code that can
-perform a full set of computations for a \(200\times 200\) spatial grid
-(i.e.~\(Q\) would be \(40.000 \times 40.000\)) in just over one second.
+This approach allows for efficient computation of the Gaussian copula
+density without explicitly forming the full \(n^2 \times n^2\) precision
+matrix \(\mathbf{Q}\) or its inverse \(\mathbf{\Sigma}\).
 
 
 

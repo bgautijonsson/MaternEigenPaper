@@ -140,30 +140,28 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review">Review</a></li>
+  <li><a href="#problem-formulation" id="toc-problem-formulation" class="nav-link" data-scroll-target="#problem-formulation">Problem Formulation</a>
+  <ul class="collapse">
+  <li><a href="#precision-matrix-structure" id="toc-precision-matrix-structure" class="nav-link" data-scroll-target="#precision-matrix-structure">Precision Matrix Structure</a></li>
+  <li><a href="#eigendecomposition-method" id="toc-eigendecomposition-method" class="nav-link" data-scroll-target="#eigendecomposition-method">Eigendecomposition Method</a></li>
+  <li><a href="#unit-marginal-variance-adjustment" id="toc-unit-marginal-variance-adjustment" class="nav-link" data-scroll-target="#unit-marginal-variance-adjustment">Unit Marginal Variance Adjustment</a></li>
+  <li><a href="#approximation-methods" id="toc-approximation-methods" class="nav-link" data-scroll-target="#approximation-methods">Approximation Methods</a></li>
+  </ul></li>
+  </ul></li>
   <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
   <ul class="collapse">
-  <li><a href="#gmrf-copula" id="toc-gmrf-copula" class="nav-link" data-scroll-target="#gmrf-copula">GMRF Copula</a></li>
-  <li><a href="#theory" id="toc-theory" class="nav-link" data-scroll-target="#theory">Theory</a></li>
-  <li><a href="#one-dimensional-ar1-matrix" id="toc-one-dimensional-ar1-matrix" class="nav-link" data-scroll-target="#one-dimensional-ar1-matrix">One-Dimensional AR(1) Matrix</a></li>
-  <li><a href="#matérn-like-precision-matrix" id="toc-matérn-like-precision-matrix" class="nav-link" data-scroll-target="#matérn-like-precision-matrix">Matérn-like Precision Matrix</a></li>
-  <li><a href="#eigendecomposition-of-kronecker-sums" id="toc-eigendecomposition-of-kronecker-sums" class="nav-link" data-scroll-target="#eigendecomposition-of-kronecker-sums">Eigendecomposition of Kronecker Sums</a>
+  <li><a href="#gaussian-copula-density-computation" id="toc-gaussian-copula-density-computation" class="nav-link" data-scroll-target="#gaussian-copula-density-computation">Gaussian Copula Density Computation</a></li>
+  <li><a href="#precision-matrix-structure-1" id="toc-precision-matrix-structure-1" class="nav-link" data-scroll-target="#precision-matrix-structure-1">Precision Matrix Structure</a></li>
+  <li><a href="#computation-process" id="toc-computation-process" class="nav-link" data-scroll-target="#computation-process">Computation Process</a>
   <ul class="collapse">
-  <li><a href="#theorem" id="toc-theorem" class="nav-link" data-scroll-target="#theorem">Theorem</a></li>
-  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a></li>
+  <li><a href="#step-1-eigendecomposition-of-mathbfq_1" id="toc-step-1-eigendecomposition-of-mathbfq_1" class="nav-link" data-scroll-target="#step-1-eigendecomposition-of-mathbfq_1">Step 1: Eigendecomposition of <span class="math inline">\(\mathbf{Q}_1\)</span></a></li>
+  <li><a href="#step-2-computation-of-marginal-standard-deviations" id="toc-step-2-computation-of-marginal-standard-deviations" class="nav-link" data-scroll-target="#step-2-computation-of-marginal-standard-deviations">Step 2: Computation of Marginal Standard Deviations</a></li>
+  <li><a href="#step-3-scaling-the-eigendecomposition" id="toc-step-3-scaling-the-eigendecomposition" class="nav-link" data-scroll-target="#step-3-scaling-the-eigendecomposition">Step 3: Scaling the Eigendecomposition</a></li>
+  <li><a href="#step-4-efficient-computation-of-log-density" id="toc-step-4-efficient-computation-of-log-density" class="nav-link" data-scroll-target="#step-4-efficient-computation-of-log-density">Step 4: Efficient Computation of Log-Density</a></li>
   </ul></li>
-  <li><a href="#example-calculating-eigenvalues-and-eigenvectors-for-q-using-q_1" id="toc-example-calculating-eigenvalues-and-eigenvectors-for-q-using-q_1" class="nav-link" data-scroll-target="#example-calculating-eigenvalues-and-eigenvectors-for-q-using-q_1">Example: Calculating Eigenvalues and Eigenvectors for <span class="math inline">\(Q\)</span> Using <span class="math inline">\(Q_1\)</span></a>
-  <ul class="collapse">
-  <li><a href="#eigenvalues" id="toc-eigenvalues" class="nav-link" data-scroll-target="#eigenvalues">Eigenvalues</a></li>
-  <li><a href="#eigenvectors" id="toc-eigenvectors" class="nav-link" data-scroll-target="#eigenvectors">Eigenvectors</a></li>
-  </ul></li>
-  <li><a href="#efficient-density-calculation-using-eigendecomposition" id="toc-efficient-density-calculation-using-eigendecomposition" class="nav-link" data-scroll-target="#efficient-density-calculation-using-eigendecomposition">Efficient Density Calculation Using Eigendecomposition</a>
-  <ul class="collapse">
-  <li><a href="#log-determinant-calculation" id="toc-log-determinant-calculation" class="nav-link" data-scroll-target="#log-determinant-calculation">Log-Determinant Calculation</a></li>
-  <li><a href="#quadratic-form-calculation" id="toc-quadratic-form-calculation" class="nav-link" data-scroll-target="#quadratic-form-calculation">Quadratic Form Calculation</a></li>
-  <li><a href="#scaling-the-input-x" id="toc-scaling-the-input-x" class="nav-link" data-scroll-target="#scaling-the-input-x">Scaling the Input x</a></li>
-  </ul></li>
-  <li><a href="#algorithm-implementation" id="toc-algorithm-implementation" class="nav-link" data-scroll-target="#algorithm-implementation">Algorithm Implementation</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -179,149 +177,130 @@ window.Quarto = {
 
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
-<p>Gaussian Markov Random Fields (GMRFs) and Copulas are two powerful tools in modern statistics, each with their own strengths in modeling complex data structures. GMRFs have been widely used for modeling spatial and temporal dependencies, particularly in fields such as environmental science, epidemiology, and image analysis. Their ability to capture local dependencies through a sparse precision matrix makes them computationally attractive for high-dimensional problems.</p>
-<p>Copulas, on the other hand, provide a flexible framework for modeling multivariate dependencies, allowing for the separate specification of marginal distributions and their joint behavior. The Gaussian copula, in particular, has gained popularity due to its interpretability and connection to the multivariate normal distribution.</p>
-<p>Let <span class="math inline">\(\mathbf{X} = (X_1, X_2, \ldots, X_n)\)</span> be a multivariate random vector with marginal distribution functions <span class="math inline">\(F_i\)</span> for <span class="math inline">\(i = 1, 2, \ldots, n\)</span> and dependence that is governed by a GMRF copula. The joint distribution function of <span class="math inline">\(\mathbf{X}\)</span> can be written as:</p>
+<section id="review" class="level2">
+<h2 class="anchored" data-anchor-id="review">Review</h2>
+<p>Gaussian Markov Random Fields (GMRFs) and copulas are two powerful statistical tools, each offering unique strengths in modeling complex data structures. GMRFs excel in capturing spatial and temporal dependencies, particularly in fields such as environmental science, epidemiology, and image analysis. Their ability to represent local dependencies through sparse precision matrices makes them computationally attractive for high-dimensional problems. Copulas, on the other hand, provide a flexible framework for modeling multivariate dependencies, allowing separate specification of marginal distributions and their joint behavior.</p>
+<p>The Gaussian copula, in particular, has gained popularity due to its interpretability and connection to the multivariate normal distribution. However, combining GMRFs with copulas has historically been computationally challenging, limiting their joint application to smaller datasets or simpler models.</p>
+<p>Let <span class="math inline">\(\mathbf{X} = (X_1, X_2, \ldots, X_n)\)</span> be a multivariate random vector with marginal distribution functions <span class="math inline">\(F_i\)</span> for <span class="math inline">\(i = 1, 2, \ldots, n\)</span>. The joint distribution function of <span class="math inline">\(\mathbf{X}\)</span> can be written as:</p>
 <p><span class="math display">\[
 F_{\mathbf{X}}(\mathbf{x}) = C(F_1(x_1), F_2(x_2), \ldots, F_n(x_n)),
 \]</span></p>
-<p>where <span class="math inline">\(C\)</span> is the Gaussian copula defined by the GMRF precision matrix <span class="math inline">\(Q\)</span>.</p>
-<p>The Gaussian copula <span class="math inline">\(C\)</span> is given by:</p>
+<p>where <span class="math inline">\(C\)</span> is the Gaussian copula defined by the GMRF precision matrix <span class="math inline">\(\mathbf{Q}\)</span>. The Gaussian copula <span class="math inline">\(C\)</span> is given by:</p>
 <p><span class="math display">\[
-C(u_1, u_2, \ldots, u_n) = \Phi_Q(\Phi^{-1}(u_1), \Phi^{-1}(u_2), \ldots, \Phi^{-1}(u_n)),
+C(u_1, u_2, \ldots, u_n) = \Phi_\mathbf{Q}(\Phi^{-1}(u_1), \Phi^{-1}(u_2), \ldots, \Phi^{-1}(u_n)),
 \]</span></p>
-<p>where <span class="math inline">\(\Phi_Q\)</span> is the joint cumulative distribution function of a multivariate normal distribution with mean vector <span class="math inline">\(\mathbf{0}\)</span> and precision matrix <span class="math inline">\(Q\)</span>, and <span class="math inline">\(\Phi^{-1}\)</span> is the inverse of the standard normal cumulative distribution function. Its density is</p>
-<p>It is imperative that the precision matrix <span class="math inline">\(Q\)</span> governing the GMRF Copula, <span class="math inline">\(C\)</span>, has marginal variance equal to 1 so that is it on the same scale as the transformed data, <span class="math inline">\(\Phi^{-1}(u_i)\)</span>. This can be troublesome because GMRFs are defined in terms of their precision matrices, <span class="math inline">\(Q\)</span>, which more often than not have marginal variances that are different from 1.</p>
-<p>This paper presents a fast and efficient algorithm for creating a Matérn-like precision matrix, <span class="math inline">\(\mathbf{Q}\)</span>, with unit marginal variance, and computing the multivariate Gaussian copula density of <span class="math inline">\(\mathbf{Z} = \Phi^{-1}(\mathbf{u})\)</span> where <span class="math inline">\(\mathbf{u} \sim \text{Uniform}(0, 1)\)</span>. The method leverages the special structure of the precision matrix and employs efficient eigendecomposition techniques to avoid explicit formation and inversion of the large precision matrix Q.</p>
+<p>where <span class="math inline">\(\Phi_\mathbf{Q}\)</span> is the joint cumulative distribution function of a multivariate normal distribution with mean vector <span class="math inline">\(\mathbf{0}\)</span> and precision matrix <span class="math inline">\(\mathbf{Q}\)</span>, and <span class="math inline">\(\Phi^{-1}\)</span> is the inverse of the standard normal cumulative distribution function.</p>
+<p>A critical requirement for the precision matrix <span class="math inline">\(\mathbf{Q}\)</span> governing the GMRF copula <span class="math inline">\(C\)</span> is that <span class="math inline">\(\mathbf{\Sigma} = \mathbf{Q}^{-1}\)</span> should have a unit diagonal, i.e.&nbsp;the marginal variance is equal to one everywhere.. This ensures it operates on the same scale as the transformed data, <span class="math inline">\(\Phi^{-1}(u_i)\)</span>. However, this can be challenging as GMRFs are typically defined in terms of precision matrices that often imply non-unit marginal variances.</p>
+<p>This paper presents a novel algorithm that bridges the gap between GMRFs and copulas, allowing for fast and efficient computation of Gaussian copula densities using GMRF precision structures. Our method focuses on creating a Matérn-like precision matrix <span class="math inline">\(\mathbf{Q}\)</span> with unit marginal variance and efficiently computing the multivariate Gaussian copula density of <span class="math inline">\(\mathbf{Z} = \Phi^{-1}(\mathbf{u})\)</span>, where <span class="math inline">\(u_i \sim \text{Uniform}(0, 1)\)</span>, <span class="math inline">\(i = 1, \dots, n\)</span>.</p>
+<p>The key innovation lies in leveraging the special structure of the precision matrix:</p>
+<p><span class="math display">\[
+\mathbf{Q} = \mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1,
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{Q}_1\)</span> is the precision matrix of a standardized one-dimensional AR(1) process and <span class="math inline">\(\otimes\)</span> denotes the Kronecker product. By employing efficient eigendecomposition techniques, our method avoids explicit formation and inversion of the large precision matrix <span class="math inline">\(\mathbf{Q}\)</span>, making it particularly suitable for high-dimensional spatial data. In additions to the exact method, we mention approximations to <span class="math inline">\(\mathbf{Q}\)</span> using circuland and folded circulant matrices.</p>
+</section>
+<section id="problem-formulation" class="level2">
+<h2 class="anchored" data-anchor-id="problem-formulation">Problem Formulation</h2>
+<p>Consider a spatial field on a regular <span class="math inline">\(n \times n\)</span> grid. Our objective is to compute the Gaussian copula density efficiently for this field. This computation involves:</p>
+<ol type="1">
+<li>Specifying a precision matrix <span class="math inline">\(\mathbf{Q}\)</span> that represents the spatial dependence structure.</li>
+<li>Ensuring the implied covariance matrix <span class="math inline">\(\mathbf{\Sigma} = \mathbf{Q}^{-1}\)</span> has unit diagonal elements.</li>
+<li>Computing the density for large spatial fields in a computationally efficient manner.</li>
+</ol>
+<section id="precision-matrix-structure" class="level3">
+<h3 class="anchored" data-anchor-id="precision-matrix-structure">Precision Matrix Structure</h3>
+<p>We use a Matérn-like precision matrix structure defined as:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf{Q} &amp;= \mathbf{\tilde{Q}^\nu}, \quad\nu \in \{0, 1, 2\}  \\
+\mathbf{\tilde Q} &amp;= \mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1,
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{Q}_1\)</span> is the precision matrix of a standardized one-dimensional AR(1) process, and <span class="math inline">\(\otimes\)</span> denotes the Kronecker product.</p>
+</section>
+<section id="eigendecomposition-method" class="level3">
+<h3 class="anchored" data-anchor-id="eigendecomposition-method">Eigendecomposition Method</h3>
+<p>The properties of Kronecker products and sums are utilized to compute the eigendecomposition of <span class="math inline">\(\mathbf{Q}\)</span>. This approach facilitates:</p>
+<ol type="1">
+<li>Calculation of <span class="math inline">\(\log |\mathbf{Q}|\)</span>.</li>
+<li>Computation of quadratic forms <span class="math inline">\(\mathbf{x}^T\mathbf{Q}\mathbf{x}\)</span>.</li>
+<li>Determination of the diagonal elements of <span class="math inline">\(\mathbf{\Sigma} = \mathbf{Q}^{-1}\)</span> without explicit matrix inversion.</li>
+</ol>
+</section>
+<section id="unit-marginal-variance-adjustment" class="level3">
+<h3 class="anchored" data-anchor-id="unit-marginal-variance-adjustment">Unit Marginal Variance Adjustment</h3>
+<p>To ensure unit marginal variances, which is necessary for copula applications, we employ a scaling method for the precision matrix.</p>
+</section>
+<section id="approximation-methods" class="level3">
+<h3 class="anchored" data-anchor-id="approximation-methods">Approximation Methods</h3>
+<p>We introduce circulant and folded circulant approximations to <span class="math inline">\(\mathbf{Q}\)</span>. These approximations offer potential computational advantages, which we analyze in terms of efficiency and accuracy trade-offs.</p>
+</section>
+</section>
 </section>
 <section id="methods" class="level1">
 <h1>Methods</h1>
-<section id="gmrf-copula" class="level2">
-<h2 class="anchored" data-anchor-id="gmrf-copula">GMRF Copula</h2>
-<p>Let <span class="math inline">\(\mathbf{X} = (X_1, X_2, \ldots, X_n)\)</span> be a multivariate random vector with marginal distribution functions <span class="math inline">\(F_i\)</span> for <span class="math inline">\(i = 1, 2, \ldots, n\)</span> and dependence that is governed by a Gaussian copula. We create the vector</p>
-<p>The matrix, Q, is defined as</p>
+<section id="gaussian-copula-density-computation" class="level2">
+<h2 class="anchored" data-anchor-id="gaussian-copula-density-computation">Gaussian Copula Density Computation</h2>
+<p>The Gaussian copula density for a random vector <span class="math inline">\(\mathbf{U} = (U_1, ..., U_n)\)</span> with <span class="math inline">\(U_i \sim \text{Uniform}(0,1)\)</span> is given by:</p>
 <p><span class="math display">\[
-Q = Q_1 \otimes I + I \otimes Q_1,
+c(\mathbf{u}) = |\mathbf{Q}|^{1/2} \exp\left(-\frac{1}{2}\mathbf{z}^T(\mathbf{Q} - \mathbf{I})\mathbf{z}\right)
 \]</span></p>
-<p>where <span class="math inline">\(Q_1\)</span> is the precision matrix of a standardized one-dimensional AR(1) process and <span class="math inline">\(\otimes\)</span> is the kronecker product.</p>
-</section>
-<section id="theory" class="level2">
-<h2 class="anchored" data-anchor-id="theory">Theory</h2>
-</section>
-<section id="one-dimensional-ar1-matrix" class="level2">
-<h2 class="anchored" data-anchor-id="one-dimensional-ar1-matrix">One-Dimensional AR(1) Matrix</h2>
-<p>The core of our approach is based on the eigendecomposition of an AR(1) precision matrix, which forms the building block of our Matérn-like precision structure. For a one-dimensional AR(1) process with parameter <span class="math inline">\(\rho\)</span>, the precision matrix <span class="math inline">\(Q_1\)</span> has a tridiagonal structure:</p>
+<p>where <span class="math inline">\(\mathbf{z} = (z_1, ..., z_n)\)</span> with <span class="math inline">\(z_i = \Phi^{-1}(u_i)\)</span>, <span class="math inline">\(\mathbf{Q}\)</span> is the precision matrix, and <span class="math inline">\(\mathbf{I}\)</span> is the identity matrix.</p>
+<p>The log-density can be expressed as:</p>
 <p><span class="math display">\[
-Q = \frac{1}{1 - \rho^2} \begin{bmatrix}
-1 &amp; -\rho &amp; 0 &amp; \cdots &amp; 0 &amp; 0 \\
--\rho &amp; 1+\rho^2 &amp; -\rho &amp; \cdots &amp; 0 &amp; 0 \\
-0 &amp; -\rho &amp; 1+\rho^2 &amp; \cdots &amp; 0 &amp; 0 \\
-\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots \\
-0 &amp; 0 &amp; 0 &amp; \cdots &amp; 1+\rho^2 &amp; -\rho \\
-0 &amp; 0 &amp; 0 &amp; \cdots &amp; -\rho &amp; 1 \\
-\end{bmatrix}
+\log c(\mathbf{u}) = \frac{1}{2}\log|\mathbf{Q}| - \frac{1}{2}\mathbf{z}^T\mathbf{Q}\mathbf{z} + \frac{1}{2}\mathbf{z}^T\mathbf{z}
 \]</span></p>
+<p>Our goal is to efficiently compute this log-density for large spatial fields.</p>
 </section>
-<section id="matérn-like-precision-matrix" class="level2">
-<h2 class="anchored" data-anchor-id="matérn-like-precision-matrix">Matérn-like Precision Matrix</h2>
-<p>For two-dimensional spatial fields, we construct a Matérn-like precision matrix <span class="math inline">\(Q\)</span> using Kronecker products:</p>
+<section id="precision-matrix-structure-1" class="level2">
+<h2 class="anchored" data-anchor-id="precision-matrix-structure-1">Precision Matrix Structure</h2>
+<p>We define the precision matrix <span class="math inline">\(\mathbf{Q}\)</span> as:</p>
 <p><span class="math display">\[
-Q = Q_1 \otimes I + I \otimes Q_1
+\mathbf{Q} = (\mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1)^\nu, \quad \nu \in \{0, 1, 2\}
 \]</span></p>
-<p>where <span class="math inline">\(I\)</span> is the identity matrix and <span class="math inline">\(\otimes\)</span> denotes the Kronecker product The eigenvalues <span class="math inline">\((\lambda_k)\)</span> and eigenvectors <span class="math inline">\((v_k)\)</span> of <span class="math inline">\(Q_1\)</span> can be calculated numerically and used to evaluate the multivariate Gaussian density, letting us skip out on forming <span class="math inline">\(Q\)</span> entirely. This is due to the following theorem:</p>
+<p>where <span class="math inline">\(\mathbf{Q}_1\)</span> is the precision matrix of a one-dimensional AR(1) process. This matrix is then scaled so that it implied unit marginal variances.</p>
 </section>
-<section id="eigendecomposition-of-kronecker-sums" class="level2">
-<h2 class="anchored" data-anchor-id="eigendecomposition-of-kronecker-sums">Eigendecomposition of Kronecker Sums</h2>
-<section id="theorem" class="level3">
-<h3 class="anchored" data-anchor-id="theorem">Theorem</h3>
-<p>Let <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> have eigenvalues <span class="math inline">\(\lambda_i\)</span>, <span class="math inline">\(i \in \{1, \ldots, n\}\)</span>, and let <span class="math inline">\(B \in \mathbb{R}^{m \times m}\)</span> have eigenvalues <span class="math inline">\(\mu_j\)</span>, <span class="math inline">\(j \in \{1, \ldots, m\}\)</span>. Then the Kronecker sum <span class="math inline">\(A \oplus B = (I_m \otimes A) + (B \otimes I_n)\)</span> has eigenvalues <span class="math inline">\(\lambda_i + \mu_j\)</span>, <span class="math inline">\(i \in \{1, \ldots, n\}, j \in \{1, \ldots, m\}\)</span>.</p>
-<p>Moreover, if <span class="math inline">\(x_1, \ldots, x_p\)</span> are linearly independent right eigenvectors of <span class="math inline">\(A\)</span> corresponding to <span class="math inline">\(\lambda_1, \ldots, \lambda_p\)</span> (<span class="math inline">\(p \leq n\)</span>), and <span class="math inline">\(z_1, \ldots, z_q\)</span> are linearly independent right eigenvectors of <span class="math inline">\(B\)</span> corresponding to <span class="math inline">\(\mu_1, \ldots, \mu_q\)</span> (<span class="math inline">\(q \leq m\)</span>), then <span class="math inline">\(z_j \otimes x_i \in \mathbb{R}^{mn}\)</span> are linearly independent right eigenvectors of <span class="math inline">\(A \oplus B\)</span> corresponding to <span class="math inline">\(\lambda_i + \mu_j\)</span>, <span class="math inline">\(i \in \{1, \ldots, p\}, j \in \{1, \ldots, q\}\)</span>.</p>
-</section>
-<section id="discussion" class="level3">
-<h3 class="anchored" data-anchor-id="discussion">Discussion</h3>
-<p>This theorem provides a crucial insight that allows us to efficiently construct the eigendecomposition of the full precision matrix <span class="math inline">\(Q\)</span> for two-dimensional spatial fields by leveraging the eigendecomposition of the one-dimensional precision matrix <span class="math inline">\(Q_1\)</span>, avoiding the computationally intensive process of explicitly forming and inverting the large matrix <span class="math inline">\(Q\)</span>.</p>
-<p>Furthermore, we can compute the log-density of an observation x directly by using just the eigenvalues and eigenvectors og <span class="math inline">\(Q_1\)</span>, thereby enabling efficient computation of the log-density of the multivariate normal distribution even for large spatial fields.</p>
-</section>
-</section>
-<section id="example-calculating-eigenvalues-and-eigenvectors-for-q-using-q_1" class="level2">
-<h2 class="anchored" data-anchor-id="example-calculating-eigenvalues-and-eigenvectors-for-q-using-q_1">Example: Calculating Eigenvalues and Eigenvectors for <span class="math inline">\(Q\)</span> Using <span class="math inline">\(Q_1\)</span></h2>
-<p>To illustrate the application of Theorem 13.16, consider the one-dimensional precision matrix <span class="math inline">\(Q_1\)</span> with known eigendecomposition. Suppose <span class="math inline">\(Q_1\)</span> has eigenvalues <span class="math inline">\(\lambda_i\)</span> and corresponding eigenvectors <span class="math inline">\(v_i\)</span>. For a two-dimensional spatial field, we construct the Matérn-like precision matrix <span class="math inline">\(Q\)</span> using Kronecker products as follows:</p>
+<section id="computation-process" class="level2">
+<h2 class="anchored" data-anchor-id="computation-process">Computation Process</h2>
+<section id="step-1-eigendecomposition-of-mathbfq_1" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-eigendecomposition-of-mathbfq_1">Step 1: Eigendecomposition of <span class="math inline">\(\mathbf{Q}_1\)</span></h3>
+<p>We first compute the eigendecomposition of <span class="math inline">\(\mathbf{Q}_1\)</span>:</p>
 <p><span class="math display">\[
-Q = Q_1 \otimes I + I \otimes Q_1,
+\mathbf{Q}_1 = \mathbf{V}\mathbf{\Lambda}\mathbf{V}^T
 \]</span></p>
-<p>where <span class="math inline">\(I\)</span> is the identity matrix and <span class="math inline">\(\otimes\)</span> denotes the Kronecker product.</p>
-<section id="eigenvalues" class="level3">
-<h3 class="anchored" data-anchor-id="eigenvalues">Eigenvalues</h3>
-<p>The eigenvalues of <span class="math inline">\(Q\)</span> can be determined from the eigenvalues of <span class="math inline">\(Q_1\)</span>. If <span class="math inline">\(Q_1\)</span> has eigenvalues <span class="math inline">\(\lambda_i\)</span> for <span class="math inline">\(i = 1, 2, \ldots, n\)</span>, then the eigenvalues of <span class="math inline">\(Q\)</span> are given by:</p>
+<p>where <span class="math inline">\(\mathbf{V}\)</span> is the matrix of eigenvectors and <span class="math inline">\(\mathbf{\Lambda}\)</span> is the diagonal matrix of eigenvalues. Then, the eigendecomposition of <span class="math inline">\(\mathbf{Q}\)</span> is:</p>
 <p><span class="math display">\[
-\lambda_{ij} = \lambda_i + \lambda_j \quad \text{for} \quad i, j = 1, 2, \ldots, n.
+\mathbf{Q} = (\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T.
 \]</span></p>
+<p>This means that the eigenvectors of <span class="math inline">\(\mathbf{Q}\)</span> are <span class="math inline">\(\mathbf{v}_j \otimes \mathbf{v}_i\)</span> and the corresponding eigenvalues are <span class="math inline">\(\lambda_i + \lambda_j\)</span>.</p>
 </section>
-<section id="eigenvectors" class="level3">
-<h3 class="anchored" data-anchor-id="eigenvectors">Eigenvectors</h3>
-<p>Similarly, the eigenvectors of <span class="math inline">\(Q\)</span> can be constructed from the eigenvectors of <span class="math inline">\(Q_1\)</span>. If <span class="math inline">\(v_i\)</span> and <span class="math inline">\(v_j\)</span> are eigenvectors of <span class="math inline">\(Q_1\)</span> corresponding to eigenvalues <span class="math inline">\(\lambda_i\)</span> and <span class="math inline">\(\lambda_j\)</span> respectively, then the eigenvectors of <span class="math inline">\(Q\)</span> are given by:</p>
+<section id="step-2-computation-of-marginal-standard-deviations" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-computation-of-marginal-standard-deviations">Step 2: Computation of Marginal Standard Deviations</h3>
+<p>Using the eigendecomposition of <span class="math inline">\(\mathbf{Q}_1\)</span>, we compute the marginal standard deviations and store them in a vector <span class="math inline">\(\mathbf{\sigma}\)</span>, i.e.&nbsp;<span class="math inline">\(\sigma_i = \sqrt{\Sigma_{ii}}\)</span>:</p>
 <p><span class="math display">\[
-v_{ij} = v_i \otimes v_j \quad \text{for} \quad i, j = 1, 2, \ldots, n.
+\mathbf{\sigma} = \sqrt{\sum_{i,j} \frac{(\mathbf{v}_j \otimes \mathbf{v}_i)^2}{(\lambda_i + \lambda_j)^\nu}}
 \]</span></p>
-<p>Here, <span class="math inline">\(v_{ij}\)</span> is the Kronecker product of <span class="math inline">\(v_i\)</span> and <span class="math inline">\(v_j\)</span>.</p>
-<p>These relationships allow us to efficiently compute the eigendecomposition of the full precision matrix <span class="math inline">\(Q\)</span> using the eigendecomposition of the smaller matrix <span class="math inline">\(Q_1\)</span>, significantly reducing the computational complexity.</p>
+<p>where <span class="math inline">\(\mathbf{v}_i\)</span> are the eigenvectors and <span class="math inline">\(\lambda_i\)</span> are the eigenvalues of <span class="math inline">\(\mathbf{Q}_1\)</span>.</p>
 </section>
-</section>
-<section id="efficient-density-calculation-using-eigendecomposition" class="level2">
-<h2 class="anchored" data-anchor-id="efficient-density-calculation-using-eigendecomposition">Efficient Density Calculation Using Eigendecomposition</h2>
-<p>Given the eigendecomposition of Q1, we can efficiently compute the multivariate normal density with respect to the precision matrix Q. Let <span class="math inline">\(\lambda_i\)</span> and <span class="math inline">\(v_i\)</span> be the eigenvalues and eigenvectors of Q1, respectively.</p>
-<p>The log-density of a multivariate normal distribution with precision matrix Q is given by:</p>
+<section id="step-3-scaling-the-eigendecomposition" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-scaling-the-eigendecomposition">Step 3: Scaling the Eigendecomposition</h3>
+<p>We scale the eigendecomposition of <span class="math inline">\(\mathbf{Q}\)</span> using the marginal standard deviations:</p>
 <p><span class="math display">\[
-\log p(x) = -\frac{1}{2} (n \log(2\pi) - \log|Q| + x^T Q x)
+\begin{aligned}
+\mathbf{D}\mathbf{Q}\mathbf{D} &amp;= \mathbf{D}(\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T\mathbf{D} \\
+&amp;= (\mathbf{\tilde V} \otimes \mathbf{\tilde V})(\mathbf{\tilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\tilde \Lambda})^\nu(\mathbf{\tilde V} \otimes \mathbf{\tilde V})^T
+\end{aligned}
 \]</span></p>
-<p>where <span class="math inline">\(n\)</span> is the dimension of <span class="math inline">\(x\)</span>, <span class="math inline">\(|Q|\)</span> is the determinant of Q, and <span class="math inline">\(x^T Q x\)</span> is the quadratic form.</p>
-<section id="log-determinant-calculation" class="level3">
-<h3 class="anchored" data-anchor-id="log-determinant-calculation">Log-Determinant Calculation</h3>
-<p>The log-determinant of Q can be computed efficiently using the eigenvalues of Q1:</p>
-<p><span class="math display">\[
-\log|Q| = \sum_{i=1}^d \sum_{j=1}^d \log(\lambda_i + \lambda_j)
-\]</span></p>
-<p>where <span class="math inline">\(d\)</span> is the dimension of Q1.</p>
+<p>where <span class="math inline">\(\mathbf{D}\)</span> is a diagonal matrix with <span class="math inline">\(D_{ii} = \sigma_i\)</span>.</p>
 </section>
-<section id="quadratic-form-calculation" class="level3">
-<h3 class="anchored" data-anchor-id="quadratic-form-calculation">Quadratic Form Calculation</h3>
-<p>First, we define the product of the eigenvector and the data vector <span class="math inline">\(x\)</span> as:</p>
-<p><span class="math display">\[
-y_{ij} = (v_i \otimes v_j)^T x,
-\]</span></p>
-<p>where <span class="math inline">\(v_i\)</span> and <span class="math inline">\(v_j\)</span> are the eigenvectors of <span class="math inline">\(Q_1\)</span> and <span class="math inline">\(\otimes\)</span> denotes the Kronecker product.</p>
-<p>Next, we define the eigenvalue sum as:</p>
-<p><span class="math display">\[
-\mu_{ij} = \lambda_i + \lambda_j,
-\]</span></p>
-<p>where <span class="math inline">\(\lambda_i\)</span> and <span class="math inline">\(\lambda_j\)</span> are the eigenvalues of <span class="math inline">\(Q_1\)</span>. Using these definitions, the quadratic form can be expressed as:</p>
-<p><span class="math display">\[
-x^T Q x = \sum_{i=1}^d \sum_{j=1}^d \mu_{ij} y_{ij}^2.
-\]</span></p>
-<p>In this way, we calculate the quadratic form without having to form the matrix Q or its full set of eigenvectors or values.</p>
+<section id="step-4-efficient-computation-of-log-density" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-efficient-computation-of-log-density">Step 4: Efficient Computation of Log-Density</h3>
+<p>Using this scaled eigendecomposition, we efficiently compute:</p>
+<ol type="1">
+<li><p>Log-determinant: <span class="math inline">\(\log|\mathbf{D}\mathbf{Q}\mathbf{D}| = \sum_{i,j} \nu \log(\tilde\lambda_i + \tilde\lambda_j)\)</span></p></li>
+<li><p>Quadratic form: <span class="math inline">\(\mathbf{z}^T\mathbf{D}\mathbf{Q}\mathbf{D}\mathbf{z} = \sum_{i,j} (\tilde\lambda_i + \tilde\lambda_j)^\nu y_{ij}^2\)</span>, where <span class="math inline">\(y_{ij} = (\mathbf{\tilde v}_j \otimes \mathbf{\tilde v}_i)^T\mathbf{z}\)</span></p></li>
+</ol>
+<p>This approach allows for efficient computation of the Gaussian copula density without explicitly forming the full <span class="math inline">\(n^2 \times n^2\)</span> precision matrix <span class="math inline">\(\mathbf{Q}\)</span> or its inverse <span class="math inline">\(\mathbf{\Sigma}\)</span>.</p>
 </section>
-<section id="scaling-the-input-x" class="level3">
-<h3 class="anchored" data-anchor-id="scaling-the-input-x">Scaling the Input x</h3>
-<p>The input vector <span class="math inline">\(x = \Phi^{-1}(u)\)</span> has zero mean and unit marginal variance. Instead of scaling the precision matrix to have <span class="math inline">\((Q^{-1})_{ii} = 1\)</span>, we calculate the marginal standard deviations, <span class="math inline">\(\sigma_k\)</span>, implied by <span class="math inline">\(Q\)</span> using the eigenstructure of <span class="math inline">\(Q_1\)</span>, then scale the input vector <span class="math inline">\(x\)</span> using those standard deviations. First we compute the marginal standard deviations: <span class="math display">\[
-\sigma_k = \sqrt{\sum_{i=1}^d \sum_{j=1}^d \frac{(v_i \otimes v_j)_k^2}{\lambda_i + \lambda_j}}
-\]</span></p>
-<p>where <span class="math inline">\((v_i \otimes v_j)_k\)</span> is the <span class="math inline">\(k\)</span>-th element of the Kronecker product <span class="math inline">\(v_i \otimes v_j\)</span>.</p>
-</section>
-</section>
-<section id="algorithm-implementation" class="level2">
-<h2 class="anchored" data-anchor-id="algorithm-implementation">Algorithm Implementation</h2>
-<p>The density calculation is implemented as follows:</p>
-<ul>
-<li>Compute the eigendecomposition of <span class="math inline">\(Q_1\)</span>.</li>
-<li>Calculate the marginal standard deviations <span class="math inline">\(\sigma_k\)</span>.</li>
-<li>For each observation <span class="math inline">\(x\)</span>:
-<ol type="a">
-<li>Standardize <span class="math inline">\(x\)</span> by element-wise multiplication with <span class="math inline">\(\sigma_k\)</span>.</li>
-<li>Compute the log-determinant and quadratic form using the formulas above.</li>
-<li>Combine the terms to get the log-density.</li>
-</ol></li>
-</ul>
-<p>This approach avoids explicit formation and inversion of the full precision matrix Q, allowing for efficient computation even for large spatial fields. This method has been implemented in C++ code that can perform a full set of computations for a <span class="math inline">\(200\times 200\)</span> spatial grid (i.e.&nbsp;<span class="math inline">\(Q\)</span> would be <span class="math inline">\(40.000 \times 40.000\)</span>) in just over one second.</p>
 </section>
 </section>
 
