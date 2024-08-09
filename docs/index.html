@@ -142,19 +142,13 @@ window.Quarto = {
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
   <ul class="collapse">
+  <li><a href="#problem-formulation" id="toc-problem-formulation" class="nav-link" data-scroll-target="#problem-formulation">Problem Formulation</a></li>
   <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review">Review</a></li>
-  <li><a href="#problem-formulation" id="toc-problem-formulation" class="nav-link" data-scroll-target="#problem-formulation">Problem Formulation</a>
-  <ul class="collapse">
-  <li><a href="#precision-matrix-structure" id="toc-precision-matrix-structure" class="nav-link" data-scroll-target="#precision-matrix-structure">Precision Matrix Structure</a></li>
-  <li><a href="#eigendecomposition-method" id="toc-eigendecomposition-method" class="nav-link" data-scroll-target="#eigendecomposition-method">Eigendecomposition Method</a></li>
-  <li><a href="#unit-marginal-variance-adjustment" id="toc-unit-marginal-variance-adjustment" class="nav-link" data-scroll-target="#unit-marginal-variance-adjustment">Unit Marginal Variance Adjustment</a></li>
-  <li><a href="#approximation-methods" id="toc-approximation-methods" class="nav-link" data-scroll-target="#approximation-methods">Approximation Methods</a></li>
-  </ul></li>
   </ul></li>
   <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
   <ul class="collapse">
   <li><a href="#gaussian-copula-density-computation" id="toc-gaussian-copula-density-computation" class="nav-link" data-scroll-target="#gaussian-copula-density-computation">Gaussian Copula Density Computation</a></li>
-  <li><a href="#precision-matrix-structure-1" id="toc-precision-matrix-structure-1" class="nav-link" data-scroll-target="#precision-matrix-structure-1">Precision Matrix Structure</a></li>
+  <li><a href="#precision-matrix-structure" id="toc-precision-matrix-structure" class="nav-link" data-scroll-target="#precision-matrix-structure">Precision Matrix Structure</a></li>
   <li><a href="#computation-process" id="toc-computation-process" class="nav-link" data-scroll-target="#computation-process">Computation Process</a>
   <ul class="collapse">
   <li><a href="#step-1-eigendecomposition-of-mathbfq_1" id="toc-step-1-eigendecomposition-of-mathbfq_1" class="nav-link" data-scroll-target="#step-1-eigendecomposition-of-mathbfq_1">Step 1: Eigendecomposition of <span class="math inline">\(\mathbf{Q}_1\)</span></a></li>
@@ -170,6 +164,16 @@ window.Quarto = {
   <li><a href="#approximations-for-q1" id="toc-approximations-for-q1" class="nav-link" data-scroll-target="#approximations-for-q1">Approximations for Q1</a></li>
   <li><a href="#extension-to-the-full-q-matrix" id="toc-extension-to-the-full-q-matrix" class="nav-link" data-scroll-target="#extension-to-the-full-q-matrix">Extension to the Full Q Matrix</a></li>
   </ul></li>
+  <li><a href="#computation-with-circulant-approximation" id="toc-computation-with-circulant-approximation" class="nav-link" data-scroll-target="#computation-with-circulant-approximation">Computation with Circulant Approximation</a>
+  <ul class="collapse">
+  <li><a href="#construct-the-base-matrix" id="toc-construct-the-base-matrix" class="nav-link" data-scroll-target="#construct-the-base-matrix">1. Construct the Base Matrix</a></li>
+  <li><a href="#compute-initial-eigenvalues" id="toc-compute-initial-eigenvalues" class="nav-link" data-scroll-target="#compute-initial-eigenvalues">2. Compute Initial Eigenvalues</a></li>
+  <li><a href="#compute-marginal-variance-and-rescale-eigenvalues" id="toc-compute-marginal-variance-and-rescale-eigenvalues" class="nav-link" data-scroll-target="#compute-marginal-variance-and-rescale-eigenvalues">3. Compute Marginal Variance and Rescale Eigenvalues</a></li>
+  <li><a href="#compute-log-determinant" id="toc-compute-log-determinant" class="nav-link" data-scroll-target="#compute-log-determinant">4. Compute Log-Determinant</a></li>
+  <li><a href="#compute-quadratic-form" id="toc-compute-quadratic-form" class="nav-link" data-scroll-target="#compute-quadratic-form">5. Compute Quadratic Form</a></li>
+  <li><a href="#compute-the-log-density" id="toc-compute-the-log-density" class="nav-link" data-scroll-target="#compute-the-log-density">6. Compute the Log-Density</a></li>
+  </ul></li>
+  <li><a href="#computation-with-folded-circulant-approximation" id="toc-computation-with-folded-circulant-approximation" class="nav-link" data-scroll-target="#computation-with-folded-circulant-approximation">Computation with Folded Circulant Approximation</a></li>
   </ul></li>
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
   <ul class="collapse">
@@ -189,6 +193,15 @@ window.Quarto = {
 
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
+<section id="problem-formulation" class="level2">
+<h2 class="anchored" data-anchor-id="problem-formulation">Problem Formulation</h2>
+<p>Consider a spatial field on a regular <span class="math inline">\(n \times n\)</span> grid. Our objective is to compute the Gaussian copula density efficiently for this field. This computation involves:</p>
+<ol type="1">
+<li>Specifying a precision matrix <span class="math inline">\(\mathbf{Q}\)</span> that represents the spatial dependence structure.</li>
+<li>Ensuring the implied covariance matrix <span class="math inline">\(\mathbf{\Sigma} = \mathbf{Q}^{-1}\)</span> has unit diagonal elements.</li>
+<li>Computing the density for large spatial fields in a computationally efficient manner.</li>
+</ol>
+</section>
 <section id="review" class="level2">
 <h2 class="anchored" data-anchor-id="review">Review</h2>
 <p>Gaussian Markov Random Fields (GMRFs) and copulas are two powerful statistical tools, each offering unique strengths in modeling complex data structures. GMRFs excel in capturing spatial and temporal dependencies, particularly in fields such as environmental science, epidemiology, and image analysis. Their ability to represent local dependencies through sparse precision matrices makes them computationally attractive for high-dimensional problems. Copulas, on the other hand, provide a flexible framework for modeling multivariate dependencies, allowing separate specification of marginal distributions and their joint behavior.</p>
@@ -210,43 +223,6 @@ C(u_1, u_2, \ldots, u_n) = \Phi_\mathbf{Q}(\Phi^{-1}(u_1), \Phi^{-1}(u_2), \ldot
 \]</span></p>
 <p>where <span class="math inline">\(\mathbf{Q}_1\)</span> is the precision matrix of a standardized one-dimensional AR(1) process and <span class="math inline">\(\otimes\)</span> denotes the Kronecker product. By employing efficient eigendecomposition techniques, our method avoids explicit formation and inversion of the large precision matrix <span class="math inline">\(\mathbf{Q}\)</span>, making it particularly suitable for high-dimensional spatial data. In additions to the exact method, we mention approximations to <span class="math inline">\(\mathbf{Q}\)</span> using circuland and folded circulant matrices.</p>
 </section>
-<section id="problem-formulation" class="level2">
-<h2 class="anchored" data-anchor-id="problem-formulation">Problem Formulation</h2>
-<p>Consider a spatial field on a regular <span class="math inline">\(n \times n\)</span> grid. Our objective is to compute the Gaussian copula density efficiently for this field. This computation involves:</p>
-<ol type="1">
-<li>Specifying a precision matrix <span class="math inline">\(\mathbf{Q}\)</span> that represents the spatial dependence structure.</li>
-<li>Ensuring the implied covariance matrix <span class="math inline">\(\mathbf{\Sigma} = \mathbf{Q}^{-1}\)</span> has unit diagonal elements.</li>
-<li>Computing the density for large spatial fields in a computationally efficient manner.</li>
-</ol>
-<section id="precision-matrix-structure" class="level3">
-<h3 class="anchored" data-anchor-id="precision-matrix-structure">Precision Matrix Structure</h3>
-<p>We use a Matérn-like precision matrix structure defined as:</p>
-<p><span class="math display">\[
-\begin{aligned}
-\mathbf{Q} &amp;= \mathbf{\tilde{Q}^{(\nu + 1)}}, \quad\nu \in \{0, 1, 2\}  \\
-\mathbf{\tilde Q} &amp;= \mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1,
-\end{aligned}
-\]</span></p>
-<p>where <span class="math inline">\(\mathbf{Q}_1\)</span> is the precision matrix of a standardized one-dimensional AR(1) process, and <span class="math inline">\(\otimes\)</span> denotes the Kronecker product.</p>
-</section>
-<section id="eigendecomposition-method" class="level3">
-<h3 class="anchored" data-anchor-id="eigendecomposition-method">Eigendecomposition Method</h3>
-<p>The properties of Kronecker products and sums are utilized to compute the eigendecomposition of <span class="math inline">\(\mathbf{Q}\)</span>. This approach facilitates:</p>
-<ol type="1">
-<li>Calculation of <span class="math inline">\(\log |\mathbf{Q}|\)</span>.</li>
-<li>Computation of quadratic forms <span class="math inline">\(\mathbf{x}^T\mathbf{Q}\mathbf{x}\)</span>.</li>
-<li>Determination of the diagonal elements of <span class="math inline">\(\mathbf{\Sigma} = \mathbf{Q}^{-1}\)</span> without explicit matrix inversion.</li>
-</ol>
-</section>
-<section id="unit-marginal-variance-adjustment" class="level3">
-<h3 class="anchored" data-anchor-id="unit-marginal-variance-adjustment">Unit Marginal Variance Adjustment</h3>
-<p>To ensure unit marginal variances, which is necessary for copula applications, we employ a scaling method for the precision matrix.</p>
-</section>
-<section id="approximation-methods" class="level3">
-<h3 class="anchored" data-anchor-id="approximation-methods">Approximation Methods</h3>
-<p>We introduce circulant and folded circulant approximations to <span class="math inline">\(\mathbf{Q}\)</span>. These approximations offer potential computational advantages, which we analyze in terms of efficiency and accuracy trade-offs.</p>
-</section>
-</section>
 </section>
 <section id="methods" class="level1">
 <h1>Methods</h1>
@@ -263,13 +239,24 @@ c(\mathbf{u}) = |\mathbf{Q}|^{1/2} \exp\left(-\frac{1}{2}\mathbf{z}^T(\mathbf{Q}
 \]</span></p>
 <p>Our goal is to efficiently compute this log-density for large spatial fields.</p>
 </section>
-<section id="precision-matrix-structure-1" class="level2">
-<h2 class="anchored" data-anchor-id="precision-matrix-structure-1">Precision Matrix Structure</h2>
+<section id="precision-matrix-structure" class="level2">
+<h2 class="anchored" data-anchor-id="precision-matrix-structure">Precision Matrix Structure</h2>
 <p>We define the precision matrix <span class="math inline">\(\mathbf{Q}\)</span> as:</p>
 <p><span class="math display">\[
 \mathbf{Q} = (\mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1)^{(\nu + 1)}, \quad \nu \in \{0, 1, 2\}
 \]</span></p>
-<p>where <span class="math inline">\(\mathbf{Q}_1\)</span> is the precision matrix of a one-dimensional AR(1) process. This matrix is then scaled so that it implied unit marginal variances.</p>
+<p>where <span class="math inline">\(\mathbf{Q}_1\)</span> is the precision matrix of a one-dimensional AR(1) process:</p>
+<p><span class="math display">\[
+\mathbf{Q}_1 = \frac{1}{1-\rho^2}
+\begin{bmatrix}
+1 &amp; -\rho &amp; 0 &amp; \cdots &amp; 0 \\
+-\rho &amp; 1+\rho^2 &amp; -\rho &amp; \cdots &amp; 0 \\
+0 &amp; -\rho &amp; 1+\rho^2 &amp; \cdots &amp; 0 \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; 0 &amp; \cdots &amp; 1
+\end{bmatrix}
+\]</span></p>
+<p>The matrix, <span class="math inline">\(\mathbf Q\)</span>, is then scaled so that its inverse, <span class="math inline">\(\mathbf \Sigma = \mathbf Q^{-1}\)</span> has unit diagonals, i.e.&nbsp;<span class="math inline">\(\mathbf \Sigma_{ii} = 1\)</span>.</p>
 </section>
 <section id="computation-process" class="level2">
 <h2 class="anchored" data-anchor-id="computation-process">Computation Process</h2>
@@ -291,14 +278,15 @@ c(\mathbf{u}) = |\mathbf{Q}|^{1/2} \exp\left(-\frac{1}{2}\mathbf{z}^T(\mathbf{Q}
 <p><span class="math display">\[
 \mathbf{\sigma} = \sqrt{\sum_{i,j} \frac{(\mathbf{v}_j \otimes \mathbf{v}_i)^2}{(\lambda_i + \lambda_j)^\nu}}
 \]</span></p>
-<p>where <span class="math inline">\(\mathbf{v}_i\)</span> are the eigenvectors and <span class="math inline">\(\lambda_i\)</span> are the eigenvalues of <span class="math inline">\(\mathbf{Q}_1\)</span>.</p>
+<p>where <span class="math inline">\(\mathbf{v}_i\)</span> are the eigenvectors and <span class="math inline">\(\lambda_i\)</span> are the eigenvalues of <span class="math inline">\(\mathbf{Q}_1\)</span>. Thus, <span class="math inline">\(\sigma\)</span> will be a vector of length <span class="math inline">\(n^2\)</span>.</p>
 </section>
 <section id="step-3-scaling-the-eigendecomposition" class="level3">
 <h3 class="anchored" data-anchor-id="step-3-scaling-the-eigendecomposition">Step 3: Scaling the Eigendecomposition</h3>
 <p>We scale the eigendecomposition of <span class="math inline">\(\mathbf{Q}\)</span> using the marginal standard deviations:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\mathbf{D}\mathbf{Q}\mathbf{D} &amp;= \mathbf{D}(\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T\mathbf{D} \\
+\mathbf{\tilde  Q} &amp;= \mathbf{D}\mathbf{Q}\mathbf{D} \\
+&amp;= \mathbf{D}(\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T\mathbf{D} \\
 &amp;= (\mathbf{\tilde V} \otimes \mathbf{\tilde V})(\mathbf{\tilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\tilde \Lambda})(\mathbf{\tilde V} \otimes \mathbf{\tilde V})^T
 \end{aligned}
 \]</span></p>
@@ -308,8 +296,8 @@ c(\mathbf{u}) = |\mathbf{Q}|^{1/2} \exp\left(-\frac{1}{2}\mathbf{z}^T(\mathbf{Q}
 <h3 class="anchored" data-anchor-id="step-4-efficient-computation-of-log-density">Step 4: Efficient Computation of Log-Density</h3>
 <p>Using this scaled eigendecomposition, we efficiently compute:</p>
 <ol type="1">
-<li><p>Log-determinant: <span class="math inline">\(\log|\mathbf{D}\mathbf{Q}\mathbf{D}| = \sum_{i,j} \log(\tilde\lambda_i + \tilde\lambda_j)\)</span></p></li>
-<li><p>Quadratic form: <span class="math inline">\(\mathbf{z}^T\mathbf{D}\mathbf{Q}\mathbf{D}\mathbf{z} = \sum_{i,j} (\tilde\lambda_i + \tilde\lambda_j) y_{ij}^2\)</span>, where <span class="math inline">\(y_{ij} = (\mathbf{\tilde v}_j \otimes \mathbf{\tilde v}_i)^T\mathbf{z}\)</span></p></li>
+<li><p>Log-determinant: <span class="math inline">\(\log|\mathbf{\tilde Q}| = \sum_{i,j} \log(\tilde\lambda_i + \tilde\lambda_j)\)</span></p></li>
+<li><p>Quadratic form: <span class="math inline">\(\mathbf{z}^T\mathbf{\tilde Q}\mathbf{z} = \sum_{i,j} (\tilde\lambda_i + \tilde\lambda_j) y_{ij}^2\)</span>, where <span class="math inline">\(y_{ij} = (\mathbf{\tilde v}_j \otimes \mathbf{\tilde v}_i)^T\mathbf{z}\)</span></p></li>
 </ol>
 <p>This approach allows for efficient computation of the Gaussian copula density without explicitly forming the full <span class="math inline">\(n^2 \times n^2\)</span> precision matrix <span class="math inline">\(\mathbf{Q}\)</span> or its inverse <span class="math inline">\(\mathbf{\Sigma}\)</span>.</p>
 </section>
@@ -319,7 +307,7 @@ c(\mathbf{u}) = |\mathbf{Q}|^{1/2} \exp\left(-\frac{1}{2}\mathbf{z}^T(\mathbf{Q}
 <p>While the eigendecomposition method provides an exact solution, it can be computationally expensive for very large spatial fields. To address this, we introduce circulant and folded circulant approximations that offer potential computational advantages.</p>
 <section id="circulant-matrices" class="level3">
 <h3 class="anchored" data-anchor-id="circulant-matrices">Circulant Matrices</h3>
-<p>A circulant matrix C is a special kind of matrix where each row is a cyclic shift of the row above it. It can be fully specified by its first row or column, called the base c:</p>
+<p>A circulant matrix <span class="math inline">\(C\)</span> is a special kind of matrix where each row is a cyclic shift of the row above it. It can be fully specified by its first row or column, called the base <span class="math inline">\(c\)</span>:</p>
 <p><span class="math display">\[
 C = \begin{pmatrix}
 c_0 &amp; c_1 &amp; c_2 &amp; \cdots &amp; c_{n-1} \\
@@ -329,15 +317,27 @@ c_{n-2} &amp; c_{n-1} &amp; c_0 &amp; \cdots &amp; c_{n-3} \\
 c_1 &amp; c_2 &amp; c_3 &amp; \cdots &amp; c_0
 \end{pmatrix} = (c_{j-i \mod n})
 \]</span></p>
-<p>The key property of circulant matrices is that they are diagonalized by the Discrete Fourier Transform (DFT) matrix. If F is the DFT matrix, then for any circulant matrix C:</p>
+<p>The base vector <span class="math inline">\(c\)</span> completely determines the circulant matrix and plays a crucial role in efficient computations. In particular:</p>
+<ol type="1">
+<li><p>The eigenvalues of <span class="math inline">\(C\)</span> are given by the Discrete Fourier Transform (DFT) of <span class="math inline">\(c\)</span>: <span class="math display">\[
+\lambda_k = \sum_{j=0}^{n-1} c_j e^{-2\pi i jk/n}, \quad k = 0, 1, ..., n-1
+\]</span></p></li>
+<li><p>Matrix-vector multiplication can be performed using the FFT: <span class="math display">\[
+Cv = \frac1n\text{DFT}(\text{DFT}(c) \odot \text{IDFT}(v))
+\]</span></p></li>
+<li><p>The determinant of <span class="math inline">\(C\)</span> is the product of its eigenvalues: <span class="math display">\[
+\det(C) = \prod_{k=0}^{n-1} \lambda_k
+\]</span></p></li>
+<li><p>When <span class="math inline">\(C\)</span> is non singular, then the inverse is circulant and thus determined by its base:</p></li>
+</ol>
 <p><span class="math display">\[
-C = F \Lambda F^H
+\frac1n \text{IDFT}(\text{DFT}(c)^{-1}).
 \]</span></p>
-<p>where <span class="math inline">\(\Lambda\)</span> is a diagonal matrix of eigenvalues and <span class="math inline">\(F^H\)</span> is the conjugate transpose of F.</p>
+<p>These properties allow for much faster computations than for general matrices.</p>
 </section>
 <section id="block-circulant-matrices" class="level3">
 <h3 class="anchored" data-anchor-id="block-circulant-matrices">Block Circulant Matrices</h3>
-<p>For two-dimensional spatial fields, we use block circulant matrices with circulant blocks (BCCB). An Nn × Nn matrix C is block circulant if it has the form:</p>
+<p>For two-dimensional spatial fields, we use block circulant matrices with circulant blocks (BCCB). An <span class="math inline">\(Nn \times Nn\)</span> matrix C is block circulant if it has the form:</p>
 <p><span class="math display">\[
 C = \begin{pmatrix}
 C_0 &amp; C_1 &amp; C_2 &amp; \cdots &amp; C_{N-1} \\
@@ -347,7 +347,19 @@ C_{N-2} &amp; C_{N-1} &amp; C_0 &amp; \cdots &amp; C_{N-3} \\
 C_1 &amp; C_2 &amp; C_3 &amp; \cdots &amp; C_0
 \end{pmatrix} = (C_{j-i \mod N})
 \]</span></p>
-<p>where each <span class="math inline">\(C_i\)</span> is itself a circulant n × n matrix.</p>
+<p>where each <span class="math inline">\(C_i\)</span> is itself a circulant <span class="math inline">\(n \times n\)</span> matrix.</p>
+<p>For a BCCB matrix, we define a base matrix <span class="math inline">\(\mathbf c\)</span>, which is an <span class="math inline">\(n \times N\)</span> matrix where each column is the base vector of the corresponding circulant block. This base matrix <span class="math inline">\(\mathbf c\)</span> completely determines the BCCB matrix and is central to efficient computations:</p>
+<ol type="1">
+<li><p>The eigenvalues of <span class="math inline">\(C\)</span> are given by the 2D DFT of <span class="math inline">\(\mathbf c\)</span>: <span class="math display">\[
+\Lambda_{k,l} = \sum_{i=0}^{n-1} \sum_{j=0}^{N-1} c_{ij} e^{-2\pi i (ki/n + lj/N)}, \quad k = 0, \dots, n-1, l = 0, \dots, N-1
+\]</span></p></li>
+<li><p>Matrix-vector multiplication can be performed using the 2D FFT: <span class="math display">\[
+Cv = \text{IDFT2}(\text{DFT2}(c) \odot \text{DFT2}(v))
+\]</span></p></li>
+<li><p>The determinant of <span class="math inline">\(C\)</span> is the product of its eigenvalues: <span class="math display">\[
+\det(C) = \prod_{k=0}^{n-1} \prod_{l=0}^{N-1} \Lambda_{k,l}
+\]</span></p></li>
+</ol>
 </section>
 <section id="computational-advantages" class="level3">
 <h3 class="anchored" data-anchor-id="computational-advantages">Computational Advantages</h3>
@@ -416,7 +428,7 @@ Cv = \sqrt{n} \text{DFT}(\text{DFT}(c) \odot \text{IDFT}(v)),
 <p><span class="math display">\[
 \mathbf{Q} = \mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1
 \]</span></p>
-<p>Now, let <span class="math inline">\(Q_1\)</span> be approximated by a circulant matrix C with base vector c = [c0, c1, …, cn-1]. Then:</p>
+<p>Now, let <span class="math inline">\(Q_1\)</span> be approximated by a circulant matrix C with base vector <span class="math inline">\(c = [c_, c_1, ..., c_{n-1}]\)</span>. Then:</p>
 <p><span class="math display">\[
 \mathbf{Q}_1 \approx \mathbf{C} =
 \begin{pmatrix}
@@ -426,7 +438,7 @@ c_{n-1} &amp; c_0 &amp; \cdots &amp; c_{n-2} \\
 c_1 &amp; c_2 &amp; \cdots &amp; c_0
 \end{pmatrix}
 \]</span></p>
-<p>The Kronecker product C ⊗ I results in a block matrix where each block is a scalar multiple of I:</p>
+<p>The Kronecker product <span class="math inline">\(C \otimes I\)</span> results in a block matrix where each block is a scalar multiple of I:</p>
 <p><span class="math display">\[
 \mathbf{C} \otimes \mathbf{I} =
 \begin{pmatrix}
@@ -456,8 +468,26 @@ c_1\mathbf{I} &amp; c_2\mathbf{I} &amp; \cdots &amp; c_0\mathbf{I}
 \mathbf{B}_1 &amp; \mathbf{B}_2 &amp; \cdots &amp; \mathbf{B}_0
 \end{pmatrix}
 \]</span></p>
-<p>where each Bi is a circulant matrix. Specifically, B0 = c0I + C, and for i ≠ 0, Bi = ciI.</p>
-<p>This BCCB structure allows us to use 2D FFT for efficient computations. The base matrix c for this BCCB structure is:</p>
+<p>where each <span class="math inline">\(\mathbf{B_i}\)</span> is a circulant matrix. Specifically, <span class="math inline">\(\mathbf{B_0} = c_0I + C\)</span>, and for <span class="math inline">\(i \neq 0\)</span>, <span class="math inline">\(\mathbf{B_i} = c_iI\)</span>.</p>
+<p>This BCCB structure allows us to use 2D FFT for efficient computations. The base matrix <span class="math inline">\(\mathbf c\)</span> for this BCCB structure is:</p>
+<p><span class="math display">\[
+\mathbf{c} = \begin{bmatrix}
+2+2\rho^2 &amp; -\rho &amp; 0 &amp; \cdots  &amp; -\rho \\
+-\rho &amp; 0 &amp; 0 &amp; \cdots  &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; \cdots  &amp; 0 \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp;  \vdots \\
+-\rho &amp; 0 &amp; 0 &amp; \cdots  &amp; 0
+\end{bmatrix}
+\]</span></p>
+<p>This base matrix <span class="math inline">\(c\)</span> captures the structure of the precision matrix <span class="math inline">\(Q\)</span> and allows for efficient computation of eigenvalues using the 2D Fast Fourier Transform (FFT), enabling rapid calculation of the log-determinant and quadratic forms needed for the Gaussian copula density.</p>
+</section>
+</section>
+<section id="computation-with-circulant-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="computation-with-circulant-approximation">Computation with Circulant Approximation</h2>
+<p>When using the circulant approximation, we leverage the efficient computation properties of block circulant matrices with circulant blocks (BCCB). This approach significantly reduces the computational complexity, especially for large spatial fields. Here’s the step-by-step process:</p>
+<section id="construct-the-base-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="construct-the-base-matrix">1. Construct the Base Matrix</h3>
+<p>First, we construct the base matrix c for our BCCB approximation of Q. For an n × n grid, c is an n × n matrix:</p>
 <p><span class="math display">\[
 \mathbf{c} = \begin{bmatrix}
 2+2\rho^2 &amp; -\rho &amp; 0 &amp; \cdots &amp; 0 &amp; -\rho \\
@@ -467,16 +497,75 @@ c_1\mathbf{I} &amp; c_2\mathbf{I} &amp; \cdots &amp; c_0\mathbf{I}
 -\rho &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0
 \end{bmatrix}
 \]</span></p>
-<p>This base matrix c captures the structure of the precision matrix Q and allows for efficient computation of eigenvalues using the 2D Fast Fourier Transform (FFT), enabling rapid calculation of the log-determinant and quadratic forms needed for the Gaussian copula density.</p>
+<p>This base matrix encapsulates the structure of our Matérn-like precision matrix.</p>
 </section>
+<section id="compute-initial-eigenvalues" class="level3">
+<h3 class="anchored" data-anchor-id="compute-initial-eigenvalues">2. Compute Initial Eigenvalues</h3>
+<p>We compute the initial eigenvalues of Q using the 2D Fast Fourier Transform (FFT) of c:</p>
+<p><span class="math display">\[
+\boldsymbol{\Lambda} = \text{FFT2}(\mathbf{c})^{\nu+1}
+\]</span></p>
+<p>where ν is the smoothness parameter.</p>
+</section>
+<section id="compute-marginal-variance-and-rescale-eigenvalues" class="level3">
+<h3 class="anchored" data-anchor-id="compute-marginal-variance-and-rescale-eigenvalues">3. Compute Marginal Variance and Rescale Eigenvalues</h3>
+<p>An important property of Block Circulant with Circulant Blocks (BCCB) matrices is that the inverse of a BCCB matrix is also a BCCB matrix with a constant diagonal. We use this to efficiently compute the marginal variance and rescale the eigenvalues:</p>
+<ol type="a">
+<li>Compute the element-wise inverse of <span class="math inline">\(\boldsymbol{\Lambda}\)</span>: <span class="math inline">\(\mathbf{\Lambda^{inv}} = 1 / \boldsymbol{\Lambda}\)</span></li>
+<li>Compute the base of <span class="math inline">\(Q^{-1}\)</span> using inverse 2D FFT: <span class="math inline">\(\mathbf{c_{inv}} = \text{IFFT2}(\mathbf{{\Lambda^{inv}}})\)</span></li>
+<li>The marginal variance is given by the first element of <span class="math inline">\(\mathbf{c^{inv}}\)</span>: <span class="math inline">\(\sigma^2 = \mathbf{c^{inv}}_{(0,0)}\)</span></li>
+<li>Rescale the eigenvalues: <span class="math inline">\(\boldsymbol{\tilde \Lambda} = \sigma^2 \boldsymbol{\Lambda}\)</span></li>
+</ol>
+<p>This process ensures that the resulting precision matrix will have unit marginal variances, as required for the Gaussian copula.</p>
+</section>
+<section id="compute-log-determinant" class="level3">
+<h3 class="anchored" data-anchor-id="compute-log-determinant">4. Compute Log-Determinant</h3>
+<p>The log-determinant of the scaled <span class="math inline">\(\mathbf{\tilde Q}\)</span> can be efficiently calculated as the sum of the logarithms of the scaled eigenvalues:</p>
+<p><span class="math display">\[
+\log|\mathbf{Q}| = \sum_{i,j} \log(\tilde \Lambda_{ij})
+\]</span></p>
+</section>
+<section id="compute-quadratic-form" class="level3">
+<h3 class="anchored" data-anchor-id="compute-quadratic-form">5. Compute Quadratic Form</h3>
+<p>To compute the quadratic form <span class="math inline">\(\mathbf{z}^T\mathbf{Q}\mathbf{z}\)</span>, we use the following steps:</p>
+<ol type="a">
+<li>Compute the 2D FFT of z: <span class="math inline">\(\mathbf{\hat{z}} = \text{FFT2}(\mathbf{z})\)</span></li>
+<li>Multiply element-wise with the scaled eigenvalues: <span class="math inline">\(\mathbf{\hat{y}} = \boldsymbol{\tilde \Lambda} \odot \mathbf{\hat{z}}\)</span></li>
+<li>Compute the inverse 2D FFT: <span class="math inline">\(\mathbf{y} = \text{IFFT2}(\mathbf{\hat{y}})\)</span></li>
+<li>Compute the dot product: <span class="math inline">\(\mathbf{z}^T\mathbf{Q}\mathbf{z} = \mathbf{z}^T\mathbf{y}\)</span></li>
+</ol>
+</section>
+<section id="compute-the-log-density" class="level3">
+<h3 class="anchored" data-anchor-id="compute-the-log-density">6. Compute the Log-Density</h3>
+<p>Finally, we can compute the log-density of the Gaussian copula:</p>
+<p><span class="math display">\[
+\log c(\mathbf{u}) = \frac{1}{2}\log|\mathbf{Q}| - \frac{1}{2}\mathbf{z}^T\mathbf{Q}\mathbf{z} + \frac{1}{2}\mathbf{z}^T\mathbf{z}
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{z} = \Phi^{-1}(\mathbf{u})\)</span>.</p>
+</section>
+</section>
+<section id="computation-with-folded-circulant-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="computation-with-folded-circulant-approximation">Computation with Folded Circulant Approximation</h2>
+<p>The folded circulant approximation offers an alternative approach that can provide better accuracy near the edges of the spatial field. This method is based on the idea of reflecting the data along each coordinate axis, effectively doubling the size of the field. Other than that, the algorithmic implementation is the same except that the circulant approximation matrices to <span class="math inline">\(Q_1\)</span> are now <span class="math inline">\(2n \times 2n\)</span>.</p>
+<p>First, we reflect the data along each coordinate axis. For a 2D spatial field represented by an <span class="math inline">\(n \times n\)</span> matrix, the reflected data takes the form:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+x_{11} &amp; \cdots &amp; x_{1n} &amp; x_{1n} &amp; \cdots &amp; x_{11} \\
+\vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+x_{n1} &amp; \cdots &amp; x_{nn} &amp; x_{nn} &amp; \cdots &amp; x_{n1} \\
+x_{n1} &amp; \cdots &amp; x_{nn} &amp; x_{nn} &amp; \cdots &amp; x_{n1} \\
+\vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+x_{11} &amp; \cdots &amp; x_{1n} &amp; x_{1n} &amp; \cdots &amp; x_{11}
+\end{bmatrix}
+\]</span></p>
+<p>This reflection creates a 2n × 2n matrix. This data is then stacked column-wise before entering into the quadratic forms.</p>
 </section>
 </section>
 <section id="results" class="level1">
 <h1>Results</h1>
-<p>To evaluate the computational efficiency of our proposed methods, we conducted a benchmarking study comparing the exact solution with the circulant and folded circulant approximations. We measured the time taken to evaluate the density of a Gaussian copula for various grid sizes, ranging from 100x100 to 40000x40000.</p>
 <section id="computational-efficiency" class="level2">
 <h2 class="anchored" data-anchor-id="computational-efficiency">Computational Efficiency</h2>
-<p>Table 1 presents the results of a benchmark comparing the time it takes to evaluate the gaussian copula density described above. For each grid size, we report the computation time for the exact method and the two approximations, along with the speed-up factor relative to the exact method. Each calculation was performed twenty times and the medians are shown in the table.</p>
+<p>Table 1 presents the results of a benchmark comparing the time it takes to evaluate the gaussian copula density described above. For each grid size, we report the computation time for the exact method and the two approximations, along with the speed-up factor relative to the exact method. Each calculation was performed twenty times and the median times are shown in the table.</p>
 <table class="caption-top table">
 <caption>Table 1. Benchmarking how long it takes to evaluate the density of a Mátern(<span class="math inline">\(\nu\)</span>)-like field with correlation parameter <span class="math inline">\(\rho\)</span>, scaled to have unit marginal variance.</caption>
 <thead>
