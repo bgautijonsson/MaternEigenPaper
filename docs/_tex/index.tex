@@ -143,7 +143,7 @@
 \makeatletter
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, sharp corners, boxrule=0pt, enhanced, interior hidden, borderline west={3pt}{0pt}{shadecolor}, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, boxrule=0pt, breakable, frame hidden, enhanced, interior hidden, borderline west={3pt}{0pt}{shadecolor}]}{\end{tcolorbox}}\fi
 \makeatother
 
 \ifLuaTeX
@@ -390,9 +390,9 @@ standard deviations:
 
 \[
 \begin{aligned}
-\mathbf{\tilde  Q} &= \mathbf{D}\mathbf{Q}\mathbf{D} \\
+\mathbf{\widetilde  Q} &= \mathbf{D}\mathbf{Q}\mathbf{D} \\
 &= \mathbf{D}(\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T\mathbf{D} \\
-&= (\mathbf{\tilde V} \otimes \mathbf{\tilde V})(\mathbf{\tilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\tilde \Lambda})(\mathbf{\tilde V} \otimes \mathbf{\tilde V})^T
+&= (\mathbf{\widetilde V} \otimes \mathbf{\widetilde V})(\mathbf{\widetilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\widetilde \Lambda})(\mathbf{\widetilde V} \otimes \mathbf{\widetilde V})^T
 \end{aligned}
 \]
 
@@ -407,12 +407,12 @@ Using this scaled eigendecomposition, we efficiently compute:
 \def\labelenumi{\arabic{enumi}.}
 \item
   Log-determinant:
-  \(\log|\mathbf{\tilde Q}| = \sum_{i,j} \log(\tilde\lambda_i + \tilde\lambda_j)\)
+  \(\log|\mathbf{\widetilde Q}| = \sum_{i,j} \log(\widetilde\lambda_i + \widetilde\lambda_j)\)
 \item
   Quadratic form:
-  \(\mathbf{z}^T\mathbf{\tilde Q}\mathbf{z} = \sum_{i,j} (\tilde\lambda_i + \tilde\lambda_j) y_{ij}^2\),
+  \(\mathbf{z}^T\mathbf{\widetilde Q}\mathbf{z} = \sum_{i,j} (\widetilde\lambda_i + \widetilde\lambda_j) y_{ij}^2\),
   where
-  \(y_{ij} = (\mathbf{\tilde v}_j \otimes \mathbf{\tilde v}_i)^T\mathbf{z}\)
+  \(y_{ij} = (\mathbf{\widetilde v}_j \otimes \mathbf{\widetilde v}_i)^T\mathbf{z}\)
 \end{enumerate}
 
 This approach allows for efficient computation of the Gaussian copula
@@ -748,7 +748,7 @@ variance and rescale the eigenvalues:
   \(\mathbf{c^{inv}}\): \(\sigma^2 = \mathbf{c^{inv}}_{(0,0)}\)
 \item
   Rescale the eigenvalues:
-  \(\boldsymbol{\tilde \Lambda} = \sigma^2 \boldsymbol{\Lambda}\)
+  \(\boldsymbol{\widetilde \Lambda} = \sigma^2 \boldsymbol{\Lambda}\)
 \end{enumerate}
 
 This process ensures that the resulting precision matrix will have unit
@@ -757,12 +757,12 @@ marginal variances, as required for the Gaussian copula.
 \subsubsection{4. Compute
 Log-Determinant}\label{compute-log-determinant}
 
-The log-determinant of the scaled \(\mathbf{\tilde Q}\) can be
+The log-determinant of the scaled \(\mathbf{\widetilde Q}\) can be
 efficiently calculated as the sum of the logarithms of the scaled
 eigenvalues:
 
 \[
-\log|\mathbf{Q}| = \sum_{i,j} \log(\tilde \Lambda_{ij})
+\log|\mathbf{Q}| = \sum_{i,j} \log(\widetilde \Lambda_{ij})
 \]
 
 \subsubsection{5. Compute Quadratic Form}\label{compute-quadratic-form}
@@ -778,7 +778,7 @@ use the following steps:
   \(\mathbf{\hat{z}} = \text{FFT2}(\mathbf{z})\)
 \item
   Multiply element-wise with the scaled eigenvalues:
-  \(\mathbf{\hat{y}} = \boldsymbol{\tilde \Lambda} \odot \mathbf{\hat{z}}\)
+  \(\mathbf{\hat{y}} = \boldsymbol{\widetilde \Lambda} \odot \mathbf{\hat{z}}\)
 \item
   Compute the inverse 2D FFT:
   \(\mathbf{y} = \text{IFFT2}(\mathbf{\hat{y}})\)
@@ -899,6 +899,298 @@ efficiency is crucial. The substantial speed-ups achieved, particularly
 for larger grids, demonstrate the potential of these methods to enable
 the analysis of much larger spatial datasets than previously feasible
 with exact methods.
+
+\section{Appendix}\label{appendix}
+
+\subsection{Cholesky Methods}\label{cholesky-methods}
+
+Standard methods of evaluating multivariate normal densities using the
+Cholesky decomposition were implemented to compare with the new methods
+for benchmarking.
+
+\subsubsection{Unscaled Precision
+Matrix}\label{unscaled-precision-matrix}
+
+\paragraph{Precision Matrix
+Construction}\label{precision-matrix-construction}
+
+We start by constructing the precision matrix \(Q\) for a 2D Matérn
+field on a grid of size \(d_x \times d_y\):
+
+\[
+Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2 
+\]
+
+where \(\otimes\) denotes the Kronecker product, \(Q_1\) and \(Q_2\) are
+1D precision matrices for the x and y dimensions respectively (typically
+AR(1)-like structures), and \(I_{d_x}\) and \(I_{d_y}\) are identity
+matrices of appropriate sizes.
+
+\paragraph{Cholesky Decomposition}\label{cholesky-decomposition}
+
+We compute the Cholesky decomposition of \(Q\): \[
+Q = LL^T
+\]
+
+where L is a lower triangular matrix.
+
+\paragraph{Density Computation}\label{density-computation}
+
+For a Matérn field with smoothness parameter \(\nu\), we need to work
+with \(Q^{\nu+1}\). The key insight is that we can efficiently compute
+log-determinant, \(\log|Q^{\nu+1}|\), and the quadratic form,
+\(x^T Q^{\nu+1} x\), without explicitly forming \(Q^{\nu+1}\). We make
+use of the facts that
+
+\[
+\log|Q^{\nu+1}| = (\nu+1)\log|Q| = 2(\nu+1)\sum_{i}\log(L_{ii}),
+\]
+
+and
+
+\[
+\begin{aligned}
+x^T Q x &= x^T L L^T x = ||L^T x||_2^2 \\
+x^T Q^2 x &=  x^T L L^T L L^T x = ||LL^T x||_2^2 \\
+x^T Q^3 x &=  x^T L L^T L L^T L L^T x = ||L^TLL^T x||_2^2,
+\end{aligned}
+\]
+
+to efficiently calculate the quadratic form using only the Cholesky
+factor of \(Q\) instead of forming the matrix \(Q^\nu\).
+
+\paragraph{Algorithm}\label{algorithm}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Construct \(Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2\)
+\item
+  Compute Cholesky decomposition \(Q = LL^T\)
+\item
+  Compute log-determinant:
+  \(\log|Q^{\nu+1}| = 2(\nu+1)\sum_{i}\log(L_{ii})\)
+\item
+  For each observation \(x\):
+
+  \begin{enumerate}
+  \def\labelenumii{\roman{enumii})}
+  \tightlist
+  \item
+    Initialize \(y = x\)
+  \item
+    For \(j\) from 0 to \(\nu\):
+
+    \begin{itemize}
+    \tightlist
+    \item
+      If \(j\) is even: \(y = L^T y\)
+    \item
+      If \(j\) is odd: \(y = L y\)
+    \end{itemize}
+  \item
+    Compute quadratic form \(q = y^Ty\)
+  \end{enumerate}
+\item
+  Compute log-density:
+  \(\log p(x) = -\frac{1}{2}(d\log(2\pi) + \log|Q^{\nu+1}| + q)\)
+\end{enumerate}
+
+\subsubsection{Scaled Precision Matrix}\label{scaled-precision-matrix}
+
+\paragraph{Precision Matrix
+Construction}\label{precision-matrix-construction-1}
+
+We start by constructing the precision matrix \(Q\) for a 2D Matérn
+field on a grid of size \(d_x \times d_y\):
+
+\[
+Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2 
+\]
+
+where \(\otimes\) denotes the Kronecker product, \(Q_1\) and \(Q_2\) are
+1D precision matrices for the x and y dimensions respectively (typically
+AR(1)-like structures), and \(I_{d_x}\) and \(I_{d_y}\) are identity
+matrices of appropriate sizes. We will then have to work with the matrix
+\(Q^{\nu + 1}\).
+
+To ensure unit marginal variances, we need to scale this precision
+matrix. Let \(D\) be a diagonal matrix where
+\(D_{ii} = \sqrt{\Sigma_{ii}}\), and \(\Sigma = (Q^{\nu+1})^{-1}\). The
+scaled precision matrix is then: \[
+\tilde{Q} = DQ^{\nu+1}D
+\]
+
+\paragraph{Cholesky Decomposition}\label{cholesky-decomposition-1}
+
+We compute the Cholesky decomposition of \(Q\): \[
+Q = LL^T
+\]
+
+where L is a lower triangular matrix.
+
+\paragraph{Efficient Computation of Scaling Matrix
+D}\label{efficient-computation-of-scaling-matrix-d}
+
+Computing \(D\) directly would require inverting \(Q^{\nu + 1}\), which
+is computationally expensive. Instead, we can efficiently compute \(D\)
+using the following steps:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Compute the Cholesky decomposition of the original \(Q = LL^T\)
+\item
+  Compute \(R = L^{-1}\), so that \(S = Q^{-1} = R^TR\).
+\item
+  We then calculate the entries in \(D\) using the following steps:
+
+  \begin{enumerate}
+  \def\labelenumii{\roman{enumii}.}
+  \tightlist
+  \item
+    For \(\nu = 0\),
+    \(D_{ii} = \sqrt{\Sigma_{ii}} = \sqrt{\sum_j (R_{ji})^2}\), the
+    column-wise norm of \(R\).
+  \item
+    For \(\nu = 1\), we use the column-wise norm of \(R^TR\)
+  \item
+    For \(\nu = 2\), we use the column-wise norm of \(RR^TR\)
+  \end{enumerate}
+\end{enumerate}
+
+This gives us the matrix D without having to explicitly invert the
+matrix Q.
+
+\paragraph{Log determinant}\label{log-determinant}
+
+The log determinant of the scaled precision matrix
+\(\tilde{Q} = DQ^{\nu+1}D\) can be computed efficiently using the
+following steps:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  First, note that
+  \(\log|\tilde{Q}| = \log|DQ^{\nu+1}D| = 2\log|D| + \log|Q^{\nu+1}|\)
+\item
+  We can compute \(\log|D|\) directly from the diagonal elements of D,
+  i.e.~\(\log|D| = \sum_i \log(D_{ii})\)
+\item
+  For \(\log|Q^{\nu+1}|\), we can use the properties of the Cholesky
+  decomposition:
+  \(\log|Q^{\nu+1}| = (\nu+1)\log|Q| = (\nu+1)\log|LL^T| = 2(\nu+1)\sum_i \log(L_{ii})\)
+\item
+  Combining these, we get
+  \(\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})\)
+\end{enumerate}
+
+This allows us to compute the log determinant efficiently without
+explicitly forming \(Q^{\nu+1}\) or its inverse.
+
+\paragraph{Quadratic Form}\label{quadratic-form}
+
+For the quadratic form \(z^T\tilde{Q}z\), where \(z = \Phi^{-1}(u)\), we
+can use the following steps:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  First, note that
+  \(z^T\tilde{Q}z = z^TDQ^{\nu+1}Dz = (Dz)^TQ^{\nu+1}(Dz)\)
+\item
+  Let \(y = Dz\). We can compute this element-wise as
+  \(y_i = D_{ii}z_i\)
+\item
+  Now we need to compute \(y^TQ^{\nu+1}y\). We can do this efficiently
+  using the Cholesky factor L:
+
+  \begin{enumerate}
+  \def\labelenumii{\roman{enumii}.}
+  \tightlist
+  \item
+    For \(\nu = 0\): \(y^TQy = ||L^Ty||_2^2\)
+  \item
+    For \(\nu = 1\): \(y^TQ^2y = ||LL^Ty||_2^2\)
+  \item
+    For \(\nu = 2\): \(y^TQ^3y = ||L^TLL^Ty||_2^2\)
+  \end{enumerate}
+\item
+  In general, we can compute this as follows:
+
+  \begin{enumerate}
+  \def\labelenumii{\roman{enumii})}
+  \tightlist
+  \item
+    Initialize \(y = Dz\)
+  \item
+    For j from 0 to \(\nu\):
+
+    \begin{itemize}
+    \tightlist
+    \item
+      If j is even: \(y = L^Ty\)
+    \item
+      If j is odd: \(y = Ly\)
+    \end{itemize}
+  \item
+    Compute quadratic form \(q = y^Ty\)
+  \end{enumerate}
+\end{enumerate}
+
+This approach allows us to compute the quadratic form efficiently
+without explicitly forming \(Q^{\nu+1}\).
+
+\paragraph{Algorithm}\label{algorithm-1}
+
+Putting it all together, here's the algorithm for computing the
+log-density of the Gaussian copula using the scaled precision matrix:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Construct \(Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2\)
+\item
+  Compute Cholesky decomposition \(Q = LL^T\)
+\item
+  Compute \(R = L^{-1}\) and use it to compute D as described earlier
+\item
+  Compute log-determinant:
+  \(\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})\)
+\item
+  For each observation \(z = \Phi^{-1}(u)\):
+
+  \begin{enumerate}
+  \def\labelenumii{\roman{enumii})}
+  \tightlist
+  \item
+    Compute \(y = Dz\)
+  \item
+    For j from 0 to \(\nu\):
+
+    \begin{itemize}
+    \tightlist
+    \item
+      If j is even: \(y = L^Ty\)
+    \item
+      If j is odd: \(y = Ly\)
+    \end{itemize}
+  \item
+    Compute quadratic form \(q = y^Ty\)
+  \end{enumerate}
+\item
+  Compute log-density:
+  \(\log c(u) = -\frac{1}{2}(d\log(2\pi) + \log|\tilde{Q}| + q - z^Tz)\)
+\end{enumerate}
+
+This algorithm computes the Gaussian copula density using the scaled
+precision matrix, avoiding explicit formation or inversion of
+\(\tilde Q = DQ^{\nu + 1}D\).
 
 
 

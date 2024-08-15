@@ -179,6 +179,14 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#computational-efficiency" id="toc-computational-efficiency" class="nav-link" data-scroll-target="#computational-efficiency">Computational Efficiency</a></li>
   </ul></li>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix">Appendix</a>
+  <ul class="collapse">
+  <li><a href="#cholesky-methods" id="toc-cholesky-methods" class="nav-link" data-scroll-target="#cholesky-methods">Cholesky Methods</a>
+  <ul class="collapse">
+  <li><a href="#unscaled-precision-matrix" id="toc-unscaled-precision-matrix" class="nav-link" data-scroll-target="#unscaled-precision-matrix">Unscaled Precision Matrix</a></li>
+  <li><a href="#scaled-precision-matrix" id="toc-scaled-precision-matrix" class="nav-link" data-scroll-target="#scaled-precision-matrix">Scaled Precision Matrix</a></li>
+  </ul></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -285,9 +293,9 @@ c(\mathbf{u}) = |\mathbf{Q}|^{1/2} \exp\left(-\frac{1}{2}\mathbf{z}^T(\mathbf{Q}
 <p>We scale the eigendecomposition of <span class="math inline">\(\mathbf{Q}\)</span> using the marginal standard deviations:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\mathbf{\tilde  Q} &amp;= \mathbf{D}\mathbf{Q}\mathbf{D} \\
+\mathbf{\widetilde  Q} &amp;= \mathbf{D}\mathbf{Q}\mathbf{D} \\
 &amp;= \mathbf{D}(\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T\mathbf{D} \\
-&amp;= (\mathbf{\tilde V} \otimes \mathbf{\tilde V})(\mathbf{\tilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\tilde \Lambda})(\mathbf{\tilde V} \otimes \mathbf{\tilde V})^T
+&amp;= (\mathbf{\widetilde V} \otimes \mathbf{\widetilde V})(\mathbf{\widetilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\widetilde \Lambda})(\mathbf{\widetilde V} \otimes \mathbf{\widetilde V})^T
 \end{aligned}
 \]</span></p>
 <p>where <span class="math inline">\(\mathbf{D}\)</span> is a diagonal matrix with <span class="math inline">\(D_{ii} = \sigma_i\)</span>.</p>
@@ -296,8 +304,8 @@ c(\mathbf{u}) = |\mathbf{Q}|^{1/2} \exp\left(-\frac{1}{2}\mathbf{z}^T(\mathbf{Q}
 <h3 class="anchored" data-anchor-id="step-4-efficient-computation-of-log-density">Step 4: Efficient Computation of Log-Density</h3>
 <p>Using this scaled eigendecomposition, we efficiently compute:</p>
 <ol type="1">
-<li><p>Log-determinant: <span class="math inline">\(\log|\mathbf{\tilde Q}| = \sum_{i,j} \log(\tilde\lambda_i + \tilde\lambda_j)\)</span></p></li>
-<li><p>Quadratic form: <span class="math inline">\(\mathbf{z}^T\mathbf{\tilde Q}\mathbf{z} = \sum_{i,j} (\tilde\lambda_i + \tilde\lambda_j) y_{ij}^2\)</span>, where <span class="math inline">\(y_{ij} = (\mathbf{\tilde v}_j \otimes \mathbf{\tilde v}_i)^T\mathbf{z}\)</span></p></li>
+<li><p>Log-determinant: <span class="math inline">\(\log|\mathbf{\widetilde Q}| = \sum_{i,j} \log(\widetilde\lambda_i + \widetilde\lambda_j)\)</span></p></li>
+<li><p>Quadratic form: <span class="math inline">\(\mathbf{z}^T\mathbf{\widetilde Q}\mathbf{z} = \sum_{i,j} (\widetilde\lambda_i + \widetilde\lambda_j) y_{ij}^2\)</span>, where <span class="math inline">\(y_{ij} = (\mathbf{\widetilde v}_j \otimes \mathbf{\widetilde v}_i)^T\mathbf{z}\)</span></p></li>
 </ol>
 <p>This approach allows for efficient computation of the Gaussian copula density without explicitly forming the full <span class="math inline">\(n^2 \times n^2\)</span> precision matrix <span class="math inline">\(\mathbf{Q}\)</span> or its inverse <span class="math inline">\(\mathbf{\Sigma}\)</span>.</p>
 </section>
@@ -514,15 +522,15 @@ c_1\mathbf{I} &amp; c_2\mathbf{I} &amp; \cdots &amp; c_0\mathbf{I}
 <li>Compute the element-wise inverse of <span class="math inline">\(\boldsymbol{\Lambda}\)</span>: <span class="math inline">\(\mathbf{\Lambda^{inv}} = 1 / \boldsymbol{\Lambda}\)</span></li>
 <li>Compute the base of <span class="math inline">\(Q^{-1}\)</span> using inverse 2D FFT: <span class="math inline">\(\mathbf{c_{inv}} = \text{IFFT2}(\mathbf{{\Lambda^{inv}}})\)</span></li>
 <li>The marginal variance is given by the first element of <span class="math inline">\(\mathbf{c^{inv}}\)</span>: <span class="math inline">\(\sigma^2 = \mathbf{c^{inv}}_{(0,0)}\)</span></li>
-<li>Rescale the eigenvalues: <span class="math inline">\(\boldsymbol{\tilde \Lambda} = \sigma^2 \boldsymbol{\Lambda}\)</span></li>
+<li>Rescale the eigenvalues: <span class="math inline">\(\boldsymbol{\widetilde \Lambda} = \sigma^2 \boldsymbol{\Lambda}\)</span></li>
 </ol>
 <p>This process ensures that the resulting precision matrix will have unit marginal variances, as required for the Gaussian copula.</p>
 </section>
 <section id="compute-log-determinant" class="level3">
 <h3 class="anchored" data-anchor-id="compute-log-determinant">4. Compute Log-Determinant</h3>
-<p>The log-determinant of the scaled <span class="math inline">\(\mathbf{\tilde Q}\)</span> can be efficiently calculated as the sum of the logarithms of the scaled eigenvalues:</p>
+<p>The log-determinant of the scaled <span class="math inline">\(\mathbf{\widetilde Q}\)</span> can be efficiently calculated as the sum of the logarithms of the scaled eigenvalues:</p>
 <p><span class="math display">\[
-\log|\mathbf{Q}| = \sum_{i,j} \log(\tilde \Lambda_{ij})
+\log|\mathbf{Q}| = \sum_{i,j} \log(\widetilde \Lambda_{ij})
 \]</span></p>
 </section>
 <section id="compute-quadratic-form" class="level3">
@@ -530,7 +538,7 @@ c_1\mathbf{I} &amp; c_2\mathbf{I} &amp; \cdots &amp; c_0\mathbf{I}
 <p>To compute the quadratic form <span class="math inline">\(\mathbf{z}^T\mathbf{Q}\mathbf{z}\)</span>, we use the following steps:</p>
 <ol type="a">
 <li>Compute the 2D FFT of z: <span class="math inline">\(\mathbf{\hat{z}} = \text{FFT2}(\mathbf{z})\)</span></li>
-<li>Multiply element-wise with the scaled eigenvalues: <span class="math inline">\(\mathbf{\hat{y}} = \boldsymbol{\tilde \Lambda} \odot \mathbf{\hat{z}}\)</span></li>
+<li>Multiply element-wise with the scaled eigenvalues: <span class="math inline">\(\mathbf{\hat{y}} = \boldsymbol{\widetilde \Lambda} \odot \mathbf{\hat{z}}\)</span></li>
 <li>Compute the inverse 2D FFT: <span class="math inline">\(\mathbf{y} = \text{IFFT2}(\mathbf{\hat{y}})\)</span></li>
 <li>Compute the dot product: <span class="math inline">\(\mathbf{z}^T\mathbf{Q}\mathbf{z} = \mathbf{z}^T\mathbf{y}\)</span></li>
 </ol>
@@ -661,6 +669,160 @@ x_{11} &amp; \cdots &amp; x_{1n} &amp; x_{1n} &amp; \cdots &amp; x_{11}
 <li><p><strong>Trade-off Considerations</strong>: The choice between the circulant and folded circulant approximations may depend on the specific requirements of the application. While the circulant approximation is faster, the folded circulant method may offer better accuracy, particularly near the edges of the spatial field.</p></li>
 </ol>
 <p>These results underscore the practical value of our approximation methods, especially for large-scale spatial analyses where computational efficiency is crucial. The substantial speed-ups achieved, particularly for larger grids, demonstrate the potential of these methods to enable the analysis of much larger spatial datasets than previously feasible with exact methods.</p>
+</section>
+</section>
+<section id="appendix" class="level1">
+<h1>Appendix</h1>
+<section id="cholesky-methods" class="level2">
+<h2 class="anchored" data-anchor-id="cholesky-methods">Cholesky Methods</h2>
+<p>Standard methods of evaluating multivariate normal densities using the Cholesky decomposition were implemented to compare with the new methods for benchmarking.</p>
+<section id="unscaled-precision-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="unscaled-precision-matrix">Unscaled Precision Matrix</h3>
+<section id="precision-matrix-construction" class="level4">
+<h4 class="anchored" data-anchor-id="precision-matrix-construction">Precision Matrix Construction</h4>
+<p>We start by constructing the precision matrix <span class="math inline">\(Q\)</span> for a 2D Matérn field on a grid of size <span class="math inline">\(d_x \times d_y\)</span>:</p>
+<p><span class="math display">\[
+Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2
+\]</span></p>
+<p>where <span class="math inline">\(\otimes\)</span> denotes the Kronecker product, <span class="math inline">\(Q_1\)</span> and <span class="math inline">\(Q_2\)</span> are 1D precision matrices for the x and y dimensions respectively (typically AR(1)-like structures), and <span class="math inline">\(I_{d_x}\)</span> and <span class="math inline">\(I_{d_y}\)</span> are identity matrices of appropriate sizes.</p>
+</section>
+<section id="cholesky-decomposition" class="level4">
+<h4 class="anchored" data-anchor-id="cholesky-decomposition">Cholesky Decomposition</h4>
+<p>We compute the Cholesky decomposition of <span class="math inline">\(Q\)</span>: <span class="math display">\[
+Q = LL^T
+\]</span></p>
+<p>where L is a lower triangular matrix.</p>
+</section>
+<section id="density-computation" class="level4">
+<h4 class="anchored" data-anchor-id="density-computation">Density Computation</h4>
+<p>For a Matérn field with smoothness parameter <span class="math inline">\(\nu\)</span>, we need to work with <span class="math inline">\(Q^{\nu+1}\)</span>. The key insight is that we can efficiently compute log-determinant, <span class="math inline">\(\log|Q^{\nu+1}|\)</span>, and the quadratic form, <span class="math inline">\(x^T Q^{\nu+1} x\)</span>, without explicitly forming <span class="math inline">\(Q^{\nu+1}\)</span>. We make use of the facts that</p>
+<p><span class="math display">\[
+\log|Q^{\nu+1}| = (\nu+1)\log|Q| = 2(\nu+1)\sum_{i}\log(L_{ii}),
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\begin{aligned}
+x^T Q x &amp;= x^T L L^T x = ||L^T x||_2^2 \\
+x^T Q^2 x &amp;=  x^T L L^T L L^T x = ||LL^T x||_2^2 \\
+x^T Q^3 x &amp;=  x^T L L^T L L^T L L^T x = ||L^TLL^T x||_2^2,
+\end{aligned}
+\]</span></p>
+<p>to efficiently calculate the quadratic form using only the Cholesky factor of <span class="math inline">\(Q\)</span> instead of forming the matrix <span class="math inline">\(Q^\nu\)</span>.</p>
+</section>
+<section id="algorithm" class="level4">
+<h4 class="anchored" data-anchor-id="algorithm">Algorithm</h4>
+<ol type="1">
+<li>Construct <span class="math inline">\(Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2\)</span></li>
+<li>Compute Cholesky decomposition <span class="math inline">\(Q = LL^T\)</span></li>
+<li>Compute log-determinant: <span class="math inline">\(\log|Q^{\nu+1}| = 2(\nu+1)\sum_{i}\log(L_{ii})\)</span></li>
+<li>For each observation <span class="math inline">\(x\)</span>:
+<ol type="i">
+<li>Initialize <span class="math inline">\(y = x\)</span></li>
+<li>For <span class="math inline">\(j\)</span> from 0 to <span class="math inline">\(\nu\)</span>:
+<ul>
+<li>If <span class="math inline">\(j\)</span> is even: <span class="math inline">\(y = L^T y\)</span></li>
+<li>If <span class="math inline">\(j\)</span> is odd: <span class="math inline">\(y = L y\)</span></li>
+</ul></li>
+<li>Compute quadratic form <span class="math inline">\(q = y^Ty\)</span></li>
+</ol></li>
+<li>Compute log-density: <span class="math inline">\(\log p(x) = -\frac{1}{2}(d\log(2\pi) + \log|Q^{\nu+1}| + q)\)</span></li>
+</ol>
+</section>
+</section>
+<section id="scaled-precision-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="scaled-precision-matrix">Scaled Precision Matrix</h3>
+<section id="precision-matrix-construction-1" class="level4">
+<h4 class="anchored" data-anchor-id="precision-matrix-construction-1">Precision Matrix Construction</h4>
+<p>We start by constructing the precision matrix <span class="math inline">\(Q\)</span> for a 2D Matérn field on a grid of size <span class="math inline">\(d_x \times d_y\)</span>:</p>
+<p><span class="math display">\[
+Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2
+\]</span></p>
+<p>where <span class="math inline">\(\otimes\)</span> denotes the Kronecker product, <span class="math inline">\(Q_1\)</span> and <span class="math inline">\(Q_2\)</span> are 1D precision matrices for the x and y dimensions respectively (typically AR(1)-like structures), and <span class="math inline">\(I_{d_x}\)</span> and <span class="math inline">\(I_{d_y}\)</span> are identity matrices of appropriate sizes. We will then have to work with the matrix <span class="math inline">\(Q^{\nu + 1}\)</span>.</p>
+<p>To ensure unit marginal variances, we need to scale this precision matrix. Let <span class="math inline">\(D\)</span> be a diagonal matrix where <span class="math inline">\(D_{ii} = \sqrt{\Sigma_{ii}}\)</span>, and <span class="math inline">\(\Sigma = (Q^{\nu+1})^{-1}\)</span>. The scaled precision matrix is then: <span class="math display">\[
+\tilde{Q} = DQ^{\nu+1}D
+\]</span></p>
+</section>
+<section id="cholesky-decomposition-1" class="level4">
+<h4 class="anchored" data-anchor-id="cholesky-decomposition-1">Cholesky Decomposition</h4>
+<p>We compute the Cholesky decomposition of <span class="math inline">\(Q\)</span>: <span class="math display">\[
+Q = LL^T
+\]</span></p>
+<p>where L is a lower triangular matrix.</p>
+</section>
+<section id="efficient-computation-of-scaling-matrix-d" class="level4">
+<h4 class="anchored" data-anchor-id="efficient-computation-of-scaling-matrix-d">Efficient Computation of Scaling Matrix D</h4>
+<p>Computing <span class="math inline">\(D\)</span> directly would require inverting <span class="math inline">\(Q^{\nu + 1}\)</span>, which is computationally expensive. Instead, we can efficiently compute <span class="math inline">\(D\)</span> using the following steps:</p>
+<ol type="1">
+<li>Compute the Cholesky decomposition of the original <span class="math inline">\(Q = LL^T\)</span></li>
+<li>Compute <span class="math inline">\(R = L^{-1}\)</span>, so that <span class="math inline">\(S = Q^{-1} = R^TR\)</span>.</li>
+<li>We then calculate the entries in <span class="math inline">\(D\)</span> using the following steps:
+<ol type="i">
+<li>For <span class="math inline">\(\nu = 0\)</span>, <span class="math inline">\(D_{ii} = \sqrt{\Sigma_{ii}} = \sqrt{\sum_j (R_{ji})^2}\)</span>, the column-wise norm of <span class="math inline">\(R\)</span>.</li>
+<li>For <span class="math inline">\(\nu = 1\)</span>, we use the column-wise norm of <span class="math inline">\(R^TR\)</span></li>
+<li>For <span class="math inline">\(\nu = 2\)</span>, we use the column-wise norm of <span class="math inline">\(RR^TR\)</span></li>
+</ol></li>
+</ol>
+<p>This gives us the matrix D without having to explicitly invert the matrix Q.</p>
+</section>
+<section id="log-determinant" class="level4">
+<h4 class="anchored" data-anchor-id="log-determinant">Log determinant</h4>
+<p>The log determinant of the scaled precision matrix <span class="math inline">\(\tilde{Q} = DQ^{\nu+1}D\)</span> can be computed efficiently using the following steps:</p>
+<ol type="1">
+<li>First, note that <span class="math inline">\(\log|\tilde{Q}| = \log|DQ^{\nu+1}D| = 2\log|D| + \log|Q^{\nu+1}|\)</span></li>
+<li>We can compute <span class="math inline">\(\log|D|\)</span> directly from the diagonal elements of D, i.e.&nbsp;<span class="math inline">\(\log|D| = \sum_i \log(D_{ii})\)</span></li>
+<li>For <span class="math inline">\(\log|Q^{\nu+1}|\)</span>, we can use the properties of the Cholesky decomposition: <span class="math inline">\(\log|Q^{\nu+1}| = (\nu+1)\log|Q| = (\nu+1)\log|LL^T| = 2(\nu+1)\sum_i \log(L_{ii})\)</span></li>
+<li>Combining these, we get <span class="math inline">\(\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})\)</span></li>
+</ol>
+<p>This allows us to compute the log determinant efficiently without explicitly forming <span class="math inline">\(Q^{\nu+1}\)</span> or its inverse.</p>
+</section>
+<section id="quadratic-form" class="level4">
+<h4 class="anchored" data-anchor-id="quadratic-form">Quadratic Form</h4>
+<p>For the quadratic form <span class="math inline">\(z^T\tilde{Q}z\)</span>, where <span class="math inline">\(z = \Phi^{-1}(u)\)</span>, we can use the following steps:</p>
+<ol type="1">
+<li>First, note that <span class="math inline">\(z^T\tilde{Q}z = z^TDQ^{\nu+1}Dz = (Dz)^TQ^{\nu+1}(Dz)\)</span></li>
+<li>Let <span class="math inline">\(y = Dz\)</span>. We can compute this element-wise as <span class="math inline">\(y_i = D_{ii}z_i\)</span></li>
+<li>Now we need to compute <span class="math inline">\(y^TQ^{\nu+1}y\)</span>. We can do this efficiently using the Cholesky factor L:
+<ol type="i">
+<li>For <span class="math inline">\(\nu = 0\)</span>: <span class="math inline">\(y^TQy = ||L^Ty||_2^2\)</span></li>
+<li>For <span class="math inline">\(\nu = 1\)</span>: <span class="math inline">\(y^TQ^2y = ||LL^Ty||_2^2\)</span></li>
+<li>For <span class="math inline">\(\nu = 2\)</span>: <span class="math inline">\(y^TQ^3y = ||L^TLL^Ty||_2^2\)</span></li>
+</ol></li>
+<li>In general, we can compute this as follows:
+<ol type="i">
+<li>Initialize <span class="math inline">\(y = Dz\)</span></li>
+<li>For j from 0 to <span class="math inline">\(\nu\)</span>:
+<ul>
+<li>If j is even: <span class="math inline">\(y = L^Ty\)</span></li>
+<li>If j is odd: <span class="math inline">\(y = Ly\)</span></li>
+</ul></li>
+<li>Compute quadratic form <span class="math inline">\(q = y^Ty\)</span></li>
+</ol></li>
+</ol>
+<p>This approach allows us to compute the quadratic form efficiently without explicitly forming <span class="math inline">\(Q^{\nu+1}\)</span>.</p>
+</section>
+<section id="algorithm-1" class="level4">
+<h4 class="anchored" data-anchor-id="algorithm-1">Algorithm</h4>
+<p>Putting it all together, here’s the algorithm for computing the log-density of the Gaussian copula using the scaled precision matrix:</p>
+<ol type="1">
+<li>Construct <span class="math inline">\(Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2\)</span></li>
+<li>Compute Cholesky decomposition <span class="math inline">\(Q = LL^T\)</span></li>
+<li>Compute <span class="math inline">\(R = L^{-1}\)</span> and use it to compute D as described earlier</li>
+<li>Compute log-determinant: <span class="math inline">\(\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})\)</span></li>
+<li>For each observation <span class="math inline">\(z = \Phi^{-1}(u)\)</span>:
+<ol type="i">
+<li>Compute <span class="math inline">\(y = Dz\)</span></li>
+<li>For j from 0 to <span class="math inline">\(\nu\)</span>:
+<ul>
+<li>If j is even: <span class="math inline">\(y = L^Ty\)</span></li>
+<li>If j is odd: <span class="math inline">\(y = Ly\)</span></li>
+</ul></li>
+<li>Compute quadratic form <span class="math inline">\(q = y^Ty\)</span></li>
+</ol></li>
+<li>Compute log-density: <span class="math inline">\(\log c(u) = -\frac{1}{2}(d\log(2\pi) + \log|\tilde{Q}| + q - z^Tz)\)</span></li>
+</ol>
+<p>This algorithm computes the Gaussian copula density using the scaled precision matrix, avoiding explicit formation or inversion of <span class="math inline">\(\tilde Q = DQ^{\nu + 1}D\)</span>.</p>
+</section>
+</section>
 </section>
 </section>
 

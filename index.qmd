@@ -130,9 +130,9 @@ We scale the eigendecomposition of $\mathbf{Q}$ using the marginal standard devi
 
 $$
 \begin{aligned}
-\mathbf{\tilde  Q} &= \mathbf{D}\mathbf{Q}\mathbf{D} \\
+\mathbf{\widetilde  Q} &= \mathbf{D}\mathbf{Q}\mathbf{D} \\
 &= \mathbf{D}(\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T\mathbf{D} \\
-&= (\mathbf{\tilde V} \otimes \mathbf{\tilde V})(\mathbf{\tilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\tilde \Lambda})(\mathbf{\tilde V} \otimes \mathbf{\tilde V})^T
+&= (\mathbf{\widetilde V} \otimes \mathbf{\widetilde V})(\mathbf{\widetilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\widetilde \Lambda})(\mathbf{\widetilde V} \otimes \mathbf{\widetilde V})^T
 \end{aligned}
 $$
 
@@ -142,9 +142,9 @@ where $\mathbf{D}$ is a diagonal matrix with $D_{ii} = \sigma_i$.
 
 Using this scaled eigendecomposition, we efficiently compute:
 
-1. Log-determinant: $\log|\mathbf{\tilde Q}| = \sum_{i,j} \log(\tilde\lambda_i + \tilde\lambda_j)$
+1. Log-determinant: $\log|\mathbf{\widetilde Q}| = \sum_{i,j} \log(\widetilde\lambda_i + \widetilde\lambda_j)$
 
-2. Quadratic form: $\mathbf{z}^T\mathbf{\tilde Q}\mathbf{z} = \sum_{i,j} (\tilde\lambda_i + \tilde\lambda_j) y_{ij}^2$, where $y_{ij} = (\mathbf{\tilde v}_j \otimes \mathbf{\tilde v}_i)^T\mathbf{z}$
+2. Quadratic form: $\mathbf{z}^T\mathbf{\widetilde Q}\mathbf{z} = \sum_{i,j} (\widetilde\lambda_i + \widetilde\lambda_j) y_{ij}^2$, where $y_{ij} = (\mathbf{\widetilde v}_j \otimes \mathbf{\widetilde v}_i)^T\mathbf{z}$
 
 This approach allows for efficient computation of the Gaussian copula density without explicitly forming the full $n^2 \times n^2$ precision matrix $\mathbf{Q}$ or its inverse $\mathbf{\Sigma}$.
 
@@ -406,16 +406,16 @@ An important property of Block Circulant with Circulant Blocks (BCCB) matrices i
 a. Compute the element-wise inverse of $\boldsymbol{\Lambda}$: $\mathbf{\Lambda^{inv}} = 1 / \boldsymbol{\Lambda}$
 b. Compute the base of $Q^{-1}$ using inverse 2D FFT: $\mathbf{c_{inv}} = \text{IFFT2}(\mathbf{{\Lambda^{inv}}})$
 c. The marginal variance is given by the first element of $\mathbf{c^{inv}}$: $\sigma^2 = \mathbf{c^{inv}}_{(0,0)}$
-d. Rescale the eigenvalues: $\boldsymbol{\tilde \Lambda} = \sigma^2 \boldsymbol{\Lambda}$
+d. Rescale the eigenvalues: $\boldsymbol{\widetilde \Lambda} = \sigma^2 \boldsymbol{\Lambda}$
 
 This process ensures that the resulting precision matrix will have unit marginal variances, as required for the Gaussian copula.
 
 ### 4. Compute Log-Determinant
 
-The log-determinant of the scaled $\mathbf{\tilde Q}$ can be efficiently calculated as the sum of the logarithms of the scaled eigenvalues:
+The log-determinant of the scaled $\mathbf{\widetilde Q}$ can be efficiently calculated as the sum of the logarithms of the scaled eigenvalues:
 
 $$
-\log|\mathbf{Q}| = \sum_{i,j} \log(\tilde \Lambda_{ij})
+\log|\mathbf{Q}| = \sum_{i,j} \log(\widetilde \Lambda_{ij})
 $$
 
 ### 5. Compute Quadratic Form
@@ -423,7 +423,7 @@ $$
 To compute the quadratic form $\mathbf{z}^T\mathbf{Q}\mathbf{z}$, we use the following steps:
 
 a. Compute the 2D FFT of z: $\mathbf{\hat{z}} = \text{FFT2}(\mathbf{z})$
-b. Multiply element-wise with the scaled eigenvalues: $\mathbf{\hat{y}} = \boldsymbol{\tilde \Lambda} \odot \mathbf{\hat{z}}$
+b. Multiply element-wise with the scaled eigenvalues: $\mathbf{\hat{y}} = \boldsymbol{\widetilde \Lambda} \odot \mathbf{\hat{z}}$
 c. Compute the inverse 2D FFT: $\mathbf{y} = \text{IFFT2}(\mathbf{\hat{y}})$
 d. Compute the dot product: $\mathbf{z}^T\mathbf{Q}\mathbf{z} = \mathbf{z}^T\mathbf{y}$
 
@@ -455,6 +455,8 @@ x_{11} & \cdots & x_{1n} & x_{1n} & \cdots & x_{11}
 $$
 
 This reflection creates a 2n × 2n matrix. This data is then stacked column-wise before entering into the quadratic forms.
+
+
 
 # Results
 
@@ -489,3 +491,152 @@ The results demonstrate significant computational gains from both approximation 
 4. **Trade-off Considerations**: The choice between the circulant and folded circulant approximations may depend on the specific requirements of the application. While the circulant approximation is faster, the folded circulant method may offer better accuracy, particularly near the edges of the spatial field.
 
 These results underscore the practical value of our approximation methods, especially for large-scale spatial analyses where computational efficiency is crucial. The substantial speed-ups achieved, particularly for larger grids, demonstrate the potential of these methods to enable the analysis of much larger spatial datasets than previously feasible with exact methods.
+
+
+# Appendix
+
+## Cholesky Methods
+
+Standard methods of evaluating multivariate normal densities using the Cholesky decomposition were implemented to compare with the new methods for benchmarking.
+
+### Unscaled Precision Matrix
+
+#### Precision Matrix Construction
+
+We start by constructing the precision matrix $Q$ for a 2D Matérn field on a grid of size $d_x \times d_y$:
+
+$$
+Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2 
+$$
+
+where $\otimes$ denotes the Kronecker product, $Q_1$ and $Q_2$ are 1D precision matrices for the x and y dimensions respectively (typically AR(1)-like structures), and $I_{d_x}$ and $I_{d_y}$ are identity matrices of appropriate sizes.
+
+#### Cholesky Decomposition
+
+We compute the Cholesky decomposition of $Q$:
+$$
+Q = LL^T
+$$
+
+where L is a lower triangular matrix. 
+
+#### Density Computation
+
+For a Matérn field with smoothness parameter $\nu$, we need to work with $Q^{\nu+1}$. The key insight is that we can efficiently compute log-determinant, $\log|Q^{\nu+1}|$, and the quadratic form, $x^T Q^{\nu+1} x$, without explicitly forming $Q^{\nu+1}$. We make use of the facts that 
+
+$$
+\log|Q^{\nu+1}| = (\nu+1)\log|Q| = 2(\nu+1)\sum_{i}\log(L_{ii}),
+$$
+
+and
+
+$$
+\begin{aligned}
+x^T Q x &= x^T L L^T x = ||L^T x||_2^2 \\
+x^T Q^2 x &=  x^T L L^T L L^T x = ||LL^T x||_2^2 \\
+x^T Q^3 x &=  x^T L L^T L L^T L L^T x = ||L^TLL^T x||_2^2,
+\end{aligned}
+$$
+
+to efficiently calculate the quadratic form using only the Cholesky factor of $Q$ instead of forming the matrix $Q^\nu$.
+
+#### Algorithm
+
+1. Construct $Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2$
+2. Compute Cholesky decomposition $Q = LL^T$
+3. Compute log-determinant: $\log|Q^{\nu+1}| = 2(\nu+1)\sum_{i}\log(L_{ii})$
+4. For each observation $x$:
+    i) Initialize $y = x$
+    ii) For $j$ from 0 to $\nu$:
+        - If $j$ is even: $y = L^T y$
+        - If $j$ is odd: $y = L y$
+    iii) Compute quadratic form $q = y^Ty$
+5. Compute log-density: $\log p(x) = -\frac{1}{2}(d\log(2\pi) + \log|Q^{\nu+1}| + q)$
+
+### Scaled Precision Matrix
+
+#### Precision Matrix Construction
+
+We start by constructing the precision matrix $Q$ for a 2D Matérn field on a grid of size $d_x \times d_y$:
+
+$$
+Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2 
+$$
+
+where $\otimes$ denotes the Kronecker product, $Q_1$ and $Q_2$ are 1D precision matrices for the x and y dimensions respectively (typically AR(1)-like structures), and $I_{d_x}$ and $I_{d_y}$ are identity matrices of appropriate sizes. We will then have to work with the matrix $Q^{\nu + 1}$.
+
+
+To ensure unit marginal variances, we need to scale this precision matrix. Let $D$ be a diagonal matrix where $D_{ii} = \sqrt{\Sigma_{ii}}$, and $\Sigma = (Q^{\nu+1})^{-1}$. The scaled precision matrix is then:
+$$
+\tilde{Q} = DQ^{\nu+1}D
+$$
+
+#### Cholesky Decomposition
+
+We compute the Cholesky decomposition of $Q$:
+$$
+Q = LL^T
+$$
+
+where L is a lower triangular matrix. 
+
+#### Efficient Computation of Scaling Matrix D
+
+Computing $D$ directly would require inverting $Q^{\nu + 1}$, which is computationally expensive. Instead, we can efficiently compute $D$ using the following steps:
+
+1. Compute the Cholesky decomposition of the original $Q = LL^T$
+2. Compute $R = L^{-1}$, so that $S = Q^{-1} = R^TR$. 
+3. We then calculate the entries in $D$ using the following steps:
+    i. For $\nu = 0$, $D_{ii} = \sqrt{\Sigma_{ii}} = \sqrt{\sum_j (R_{ji})^2}$, the column-wise norm of $R$.
+    ii. For $\nu = 1$, we use the column-wise norm of $R^TR$
+    iii. For $\nu = 2$, we use the column-wise norm of $RR^TR$
+
+This gives us the matrix D without having to explicitly invert the matrix Q.
+
+#### Log determinant
+
+The log determinant of the scaled precision matrix $\tilde{Q} = DQ^{\nu+1}D$ can be computed efficiently using the following steps:
+
+1. First, note that $\log|\tilde{Q}| = \log|DQ^{\nu+1}D| = 2\log|D| + \log|Q^{\nu+1}|$
+2. We can compute $\log|D|$ directly from the diagonal elements of D, i.e. $\log|D| = \sum_i \log(D_{ii})$
+3. For $\log|Q^{\nu+1}|$, we can use the properties of the Cholesky decomposition: $\log|Q^{\nu+1}| = (\nu+1)\log|Q| = (\nu+1)\log|LL^T| = 2(\nu+1)\sum_i \log(L_{ii})$
+4. Combining these, we get $\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})$
+
+This allows us to compute the log determinant efficiently without explicitly forming $Q^{\nu+1}$ or its inverse.
+
+#### Quadratic Form
+
+For the quadratic form $z^T\tilde{Q}z$, where $z = \Phi^{-1}(u)$, we can use the following steps:
+
+1. First, note that $z^T\tilde{Q}z = z^TDQ^{\nu+1}Dz = (Dz)^TQ^{\nu+1}(Dz)$
+2. Let $y = Dz$. We can compute this element-wise as $y_i = D_{ii}z_i$
+3. Now we need to compute $y^TQ^{\nu+1}y$. We can do this efficiently using the Cholesky factor L:
+    i. For $\nu = 0$: $y^TQy = ||L^Ty||_2^2$
+    i. For $\nu = 1$: $y^TQ^2y = ||LL^Ty||_2^2$
+    i. For $\nu = 2$: $y^TQ^3y = ||L^TLL^Ty||_2^2$
+4. In general, we can compute this as follows:
+    i) Initialize $y = Dz$
+    ii) For j from 0 to $\nu$:
+        - If j is even: $y = L^Ty$
+        - If j is odd:  $y = Ly$
+    iii) Compute quadratic form $q = y^Ty$
+
+This approach allows us to compute the quadratic form efficiently without explicitly forming $Q^{\nu+1}$.
+
+#### Algorithm
+
+Putting it all together, here's the algorithm for computing the log-density of the Gaussian copula using the scaled precision matrix:
+
+1. Construct $Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2$
+2. Compute Cholesky decomposition $Q = LL^T$
+3. Compute $R = L^{-1}$ and use it to compute D as described earlier
+4. Compute log-determinant: $\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})$
+5. For each observation $z = \Phi^{-1}(u)$:
+    i) Compute $y = Dz$
+    ii) For j from 0 to $\nu$:
+        - If j is even: $y = L^Ty$
+        - If j is odd:  $y = Ly$
+    iii) Compute quadratic form $q = y^Ty$
+6. Compute log-density: $\log c(u) = -\frac{1}{2}(d\log(2\pi) + \log|\tilde{Q}| + q - z^Tz)$
+
+This algorithm computes the Gaussian copula density using the scaled precision matrix, avoiding explicit formation or inversion of $\tilde Q = DQ^{\nu + 1}D$. 

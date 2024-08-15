@@ -836,9 +836,9 @@ addressing a common limitation of periodic boundary conditions.
               <alternatives>
                 <tex-math><![CDATA[
       \begin{aligned}
-      \mathbf{\tilde  Q} &= \mathbf{D}\mathbf{Q}\mathbf{D} \\
+      \mathbf{\widetilde  Q} &= \mathbf{D}\mathbf{Q}\mathbf{D} \\
       &= \mathbf{D}(\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T\mathbf{D} \\
-      &= (\mathbf{\tilde V} \otimes \mathbf{\tilde V})(\mathbf{\tilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\tilde \Lambda})(\mathbf{\tilde V} \otimes \mathbf{\tilde V})^T
+      &= (\mathbf{\widetilde V} \otimes \mathbf{\widetilde V})(\mathbf{\widetilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\widetilde \Lambda})(\mathbf{\widetilde V} \otimes \mathbf{\widetilde V})^T
       \end{aligned}
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
@@ -962,11 +962,11 @@ addressing a common limitation of periodic boundary conditions.
       compute:</p>
           <list list-type="order">
             <list-item>
-              <p>Log-determinant: <inline-formula><alternatives><tex-math><![CDATA[\log|\mathbf{\tilde Q}| = \sum_{i,j} \log(\tilde\lambda_i + \tilde\lambda_j)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mover><mml:mi>𝐐</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:msub><mml:mo>∑</mml:mo><mml:mrow><mml:mi>i</mml:mi><mml:mo>,</mml:mo><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
+              <p>Log-determinant: <inline-formula><alternatives><tex-math><![CDATA[\log|\mathbf{\widetilde Q}| = \sum_{i,j} \log(\widetilde\lambda_i + \widetilde\lambda_j)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mover><mml:mi>𝐐</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:msub><mml:mo>∑</mml:mo><mml:mrow><mml:mi>i</mml:mi><mml:mo>,</mml:mo><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
             </list-item>
             <list-item>
-              <p>Quadratic form: <inline-formula><alternatives><tex-math><![CDATA[\mathbf{z}^T\mathbf{\tilde Q}\mathbf{z} = \sum_{i,j} (\tilde\lambda_i + \tilde\lambda_j) y_{ij}^2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>𝐳</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mover><mml:mi>𝐐</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>𝐳</mml:mi><mml:mo>=</mml:mo><mml:msub><mml:mo>∑</mml:mo><mml:mrow><mml:mi>i</mml:mi><mml:mo>,</mml:mo><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:msubsup><mml:mi>y</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow><mml:mn>2</mml:mn></mml:msubsup></mml:mrow></mml:math></alternatives></inline-formula>,
-          where <inline-formula><alternatives><tex-math><![CDATA[y_{ij} = (\mathbf{\tilde v}_j \otimes \mathbf{\tilde v}_i)^T\mathbf{z}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>y</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>𝐯</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>j</mml:mi></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mover><mml:mi>𝐯</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>i</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mi>T</mml:mi></mml:msup><mml:mi>𝐳</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+              <p>Quadratic form: <inline-formula><alternatives><tex-math><![CDATA[\mathbf{z}^T\mathbf{\widetilde Q}\mathbf{z} = \sum_{i,j} (\widetilde\lambda_i + \widetilde\lambda_j) y_{ij}^2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>𝐳</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mover><mml:mi>𝐐</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>𝐳</mml:mi><mml:mo>=</mml:mo><mml:msub><mml:mo>∑</mml:mo><mml:mrow><mml:mi>i</mml:mi><mml:mo>,</mml:mo><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:msubsup><mml:mi>y</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow><mml:mn>2</mml:mn></mml:msubsup></mml:mrow></mml:math></alternatives></inline-formula>,
+          where <inline-formula><alternatives><tex-math><![CDATA[y_{ij} = (\mathbf{\widetilde v}_j \otimes \mathbf{\widetilde v}_i)^T\mathbf{z}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>y</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>𝐯</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>j</mml:mi></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mover><mml:mi>𝐯</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>i</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mi>T</mml:mi></mml:msup><mml:mi>𝐳</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
             </list-item>
           </list>
           <p>This approach allows for efficient computation of the Gaussian
@@ -2969,7 +2969,7 @@ addressing a common limitation of periodic boundary conditions.
           <inline-formula><alternatives><tex-math><![CDATA[\sigma^2 = \mathbf{c^{inv}}_{(0,0)}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>σ</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mo>=</mml:mo><mml:msub><mml:msup><mml:mi>𝐜</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mn>0</mml:mn><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:msub></mml:mrow></mml:math></alternatives></inline-formula></p>
             </list-item>
             <list-item>
-              <p>Rescale the eigenvalues: <inline-formula><alternatives><tex-math><![CDATA[\boldsymbol{\tilde \Lambda} = \sigma^2 \boldsymbol{\Lambda}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mover><mml:mi>𝚲</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:msup><mml:mi>σ</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mi>𝚲</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+              <p>Rescale the eigenvalues: <inline-formula><alternatives><tex-math><![CDATA[\boldsymbol{\widetilde \Lambda} = \sigma^2 \boldsymbol{\Lambda}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mover><mml:mi>𝚲</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:msup><mml:mi>σ</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mi>𝚲</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
             </list-item>
           </list>
           <p>This process ensures that the resulting precision matrix will
@@ -2979,14 +2979,14 @@ addressing a common limitation of periodic boundary conditions.
         <sec id="compute-log-determinant">
           <title>4. Compute Log-Determinant</title>
           <p>The log-determinant of the scaled
-      <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\tilde Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mover><mml:mi>𝐐</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover></mml:math></alternatives></inline-formula>
+      <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\widetilde Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mover><mml:mi>𝐐</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover></mml:math></alternatives></inline-formula>
       can be efficiently calculated as the sum of the logarithms of the
       scaled eigenvalues:</p>
           <p>
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \log|\mathbf{Q}| = \sum_{i,j} \log(\tilde \Lambda_{ij})
+      \log|\mathbf{Q}| = \sum_{i,j} \log(\widetilde \Lambda_{ij})
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
@@ -3036,7 +3036,7 @@ addressing a common limitation of periodic boundary conditions.
             </list-item>
             <list-item>
               <p>Multiply element-wise with the scaled eigenvalues:
-          <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\hat{y}} = \boldsymbol{\tilde \Lambda} \odot \mathbf{\hat{z}}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mover><mml:mi>𝐲</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:mover><mml:mi>𝚲</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo>⊙</mml:mo><mml:mover><mml:mi>𝐳</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover></mml:mrow></mml:math></alternatives></inline-formula></p>
+          <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\hat{y}} = \boldsymbol{\widetilde \Lambda} \odot \mathbf{\hat{z}}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mover><mml:mi>𝐲</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:mover><mml:mi>𝚲</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo>⊙</mml:mo><mml:mover><mml:mi>𝐳</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover></mml:mrow></mml:math></alternatives></inline-formula></p>
             </list-item>
             <list-item>
               <p>Compute the inverse 2D FFT: <inline-formula><alternatives><tex-math><![CDATA[\mathbf{y} = \text{IFFT2}(\mathbf{\hat{y}})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>𝐲</mml:mi><mml:mo>=</mml:mo><mml:mtext mathvariant="normal">IFFT2</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mover><mml:mi>𝐲</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
@@ -3493,6 +3493,637 @@ addressing a common limitation of periodic boundary conditions.
     achieved, particularly for larger grids, demonstrate the potential
     of these methods to enable the analysis of much larger spatial
     datasets than previously feasible with exact methods.</p>
+      </sec>
+    </sec>
+    <sec id="appendix">
+      <title>Appendix</title>
+      <sec id="cholesky-methods">
+        <title>Cholesky Methods</title>
+        <p>Standard methods of evaluating multivariate normal densities
+    using the Cholesky decomposition were implemented to compare with
+    the new methods for benchmarking.</p>
+        <sec id="unscaled-precision-matrix">
+          <title>Unscaled Precision Matrix</title>
+          <sec id="precision-matrix-construction">
+            <title>Precision Matrix Construction</title>
+            <p>We start by constructing the precision matrix
+        <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+        for a 2D Matérn field on a grid of size
+        <inline-formula><alternatives><tex-math><![CDATA[d_x \times d_y]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>d</mml:mi><mml:mi>x</mml:mi></mml:msub><mml:mo>×</mml:mo><mml:msub><mml:mi>d</mml:mi><mml:mi>y</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>:</p>
+            <p>
+              <disp-formula>
+                <alternatives>
+                  <tex-math><![CDATA[
+        Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2 
+        ]]></tex-math>
+                  <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                    <mml:mrow>
+                      <mml:mi>Q</mml:mi>
+                      <mml:mo>=</mml:mo>
+                      <mml:msub>
+                        <mml:mi>Q</mml:mi>
+                        <mml:mn>1</mml:mn>
+                      </mml:msub>
+                      <mml:mo>⊗</mml:mo>
+                      <mml:msub>
+                        <mml:mi>I</mml:mi>
+                        <mml:msub>
+                          <mml:mi>d</mml:mi>
+                          <mml:mi>y</mml:mi>
+                        </mml:msub>
+                      </mml:msub>
+                      <mml:mo>+</mml:mo>
+                      <mml:msub>
+                        <mml:mi>I</mml:mi>
+                        <mml:msub>
+                          <mml:mi>d</mml:mi>
+                          <mml:mi>x</mml:mi>
+                        </mml:msub>
+                      </mml:msub>
+                      <mml:mo>⊗</mml:mo>
+                      <mml:msub>
+                        <mml:mi>Q</mml:mi>
+                        <mml:mn>2</mml:mn>
+                      </mml:msub>
+                    </mml:mrow>
+                  </mml:math>
+                </alternatives>
+              </disp-formula>
+            </p>
+            <p>where <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
+        denotes the Kronecker product, <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+        and <inline-formula><alternatives><tex-math><![CDATA[Q_2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+        are 1D precision matrices for the x and y dimensions
+        respectively (typically AR(1)-like structures), and
+        <inline-formula><alternatives><tex-math><![CDATA[I_{d_x}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>I</mml:mi><mml:msub><mml:mi>d</mml:mi><mml:mi>x</mml:mi></mml:msub></mml:msub></mml:math></alternatives></inline-formula>
+        and <inline-formula><alternatives><tex-math><![CDATA[I_{d_y}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>I</mml:mi><mml:msub><mml:mi>d</mml:mi><mml:mi>y</mml:mi></mml:msub></mml:msub></mml:math></alternatives></inline-formula>
+        are identity matrices of appropriate sizes.</p>
+          </sec>
+          <sec id="cholesky-decomposition">
+            <title>Cholesky Decomposition</title>
+            <p>We compute the Cholesky decomposition of
+        <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>:
+        <disp-formula><alternatives><tex-math><![CDATA[
+        Q = LL^T
+        ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:mi>Q</mml:mi><mml:mo>=</mml:mo><mml:mi>L</mml:mi><mml:msup><mml:mi>L</mml:mi><mml:mi>T</mml:mi></mml:msup></mml:mrow></mml:math></alternatives></disp-formula></p>
+            <p>where L is a lower triangular matrix.</p>
+          </sec>
+          <sec id="density-computation">
+            <title>Density Computation</title>
+            <p>For a Matérn field with smoothness parameter
+        <inline-formula><alternatives><tex-math><![CDATA[\nu]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ν</mml:mi></mml:math></alternatives></inline-formula>,
+        we need to work with <inline-formula><alternatives><tex-math><![CDATA[Q^{\nu+1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:math></alternatives></inline-formula>.
+        The key insight is that we can efficiently compute
+        log-determinant, <inline-formula><alternatives><tex-math><![CDATA[\log|Q^{\nu+1}|]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>,
+        and the quadratic form, <inline-formula><alternatives><tex-math><![CDATA[x^T Q^{\nu+1} x]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>x</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mi>x</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>,
+        without explicitly forming <inline-formula><alternatives><tex-math><![CDATA[Q^{\nu+1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:math></alternatives></inline-formula>.
+        We make use of the facts that</p>
+            <p>
+              <disp-formula>
+                <alternatives>
+                  <tex-math><![CDATA[
+        \log|Q^{\nu+1}| = (\nu+1)\log|Q| = 2(\nu+1)\sum_{i}\log(L_{ii}),
+        ]]></tex-math>
+                  <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                    <mml:mrow>
+                      <mml:mo>log</mml:mo>
+                      <mml:mrow>
+                        <mml:mo stretchy="true" form="prefix">|</mml:mo>
+                        <mml:msup>
+                          <mml:mi>Q</mml:mi>
+                          <mml:mrow>
+                            <mml:mi>ν</mml:mi>
+                            <mml:mo>+</mml:mo>
+                            <mml:mn>1</mml:mn>
+                          </mml:mrow>
+                        </mml:msup>
+                        <mml:mo stretchy="true" form="postfix">|</mml:mo>
+                      </mml:mrow>
+                      <mml:mo>=</mml:mo>
+                      <mml:mrow>
+                        <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                        <mml:mi>ν</mml:mi>
+                        <mml:mo>+</mml:mo>
+                        <mml:mn>1</mml:mn>
+                        <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                      </mml:mrow>
+                      <mml:mo>log</mml:mo>
+                      <mml:mrow>
+                        <mml:mo stretchy="true" form="prefix">|</mml:mo>
+                        <mml:mi>Q</mml:mi>
+                        <mml:mo stretchy="true" form="postfix">|</mml:mo>
+                      </mml:mrow>
+                      <mml:mo>=</mml:mo>
+                      <mml:mn>2</mml:mn>
+                      <mml:mrow>
+                        <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                        <mml:mi>ν</mml:mi>
+                        <mml:mo>+</mml:mo>
+                        <mml:mn>1</mml:mn>
+                        <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                      </mml:mrow>
+                      <mml:munder>
+                        <mml:mo>∑</mml:mo>
+                        <mml:mi>i</mml:mi>
+                      </mml:munder>
+                      <mml:mo>log</mml:mo>
+                      <mml:mrow>
+                        <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                        <mml:msub>
+                          <mml:mi>L</mml:mi>
+                          <mml:mrow>
+                            <mml:mi>i</mml:mi>
+                            <mml:mi>i</mml:mi>
+                          </mml:mrow>
+                        </mml:msub>
+                        <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                      </mml:mrow>
+                      <mml:mo>,</mml:mo>
+                    </mml:mrow>
+                  </mml:math>
+                </alternatives>
+              </disp-formula>
+            </p>
+            <p>and</p>
+            <p>
+              <disp-formula>
+                <alternatives>
+                  <tex-math><![CDATA[
+        \begin{aligned}
+        x^T Q x &= x^T L L^T x = ||L^T x||_2^2 \\
+        x^T Q^2 x &=  x^T L L^T L L^T x = ||LL^T x||_2^2 \\
+        x^T Q^3 x &=  x^T L L^T L L^T L L^T x = ||L^TLL^T x||_2^2,
+        \end{aligned}
+        ]]></tex-math>
+                  <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                    <mml:mtable>
+                      <mml:mtr>
+                        <mml:mtd columnalign="right" style="text-align: right">
+                          <mml:msup>
+                            <mml:mi>x</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:mi>Q</mml:mi>
+                          <mml:mi>x</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="left" style="text-align: left">
+                          <mml:mo>=</mml:mo>
+                          <mml:msup>
+                            <mml:mi>x</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:mi>L</mml:mi>
+                          <mml:msup>
+                            <mml:mi>L</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:mi>x</mml:mi>
+                          <mml:mo>=</mml:mo>
+                          <mml:mrow>
+                            <mml:mo stretchy="true" form="prefix">|</mml:mo>
+                            <mml:mo stretchy="true" form="postfix">|</mml:mo>
+                          </mml:mrow>
+                          <mml:msup>
+                            <mml:mi>L</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:mi>x</mml:mi>
+                          <mml:msubsup>
+                            <mml:mrow>
+                              <mml:mo stretchy="true" form="prefix">|</mml:mo>
+                              <mml:mo stretchy="true" form="postfix">|</mml:mo>
+                            </mml:mrow>
+                            <mml:mn>2</mml:mn>
+                            <mml:mn>2</mml:mn>
+                          </mml:msubsup>
+                        </mml:mtd>
+                      </mml:mtr>
+                      <mml:mtr>
+                        <mml:mtd columnalign="right" style="text-align: right">
+                          <mml:msup>
+                            <mml:mi>x</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:msup>
+                            <mml:mi>Q</mml:mi>
+                            <mml:mn>2</mml:mn>
+                          </mml:msup>
+                          <mml:mi>x</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="left" style="text-align: left">
+                          <mml:mo>=</mml:mo>
+                          <mml:msup>
+                            <mml:mi>x</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:mi>L</mml:mi>
+                          <mml:msup>
+                            <mml:mi>L</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:mi>L</mml:mi>
+                          <mml:msup>
+                            <mml:mi>L</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:mi>x</mml:mi>
+                          <mml:mo>=</mml:mo>
+                          <mml:mrow>
+                            <mml:mo stretchy="true" form="prefix">|</mml:mo>
+                            <mml:mo stretchy="true" form="postfix">|</mml:mo>
+                          </mml:mrow>
+                          <mml:mi>L</mml:mi>
+                          <mml:msup>
+                            <mml:mi>L</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:mi>x</mml:mi>
+                          <mml:msubsup>
+                            <mml:mrow>
+                              <mml:mo stretchy="true" form="prefix">|</mml:mo>
+                              <mml:mo stretchy="true" form="postfix">|</mml:mo>
+                            </mml:mrow>
+                            <mml:mn>2</mml:mn>
+                            <mml:mn>2</mml:mn>
+                          </mml:msubsup>
+                        </mml:mtd>
+                      </mml:mtr>
+                      <mml:mtr>
+                        <mml:mtd columnalign="right" style="text-align: right">
+                          <mml:msup>
+                            <mml:mi>x</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:msup>
+                            <mml:mi>Q</mml:mi>
+                            <mml:mn>3</mml:mn>
+                          </mml:msup>
+                          <mml:mi>x</mml:mi>
+                        </mml:mtd>
+                        <mml:mtd columnalign="left" style="text-align: left">
+                          <mml:mo>=</mml:mo>
+                          <mml:msup>
+                            <mml:mi>x</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:mi>L</mml:mi>
+                          <mml:msup>
+                            <mml:mi>L</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:mi>L</mml:mi>
+                          <mml:msup>
+                            <mml:mi>L</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:mi>L</mml:mi>
+                          <mml:msup>
+                            <mml:mi>L</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:mi>x</mml:mi>
+                          <mml:mo>=</mml:mo>
+                          <mml:mrow>
+                            <mml:mo stretchy="true" form="prefix">|</mml:mo>
+                            <mml:mo stretchy="true" form="postfix">|</mml:mo>
+                          </mml:mrow>
+                          <mml:msup>
+                            <mml:mi>L</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:mi>L</mml:mi>
+                          <mml:msup>
+                            <mml:mi>L</mml:mi>
+                            <mml:mi>T</mml:mi>
+                          </mml:msup>
+                          <mml:mi>x</mml:mi>
+                          <mml:msubsup>
+                            <mml:mrow>
+                              <mml:mo stretchy="true" form="prefix">|</mml:mo>
+                              <mml:mo stretchy="true" form="postfix">|</mml:mo>
+                            </mml:mrow>
+                            <mml:mn>2</mml:mn>
+                            <mml:mn>2</mml:mn>
+                          </mml:msubsup>
+                          <mml:mo>,</mml:mo>
+                        </mml:mtd>
+                      </mml:mtr>
+                    </mml:mtable>
+                  </mml:math>
+                </alternatives>
+              </disp-formula>
+            </p>
+            <p>to efficiently calculate the quadratic form using only the
+        Cholesky factor of <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+        instead of forming the matrix <inline-formula><alternatives><tex-math><![CDATA[Q^\nu]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>Q</mml:mi><mml:mi>ν</mml:mi></mml:msup></mml:math></alternatives></inline-formula>.</p>
+          </sec>
+          <sec id="algorithm">
+            <title>Algorithm</title>
+            <list list-type="order">
+              <list-item>
+                <p>Construct <inline-formula><alternatives><tex-math><![CDATA[Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>Q</mml:mi><mml:mo>=</mml:mo><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mi>I</mml:mi><mml:msub><mml:mi>d</mml:mi><mml:mi>y</mml:mi></mml:msub></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mi>I</mml:mi><mml:msub><mml:mi>d</mml:mi><mml:mi>x</mml:mi></mml:msub></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mi>Q</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:mrow></mml:math></alternatives></inline-formula></p>
+              </list-item>
+              <list-item>
+                <p>Compute Cholesky decomposition
+            <inline-formula><alternatives><tex-math><![CDATA[Q = LL^T]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>Q</mml:mi><mml:mo>=</mml:mo><mml:mi>L</mml:mi><mml:msup><mml:mi>L</mml:mi><mml:mi>T</mml:mi></mml:msup></mml:mrow></mml:math></alternatives></inline-formula></p>
+              </list-item>
+              <list-item>
+                <p>Compute log-determinant: <inline-formula><alternatives><tex-math><![CDATA[\log|Q^{\nu+1}| = 2(\nu+1)\sum_{i}\log(L_{ii})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mn>2</mml:mn><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:msub><mml:mo>∑</mml:mo><mml:mi>i</mml:mi></mml:msub><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>L</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
+              </list-item>
+              <list-item>
+                <p>For each observation <inline-formula><alternatives><tex-math><![CDATA[x]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>x</mml:mi></mml:math></alternatives></inline-formula>:</p>
+                <list list-type="roman-lower">
+                  <list-item>
+                    <label>i)</label>
+                    <p>Initialize <inline-formula><alternatives><tex-math><![CDATA[y = x]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>y</mml:mi><mml:mo>=</mml:mo><mml:mi>x</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+                  </list-item>
+                  <list-item>
+                    <label>ii)</label>
+                    <p>For <inline-formula><alternatives><tex-math><![CDATA[j]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>j</mml:mi></mml:math></alternatives></inline-formula>
+                from 0 to <inline-formula><alternatives><tex-math><![CDATA[\nu]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ν</mml:mi></mml:math></alternatives></inline-formula>:</p>
+                    <list list-type="bullet">
+                      <list-item>
+                        <p>If <inline-formula><alternatives><tex-math><![CDATA[j]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>j</mml:mi></mml:math></alternatives></inline-formula>
+                    is even: <inline-formula><alternatives><tex-math><![CDATA[y = L^T y]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>y</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>L</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>y</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+                      </list-item>
+                      <list-item>
+                        <p>If <inline-formula><alternatives><tex-math><![CDATA[j]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>j</mml:mi></mml:math></alternatives></inline-formula>
+                    is odd: <inline-formula><alternatives><tex-math><![CDATA[y = L y]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>y</mml:mi><mml:mo>=</mml:mo><mml:mi>L</mml:mi><mml:mi>y</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+                      </list-item>
+                    </list>
+                  </list-item>
+                  <list-item>
+                    <label>iii)</label>
+                    <p>Compute quadratic form <inline-formula><alternatives><tex-math><![CDATA[q = y^Ty]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>q</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>y</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>y</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+                  </list-item>
+                </list>
+              </list-item>
+              <list-item>
+                <p>Compute log-density: <inline-formula><alternatives><tex-math><![CDATA[\log p(x) = -\frac{1}{2}(d\log(2\pi) + \log|Q^{\nu+1}| + q)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mi>p</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>x</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mi>−</mml:mi><mml:mfrac><mml:mn>1</mml:mn><mml:mn>2</mml:mn></mml:mfrac><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>d</mml:mi><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mn>2</mml:mn><mml:mi>π</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:mi>q</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
+              </list-item>
+            </list>
+          </sec>
+        </sec>
+        <sec id="scaled-precision-matrix">
+          <title>Scaled Precision Matrix</title>
+          <sec id="precision-matrix-construction-1">
+            <title>Precision Matrix Construction</title>
+            <p>We start by constructing the precision matrix
+        <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+        for a 2D Matérn field on a grid of size
+        <inline-formula><alternatives><tex-math><![CDATA[d_x \times d_y]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>d</mml:mi><mml:mi>x</mml:mi></mml:msub><mml:mo>×</mml:mo><mml:msub><mml:mi>d</mml:mi><mml:mi>y</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>:</p>
+            <p>
+              <disp-formula>
+                <alternatives>
+                  <tex-math><![CDATA[
+        Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2 
+        ]]></tex-math>
+                  <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                    <mml:mrow>
+                      <mml:mi>Q</mml:mi>
+                      <mml:mo>=</mml:mo>
+                      <mml:msub>
+                        <mml:mi>Q</mml:mi>
+                        <mml:mn>1</mml:mn>
+                      </mml:msub>
+                      <mml:mo>⊗</mml:mo>
+                      <mml:msub>
+                        <mml:mi>I</mml:mi>
+                        <mml:msub>
+                          <mml:mi>d</mml:mi>
+                          <mml:mi>y</mml:mi>
+                        </mml:msub>
+                      </mml:msub>
+                      <mml:mo>+</mml:mo>
+                      <mml:msub>
+                        <mml:mi>I</mml:mi>
+                        <mml:msub>
+                          <mml:mi>d</mml:mi>
+                          <mml:mi>x</mml:mi>
+                        </mml:msub>
+                      </mml:msub>
+                      <mml:mo>⊗</mml:mo>
+                      <mml:msub>
+                        <mml:mi>Q</mml:mi>
+                        <mml:mn>2</mml:mn>
+                      </mml:msub>
+                    </mml:mrow>
+                  </mml:math>
+                </alternatives>
+              </disp-formula>
+            </p>
+            <p>where <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
+        denotes the Kronecker product, <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+        and <inline-formula><alternatives><tex-math><![CDATA[Q_2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+        are 1D precision matrices for the x and y dimensions
+        respectively (typically AR(1)-like structures), and
+        <inline-formula><alternatives><tex-math><![CDATA[I_{d_x}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>I</mml:mi><mml:msub><mml:mi>d</mml:mi><mml:mi>x</mml:mi></mml:msub></mml:msub></mml:math></alternatives></inline-formula>
+        and <inline-formula><alternatives><tex-math><![CDATA[I_{d_y}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>I</mml:mi><mml:msub><mml:mi>d</mml:mi><mml:mi>y</mml:mi></mml:msub></mml:msub></mml:math></alternatives></inline-formula>
+        are identity matrices of appropriate sizes. We will then have to
+        work with the matrix <inline-formula><alternatives><tex-math><![CDATA[Q^{\nu + 1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:math></alternatives></inline-formula>.</p>
+            <p>To ensure unit marginal variances, we need to scale this
+        precision matrix. Let <inline-formula><alternatives><tex-math><![CDATA[D]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>D</mml:mi></mml:math></alternatives></inline-formula>
+        be a diagonal matrix where <inline-formula><alternatives><tex-math><![CDATA[D_{ii} = \sqrt{\Sigma_{ii}}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>D</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:msqrt><mml:msub><mml:mi>Σ</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub></mml:msqrt></mml:mrow></mml:math></alternatives></inline-formula>,
+        and <inline-formula><alternatives><tex-math><![CDATA[\Sigma = (Q^{\nu+1})^{-1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>Σ</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:mrow></mml:math></alternatives></inline-formula>.
+        The scaled precision matrix is then:
+        <disp-formula><alternatives><tex-math><![CDATA[
+        \tilde{Q} = DQ^{\nu+1}D
+        ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:mover><mml:mi>Q</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:mi>D</mml:mi><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mi>D</mml:mi></mml:mrow></mml:math></alternatives></disp-formula></p>
+          </sec>
+          <sec id="cholesky-decomposition-1">
+            <title>Cholesky Decomposition</title>
+            <p>We compute the Cholesky decomposition of
+        <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>:
+        <disp-formula><alternatives><tex-math><![CDATA[
+        Q = LL^T
+        ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:mi>Q</mml:mi><mml:mo>=</mml:mo><mml:mi>L</mml:mi><mml:msup><mml:mi>L</mml:mi><mml:mi>T</mml:mi></mml:msup></mml:mrow></mml:math></alternatives></disp-formula></p>
+            <p>where L is a lower triangular matrix.</p>
+          </sec>
+          <sec id="efficient-computation-of-scaling-matrix-d">
+            <title>Efficient Computation of Scaling Matrix D</title>
+            <p>Computing <inline-formula><alternatives><tex-math><![CDATA[D]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>D</mml:mi></mml:math></alternatives></inline-formula>
+        directly would require inverting <inline-formula><alternatives><tex-math><![CDATA[Q^{\nu + 1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:math></alternatives></inline-formula>,
+        which is computationally expensive. Instead, we can efficiently
+        compute <inline-formula><alternatives><tex-math><![CDATA[D]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>D</mml:mi></mml:math></alternatives></inline-formula>
+        using the following steps:</p>
+            <list list-type="order">
+              <list-item>
+                <p>Compute the Cholesky decomposition of the original
+            <inline-formula><alternatives><tex-math><![CDATA[Q = LL^T]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>Q</mml:mi><mml:mo>=</mml:mo><mml:mi>L</mml:mi><mml:msup><mml:mi>L</mml:mi><mml:mi>T</mml:mi></mml:msup></mml:mrow></mml:math></alternatives></inline-formula></p>
+              </list-item>
+              <list-item>
+                <p>Compute <inline-formula><alternatives><tex-math><![CDATA[R = L^{-1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>R</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>L</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:mrow></mml:math></alternatives></inline-formula>,
+            so that <inline-formula><alternatives><tex-math><![CDATA[S = Q^{-1} = R^TR]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>S</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mo>=</mml:mo><mml:msup><mml:mi>R</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>R</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>.</p>
+              </list-item>
+              <list-item>
+                <p>We then calculate the entries in
+            <inline-formula><alternatives><tex-math><![CDATA[D]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>D</mml:mi></mml:math></alternatives></inline-formula>
+            using the following steps:</p>
+                <list list-type="roman-lower">
+                  <list-item>
+                    <p>For <inline-formula><alternatives><tex-math><![CDATA[\nu = 0]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>ν</mml:mi><mml:mo>=</mml:mo><mml:mn>0</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>,
+                <inline-formula><alternatives><tex-math><![CDATA[D_{ii} = \sqrt{\Sigma_{ii}} = \sqrt{\sum_j (R_{ji})^2}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>D</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:msqrt><mml:msub><mml:mi>Σ</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub></mml:msqrt><mml:mo>=</mml:mo><mml:msqrt><mml:mrow><mml:msub><mml:mo>∑</mml:mo><mml:mi>j</mml:mi></mml:msub><mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>R</mml:mi><mml:mrow><mml:mi>j</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mn>2</mml:mn></mml:msup></mml:mrow></mml:msqrt></mml:mrow></mml:math></alternatives></inline-formula>,
+                the column-wise norm of <inline-formula><alternatives><tex-math><![CDATA[R]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>R</mml:mi></mml:math></alternatives></inline-formula>.</p>
+                  </list-item>
+                  <list-item>
+                    <p>For <inline-formula><alternatives><tex-math><![CDATA[\nu = 1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>ν</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>,
+                we use the column-wise norm of
+                <inline-formula><alternatives><tex-math><![CDATA[R^TR]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>R</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>R</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+                  </list-item>
+                  <list-item>
+                    <p>For <inline-formula><alternatives><tex-math><![CDATA[\nu = 2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>ν</mml:mi><mml:mo>=</mml:mo><mml:mn>2</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>,
+                we use the column-wise norm of
+                <inline-formula><alternatives><tex-math><![CDATA[RR^TR]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>R</mml:mi><mml:msup><mml:mi>R</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>R</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+                  </list-item>
+                </list>
+              </list-item>
+            </list>
+            <p>This gives us the matrix D without having to explicitly
+        invert the matrix Q.</p>
+          </sec>
+          <sec id="log-determinant">
+            <title>Log determinant</title>
+            <p>The log determinant of the scaled precision matrix
+        <inline-formula><alternatives><tex-math><![CDATA[\tilde{Q} = DQ^{\nu+1}D]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mover><mml:mi>Q</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:mi>D</mml:mi><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mi>D</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+        can be computed efficiently using the following steps:</p>
+            <list list-type="order">
+              <list-item>
+                <p>First, note that <inline-formula><alternatives><tex-math><![CDATA[\log|\tilde{Q}| = \log|DQ^{\nu+1}D| = 2\log|D| + \log|Q^{\nu+1}|]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mover><mml:mi>Q</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mi>D</mml:mi><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mi>D</mml:mi><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mn>2</mml:mn><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mi>D</mml:mi><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
+              </list-item>
+              <list-item>
+                <p>We can compute <inline-formula><alternatives><tex-math><![CDATA[\log|D|]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mi>D</mml:mi><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>
+            directly from the diagonal elements of D,
+            i.e. <inline-formula><alternatives><tex-math><![CDATA[\log|D| = \sum_i \log(D_{ii})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mi>D</mml:mi><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:msub><mml:mo>∑</mml:mo><mml:mi>i</mml:mi></mml:msub><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>D</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
+              </list-item>
+              <list-item>
+                <p>For <inline-formula><alternatives><tex-math><![CDATA[\log|Q^{\nu+1}|]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>,
+            we can use the properties of the Cholesky decomposition:
+            <inline-formula><alternatives><tex-math><![CDATA[\log|Q^{\nu+1}| = (\nu+1)\log|Q| = (\nu+1)\log|LL^T| = 2(\nu+1)\sum_i \log(L_{ii})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mi>Q</mml:mi><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mi>L</mml:mi><mml:msup><mml:mi>L</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mn>2</mml:mn><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:msub><mml:mo>∑</mml:mo><mml:mi>i</mml:mi></mml:msub><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>L</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
+              </list-item>
+              <list-item>
+                <p>Combining these, we get <inline-formula><alternatives><tex-math><![CDATA[\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mover><mml:mi>Q</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mn>2</mml:mn><mml:msub><mml:mo>∑</mml:mo><mml:mi>i</mml:mi></mml:msub><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>D</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:mn>2</mml:mn><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:msub><mml:mo>∑</mml:mo><mml:mi>i</mml:mi></mml:msub><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>L</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
+              </list-item>
+            </list>
+            <p>This allows us to compute the log determinant efficiently
+        without explicitly forming <inline-formula><alternatives><tex-math><![CDATA[Q^{\nu+1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:math></alternatives></inline-formula>
+        or its inverse.</p>
+          </sec>
+          <sec id="quadratic-form">
+            <title>Quadratic Form</title>
+            <p>For the quadratic form <inline-formula><alternatives><tex-math><![CDATA[z^T\tilde{Q}z]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>z</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mover><mml:mi>Q</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>z</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>,
+        where <inline-formula><alternatives><tex-math><![CDATA[z = \Phi^{-1}(u)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>z</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>u</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>,
+        we can use the following steps:</p>
+            <list list-type="order">
+              <list-item>
+                <p>First, note that <inline-formula><alternatives><tex-math><![CDATA[z^T\tilde{Q}z = z^TDQ^{\nu+1}Dz = (Dz)^TQ^{\nu+1}(Dz)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>z</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mover><mml:mi>Q</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>z</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>z</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>D</mml:mi><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mi>D</mml:mi><mml:mi>z</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>D</mml:mi><mml:mi>z</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mi>T</mml:mi></mml:msup><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>D</mml:mi><mml:mi>z</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
+              </list-item>
+              <list-item>
+                <p>Let <inline-formula><alternatives><tex-math><![CDATA[y = Dz]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>y</mml:mi><mml:mo>=</mml:mo><mml:mi>D</mml:mi><mml:mi>z</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>.
+            We can compute this element-wise as
+            <inline-formula><alternatives><tex-math><![CDATA[y_i = D_{ii}z_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>y</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>=</mml:mo><mml:msub><mml:mi>D</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:msub><mml:mi>z</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula></p>
+              </list-item>
+              <list-item>
+                <p>Now we need to compute <inline-formula><alternatives><tex-math><![CDATA[y^TQ^{\nu+1}y]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>y</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mi>y</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>.
+            We can do this efficiently using the Cholesky factor L:</p>
+                <list list-type="roman-lower">
+                  <list-item>
+                    <p>For <inline-formula><alternatives><tex-math><![CDATA[\nu = 0]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>ν</mml:mi><mml:mo>=</mml:mo><mml:mn>0</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>:
+                <inline-formula><alternatives><tex-math><![CDATA[y^TQy = ||L^Ty||_2^2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>y</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>Q</mml:mi><mml:mi>y</mml:mi><mml:mo>=</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:msup><mml:mi>L</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>y</mml:mi><mml:msubsup><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mn>2</mml:mn><mml:mn>2</mml:mn></mml:msubsup></mml:mrow></mml:math></alternatives></inline-formula></p>
+                  </list-item>
+                  <list-item>
+                    <p>For <inline-formula><alternatives><tex-math><![CDATA[\nu = 1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>ν</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>:
+                <inline-formula><alternatives><tex-math><![CDATA[y^TQ^2y = ||LL^Ty||_2^2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>y</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:msup><mml:mi>Q</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mi>y</mml:mi><mml:mo>=</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mi>L</mml:mi><mml:msup><mml:mi>L</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>y</mml:mi><mml:msubsup><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mn>2</mml:mn><mml:mn>2</mml:mn></mml:msubsup></mml:mrow></mml:math></alternatives></inline-formula></p>
+                  </list-item>
+                  <list-item>
+                    <p>For <inline-formula><alternatives><tex-math><![CDATA[\nu = 2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>ν</mml:mi><mml:mo>=</mml:mo><mml:mn>2</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>:
+                <inline-formula><alternatives><tex-math><![CDATA[y^TQ^3y = ||L^TLL^Ty||_2^2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>y</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:msup><mml:mi>Q</mml:mi><mml:mn>3</mml:mn></mml:msup><mml:mi>y</mml:mi><mml:mo>=</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:msup><mml:mi>L</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>L</mml:mi><mml:msup><mml:mi>L</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>y</mml:mi><mml:msubsup><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mn>2</mml:mn><mml:mn>2</mml:mn></mml:msubsup></mml:mrow></mml:math></alternatives></inline-formula></p>
+                  </list-item>
+                </list>
+              </list-item>
+              <list-item>
+                <p>In general, we can compute this as follows:</p>
+                <list list-type="roman-lower">
+                  <list-item>
+                    <label>i)</label>
+                    <p>Initialize <inline-formula><alternatives><tex-math><![CDATA[y = Dz]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>y</mml:mi><mml:mo>=</mml:mo><mml:mi>D</mml:mi><mml:mi>z</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+                  </list-item>
+                  <list-item>
+                    <label>ii)</label>
+                    <p>For j from 0 to <inline-formula><alternatives><tex-math><![CDATA[\nu]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ν</mml:mi></mml:math></alternatives></inline-formula>:</p>
+                    <list list-type="bullet">
+                      <list-item>
+                        <p>If j is even: <inline-formula><alternatives><tex-math><![CDATA[y = L^Ty]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>y</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>L</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>y</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+                      </list-item>
+                      <list-item>
+                        <p>If j is odd: <inline-formula><alternatives><tex-math><![CDATA[y = Ly]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>y</mml:mi><mml:mo>=</mml:mo><mml:mi>L</mml:mi><mml:mi>y</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+                      </list-item>
+                    </list>
+                  </list-item>
+                  <list-item>
+                    <label>iii)</label>
+                    <p>Compute quadratic form <inline-formula><alternatives><tex-math><![CDATA[q = y^Ty]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>q</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>y</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>y</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+                  </list-item>
+                </list>
+              </list-item>
+            </list>
+            <p>This approach allows us to compute the quadratic form
+        efficiently without explicitly forming
+        <inline-formula><alternatives><tex-math><![CDATA[Q^{\nu+1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:math></alternatives></inline-formula>.</p>
+          </sec>
+          <sec id="algorithm-1">
+            <title>Algorithm</title>
+            <p>Putting it all together, here’s the algorithm for computing
+        the log-density of the Gaussian copula using the scaled
+        precision matrix:</p>
+            <list list-type="order">
+              <list-item>
+                <p>Construct <inline-formula><alternatives><tex-math><![CDATA[Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>Q</mml:mi><mml:mo>=</mml:mo><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mi>I</mml:mi><mml:msub><mml:mi>d</mml:mi><mml:mi>y</mml:mi></mml:msub></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mi>I</mml:mi><mml:msub><mml:mi>d</mml:mi><mml:mi>x</mml:mi></mml:msub></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mi>Q</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:mrow></mml:math></alternatives></inline-formula></p>
+              </list-item>
+              <list-item>
+                <p>Compute Cholesky decomposition
+            <inline-formula><alternatives><tex-math><![CDATA[Q = LL^T]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>Q</mml:mi><mml:mo>=</mml:mo><mml:mi>L</mml:mi><mml:msup><mml:mi>L</mml:mi><mml:mi>T</mml:mi></mml:msup></mml:mrow></mml:math></alternatives></inline-formula></p>
+              </list-item>
+              <list-item>
+                <p>Compute <inline-formula><alternatives><tex-math><![CDATA[R = L^{-1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>R</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>L</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:mrow></mml:math></alternatives></inline-formula>
+            and use it to compute D as described earlier</p>
+              </list-item>
+              <list-item>
+                <p>Compute log-determinant: <inline-formula><alternatives><tex-math><![CDATA[\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mover><mml:mi>Q</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mn>2</mml:mn><mml:msub><mml:mo>∑</mml:mo><mml:mi>i</mml:mi></mml:msub><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>D</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:mn>2</mml:mn><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:msub><mml:mo>∑</mml:mo><mml:mi>i</mml:mi></mml:msub><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>L</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
+              </list-item>
+              <list-item>
+                <p>For each observation <inline-formula><alternatives><tex-math><![CDATA[z = \Phi^{-1}(u)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>z</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>u</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>:</p>
+                <list list-type="roman-lower">
+                  <list-item>
+                    <label>i)</label>
+                    <p>Compute <inline-formula><alternatives><tex-math><![CDATA[y = Dz]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>y</mml:mi><mml:mo>=</mml:mo><mml:mi>D</mml:mi><mml:mi>z</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+                  </list-item>
+                  <list-item>
+                    <label>ii)</label>
+                    <p>For j from 0 to <inline-formula><alternatives><tex-math><![CDATA[\nu]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ν</mml:mi></mml:math></alternatives></inline-formula>:</p>
+                    <list list-type="bullet">
+                      <list-item>
+                        <p>If j is even: <inline-formula><alternatives><tex-math><![CDATA[y = L^Ty]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>y</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>L</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>y</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+                      </list-item>
+                      <list-item>
+                        <p>If j is odd: <inline-formula><alternatives><tex-math><![CDATA[y = Ly]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>y</mml:mi><mml:mo>=</mml:mo><mml:mi>L</mml:mi><mml:mi>y</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+                      </list-item>
+                    </list>
+                  </list-item>
+                  <list-item>
+                    <label>iii)</label>
+                    <p>Compute quadratic form <inline-formula><alternatives><tex-math><![CDATA[q = y^Ty]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>q</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>y</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>y</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+                  </list-item>
+                </list>
+              </list-item>
+              <list-item>
+                <p>Compute log-density: <inline-formula><alternatives><tex-math><![CDATA[\log c(u) = -\frac{1}{2}(d\log(2\pi) + \log|\tilde{Q}| + q - z^Tz)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mi>c</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>u</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mi>−</mml:mi><mml:mfrac><mml:mn>1</mml:mn><mml:mn>2</mml:mn></mml:mfrac><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>d</mml:mi><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mn>2</mml:mn><mml:mi>π</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mover><mml:mi>Q</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:mi>q</mml:mi><mml:mo>−</mml:mo><mml:msup><mml:mi>z</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>z</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
+              </list-item>
+            </list>
+            <p>This algorithm computes the Gaussian copula density using the
+        scaled precision matrix, avoiding explicit formation or
+        inversion of <inline-formula><alternatives><tex-math><![CDATA[\tilde Q = DQ^{\nu + 1}D]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mover><mml:mi>Q</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:mi>D</mml:mi><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mi>D</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>.</p>
+          </sec>
+        </sec>
       </sec>
     </sec>
   </body>
