@@ -5,7 +5,7 @@ author:
   affiliation: University of Iceland
   email: brynjolfur@hi.is
   url: bggj.is
-date: 2024/08/09
+date: 2024/08/15
 number-sections: false
 code-block-border-left: true
 abstract: "This paper presents an algorithm for efficient computation of Gaussian copula densities using Gaussian Markov Random Field (GMRF) precision structures. We introduce a Matérn-like precision matrix with unit marginal variance, leveraging a Kronecker sum structure that allows for fast eigendecomposition. The method avoids explicit formation and inversion of large precision matrices, making it particularly suitable for high-dimensional spatial data. We propose two approximation methods: circulant and folded circulant, which utilize the computational efficiency of Fast Fourier Transforms (FFTs). The circulant approximation treats the spatial field as if it were on a torus, where opposite edges are connected. The folded circulant approximation, however, uses a reflection boundary condition, effectively doubling the size of the field by reflecting the data along each coordinate axis. This approach potentially offers improved accuracy near field edges, addressing a common limitation of periodic boundary conditions."
@@ -454,7 +454,7 @@ x_{11} & \cdots & x_{1n} & x_{1n} & \cdots & x_{11}
 \end{bmatrix}
 $$
 
-This reflection creates a 2n × 2n matrix. This data is then stacked column-wise before entering into the quadratic forms.
+This reflection creates a $2n \times 2n$ matrix. The matrix is then stacked in lexicographic order before entering into the quadratic forms.
 
 
 
@@ -493,7 +493,7 @@ The results demonstrate significant computational gains from both approximation 
 These results underscore the practical value of our approximation methods, especially for large-scale spatial analyses where computational efficiency is crucial. The substantial speed-ups achieved, particularly for larger grids, demonstrate the potential of these methods to enable the analysis of much larger spatial datasets than previously feasible with exact methods.
 
 
-# Appendix
+# Appendix {.appendix}
 
 ## Cholesky Methods
 

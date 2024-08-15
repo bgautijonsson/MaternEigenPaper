@@ -4,6 +4,17 @@ project:
 
 manuscript:
   article: index.qmd
+  code-links: 
+    - text: GitHub Repo
+      icon: github
+      href: https://github.com/bgautijonsson/copulas
+    - text: Stan Code
+      icon: code
+      href: https://github.com/bgautijonsson/copulas
+    - text: R Package
+      icon: code
+      href: https://github.com/bgautijonsson/stdmatern
+    
 
 format:
   html: 
@@ -17,5 +28,5 @@ format:
 execute:
   freeze: true
 
-editor: visual
+editor: source
 

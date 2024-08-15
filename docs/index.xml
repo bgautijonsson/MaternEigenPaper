@@ -3346,8 +3346,9 @@ addressing a common limitation of periodic boundary conditions.
             </alternatives>
           </disp-formula>
         </p>
-        <p>This reflection creates a 2n × 2n matrix. This data is then
-    stacked column-wise before entering into the quadratic forms.</p>
+        <p>This reflection creates a <inline-formula><alternatives><tex-math><![CDATA[2n \times 2n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mn>2</mml:mn><mml:mi>n</mml:mi><mml:mo>×</mml:mo><mml:mn>2</mml:mn><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+    matrix. The matrix is then stacked in lexicographic order before
+    entering into the quadratic forms.</p>
       </sec>
     </sec>
     <sec id="results">
@@ -4129,4 +4130,22 @@ addressing a common limitation of periodic boundary conditions.
   </body>
   <back>
 </back>
+  <sub-article article-type="notebook" id="nb-3-nb-1">
+    <front-stub>
+</front-stub>
+    <body>
+      <p>This repository contains the a work-in-progress manuscrips, which
+explores computational methods for Gaussian copulas using the GMRF
+approximation to the Matérn covariance function.</p>
+      <p>The paper can be found here: https://bggj.is/MaternEigenPaper/</p>
+      <p>An R package that implements these methods using
+<monospace>{Rcpp}</monospace> can be found here:
+https://github.com/bgautijonsson/stdmatern</p>
+      <p>A repo that contains case studies using Stan to model processes with
+these methods can be found here:
+https://github.com/bgautijonsson/copulas</p>
+    </body>
+    <back>
+</back>
+  </sub-article>
 </article>
