@@ -24,7 +24,7 @@ format:
   docx: default
   jats: default
   acs-pdf: default
-
+ 
 execute:
   freeze: true
 
