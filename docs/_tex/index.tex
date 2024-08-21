@@ -143,7 +143,7 @@
 \makeatletter
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, sharp corners, interior hidden, breakable, frame hidden, enhanced, boxrule=0pt]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, frame hidden, sharp corners, interior hidden, enhanced, breakable]}{\end{tcolorbox}}\fi
 \makeatother
 
 \ifLuaTeX
@@ -926,38 +926,26 @@ where \(\otimes\) denotes the Kronecker product, \(Q_1\) and \(Q_2\) are
 AR(1)-like structures), and \(I_{d_x}\) and \(I_{d_y}\) are identity
 matrices of appropriate sizes.
 
-\paragraph{Cholesky Decomposition}\label{cholesky-decomposition}
-
-We compute the Cholesky decomposition of \(Q\): \[
-Q = LL^T
-\]
-
-where L is a lower triangular matrix.
-
 \paragraph{Density Computation}\label{density-computation}
 
 For a Matérn field with smoothness parameter \(\nu\), we need to work
-with \(Q^{\nu+1}\). The key insight is that we can efficiently compute
-log-determinant, \(\log|Q^{\nu+1}|\), and the quadratic form,
-\(x^T Q^{\nu+1} x\), without explicitly forming \(Q^{\nu+1}\). We make
-use of the facts that
+with \(Q^{\nu+1}\). We can efficiently compute the log-determinant,
+\(\log|Q^{\nu+1}|\), and the quadratic form, \(x^T Q^{\nu+1} x\),
+without explicitly forming \(Q^{\nu+1}\). To do this, we compute the
+Cholesky decomposition, \(Q = LL^T\), where L is a lower triangular
+matrix, and make use of the following equations:
 
 \[
-\log|Q^{\nu+1}| = (\nu+1)\log|Q| = 2(\nu+1)\sum_{i}\log(L_{ii}),
+\log|Q^{\nu+1}| = (\nu+1)\log|Q| = 2(\nu+1)\sum_{i}\log(L_{ii}), 
 \]
-
-and
 
 \[
 \begin{aligned}
 x^T Q x &= x^T L L^T x = ||L^T x||_2^2 \\
 x^T Q^2 x &=  x^T L L^T L L^T x = ||LL^T x||_2^2 \\
-x^T Q^3 x &=  x^T L L^T L L^T L L^T x = ||L^TLL^T x||_2^2,
+x^T Q^3 x &=  x^T L L^T L L^T L L^T x = ||L^TLL^T x||_2^2.
 \end{aligned}
 \]
-
-to efficiently calculate the quadratic form using only the Cholesky
-factor of \(Q\) instead of forming the matrix \(Q^\nu\).
 
 \paragraph{Algorithm}\label{algorithm}
 
@@ -1022,20 +1010,8 @@ scaled precision matrix is then: \[
 \tilde{Q} = DQ^{\nu+1}D
 \]
 
-\paragraph{Cholesky Decomposition}\label{cholesky-decomposition-1}
-
-We compute the Cholesky decomposition of \(Q\): \[
-Q = LL^T
-\]
-
-where L is a lower triangular matrix.
-
 \paragraph{Efficient Computation of Scaling Matrix
 D}\label{efficient-computation-of-scaling-matrix-d}
-
-Computing \(D\) directly would require inverting \(Q^{\nu + 1}\), which
-is computationally expensive. Instead, we can efficiently compute \(D\)
-using the following steps:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1061,14 +1037,7 @@ using the following steps:
   \end{enumerate}
 \end{enumerate}
 
-This gives us the matrix D without having to explicitly invert the
-matrix Q.
-
 \paragraph{Log determinant}\label{log-determinant}
-
-The log determinant of the scaled precision matrix
-\(\tilde{Q} = DQ^{\nu+1}D\) can be computed efficiently using the
-following steps:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1088,13 +1057,7 @@ following steps:
   \(\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})\)
 \end{enumerate}
 
-This allows us to compute the log determinant efficiently without
-explicitly forming \(Q^{\nu+1}\) or its inverse.
-
 \paragraph{Quadratic Form}\label{quadratic-form}
-
-For the quadratic form \(z^T\tilde{Q}z\), where \(z = \Phi^{-1}(u)\), we
-can use the following steps:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1106,44 +1069,8 @@ can use the following steps:
   Let \(y = Dz\). We can compute this element-wise as
   \(y_i = D_{ii}z_i\)
 \item
-  Now we need to compute \(y^TQ^{\nu+1}y\). We can do this efficiently
-  using the Cholesky factor L:
-
-  \begin{enumerate}
-  \def\labelenumii{\roman{enumii}.}
-  \tightlist
-  \item
-    For \(\nu = 0\): \(y^TQy = ||L^Ty||_2^2\)
-  \item
-    For \(\nu = 1\): \(y^TQ^2y = ||LL^Ty||_2^2\)
-  \item
-    For \(\nu = 2\): \(y^TQ^3y = ||L^TLL^Ty||_2^2\)
-  \end{enumerate}
-\item
-  In general, we can compute this as follows:
-
-  \begin{enumerate}
-  \def\labelenumii{\roman{enumii})}
-  \tightlist
-  \item
-    Initialize \(y = Dz\)
-  \item
-    For j from 0 to \(\nu\):
-
-    \begin{itemize}
-    \tightlist
-    \item
-      If j is even: \(y = L^Ty\)
-    \item
-      If j is odd: \(y = Ly\)
-    \end{itemize}
-  \item
-    Compute quadratic form \(q = y^Ty\)
-  \end{enumerate}
+  Now we compute \(y^TQ^{\nu+1}y\) as in the unscaled case.
 \end{enumerate}
-
-This approach allows us to compute the quadratic form efficiently
-without explicitly forming \(Q^{\nu+1}\).
 
 \paragraph{Algorithm}\label{algorithm-1}
 
@@ -1171,26 +1098,12 @@ log-density of the Gaussian copula using the scaled precision matrix:
   \item
     Compute \(y = Dz\)
   \item
-    For j from 0 to \(\nu\):
-
-    \begin{itemize}
-    \tightlist
-    \item
-      If j is even: \(y = L^Ty\)
-    \item
-      If j is odd: \(y = Ly\)
-    \end{itemize}
-  \item
-    Compute quadratic form \(q = y^Ty\)
+    Compute \(y^TQ^{\nu+1}y\) as in the unscaled case.
   \end{enumerate}
 \item
   Compute log-density:
   \(\log c(u) = -\frac{1}{2}(d\log(2\pi) + \log|\tilde{Q}| + q - z^Tz)\)
 \end{enumerate}
-
-This algorithm computes the Gaussian copula density using the scaled
-precision matrix, avoiding explicit formation or inversion of
-\(\tilde Q = DQ^{\nu + 1}D\).
 
 
 

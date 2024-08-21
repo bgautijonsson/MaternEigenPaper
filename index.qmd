@@ -511,34 +511,22 @@ $$
 
 where $\otimes$ denotes the Kronecker product, $Q_1$ and $Q_2$ are 1D precision matrices for the x and y dimensions respectively (typically AR(1)-like structures), and $I_{d_x}$ and $I_{d_y}$ are identity matrices of appropriate sizes.
 
-#### Cholesky Decomposition
-
-We compute the Cholesky decomposition of $Q$:
-$$
-Q = LL^T
-$$
-
-where L is a lower triangular matrix. 
-
 #### Density Computation
 
-For a Matérn field with smoothness parameter $\nu$, we need to work with $Q^{\nu+1}$. The key insight is that we can efficiently compute log-determinant, $\log|Q^{\nu+1}|$, and the quadratic form, $x^T Q^{\nu+1} x$, without explicitly forming $Q^{\nu+1}$. We make use of the facts that 
+For a Matérn field with smoothness parameter $\nu$, we need to work with $Q^{\nu+1}$. We can efficiently compute the log-determinant, $\log|Q^{\nu+1}|$, and the quadratic form, $x^T Q^{\nu+1} x$, without explicitly forming $Q^{\nu+1}$. To do this, we compute the Cholesky decomposition, $Q = LL^T$, where L is a lower triangular matrix, and make use of the following equations:
 
 $$
-\log|Q^{\nu+1}| = (\nu+1)\log|Q| = 2(\nu+1)\sum_{i}\log(L_{ii}),
+\log|Q^{\nu+1}| = (\nu+1)\log|Q| = 2(\nu+1)\sum_{i}\log(L_{ii}), 
 $$
-
-and
 
 $$
 \begin{aligned}
 x^T Q x &= x^T L L^T x = ||L^T x||_2^2 \\
 x^T Q^2 x &=  x^T L L^T L L^T x = ||LL^T x||_2^2 \\
-x^T Q^3 x &=  x^T L L^T L L^T L L^T x = ||L^TLL^T x||_2^2,
+x^T Q^3 x &=  x^T L L^T L L^T L L^T x = ||L^TLL^T x||_2^2.
 \end{aligned}
 $$
 
-to efficiently calculate the quadratic form using only the Cholesky factor of $Q$ instead of forming the matrix $Q^\nu$.
 
 #### Algorithm
 
@@ -571,18 +559,7 @@ $$
 \tilde{Q} = DQ^{\nu+1}D
 $$
 
-#### Cholesky Decomposition
-
-We compute the Cholesky decomposition of $Q$:
-$$
-Q = LL^T
-$$
-
-where L is a lower triangular matrix. 
-
 #### Efficient Computation of Scaling Matrix D
-
-Computing $D$ directly would require inverting $Q^{\nu + 1}$, which is computationally expensive. Instead, we can efficiently compute $D$ using the following steps:
 
 1. Compute the Cholesky decomposition of the original $Q = LL^T$
 2. Compute $R = L^{-1}$, so that $S = Q^{-1} = R^TR$. 
@@ -591,37 +568,18 @@ Computing $D$ directly would require inverting $Q^{\nu + 1}$, which is computati
     ii. For $\nu = 1$, we use the column-wise norm of $R^TR$
     iii. For $\nu = 2$, we use the column-wise norm of $RR^TR$
 
-This gives us the matrix D without having to explicitly invert the matrix Q.
-
 #### Log determinant
-
-The log determinant of the scaled precision matrix $\tilde{Q} = DQ^{\nu+1}D$ can be computed efficiently using the following steps:
 
 1. First, note that $\log|\tilde{Q}| = \log|DQ^{\nu+1}D| = 2\log|D| + \log|Q^{\nu+1}|$
 2. We can compute $\log|D|$ directly from the diagonal elements of D, i.e. $\log|D| = \sum_i \log(D_{ii})$
 3. For $\log|Q^{\nu+1}|$, we can use the properties of the Cholesky decomposition: $\log|Q^{\nu+1}| = (\nu+1)\log|Q| = (\nu+1)\log|LL^T| = 2(\nu+1)\sum_i \log(L_{ii})$
 4. Combining these, we get $\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})$
 
-This allows us to compute the log determinant efficiently without explicitly forming $Q^{\nu+1}$ or its inverse.
-
 #### Quadratic Form
-
-For the quadratic form $z^T\tilde{Q}z$, where $z = \Phi^{-1}(u)$, we can use the following steps:
 
 1. First, note that $z^T\tilde{Q}z = z^TDQ^{\nu+1}Dz = (Dz)^TQ^{\nu+1}(Dz)$
 2. Let $y = Dz$. We can compute this element-wise as $y_i = D_{ii}z_i$
-3. Now we need to compute $y^TQ^{\nu+1}y$. We can do this efficiently using the Cholesky factor L:
-    i. For $\nu = 0$: $y^TQy = ||L^Ty||_2^2$
-    i. For $\nu = 1$: $y^TQ^2y = ||LL^Ty||_2^2$
-    i. For $\nu = 2$: $y^TQ^3y = ||L^TLL^Ty||_2^2$
-4. In general, we can compute this as follows:
-    i) Initialize $y = Dz$
-    ii) For j from 0 to $\nu$:
-        - If j is even: $y = L^Ty$
-        - If j is odd:  $y = Ly$
-    iii) Compute quadratic form $q = y^Ty$
-
-This approach allows us to compute the quadratic form efficiently without explicitly forming $Q^{\nu+1}$.
+3. Now we compute $y^TQ^{\nu+1}y$ as in the unscaled case.
 
 #### Algorithm
 
@@ -633,10 +591,5 @@ Putting it all together, here's the algorithm for computing the log-density of t
 4. Compute log-determinant: $\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})$
 5. For each observation $z = \Phi^{-1}(u)$:
     i) Compute $y = Dz$
-    ii) For j from 0 to $\nu$:
-        - If j is even: $y = L^Ty$
-        - If j is odd:  $y = Ly$
-    iii) Compute quadratic form $q = y^Ty$
+    ii) Compute $y^TQ^{\nu+1}y$ as in the unscaled case.
 6. Compute log-density: $\log c(u) = -\frac{1}{2}(d\log(2\pi) + \log|\tilde{Q}| + q - z^Tz)$
-
-This algorithm computes the Gaussian copula density using the scaled precision matrix, avoiding explicit formation or inversion of $\tilde Q = DQ^{\nu + 1}D$. 

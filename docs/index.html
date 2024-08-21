@@ -681,28 +681,19 @@ Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2
 \]</span></p>
 <p>where <span class="math inline">\(\otimes\)</span> denotes the Kronecker product, <span class="math inline">\(Q_1\)</span> and <span class="math inline">\(Q_2\)</span> are 1D precision matrices for the x and y dimensions respectively (typically AR(1)-like structures), and <span class="math inline">\(I_{d_x}\)</span> and <span class="math inline">\(I_{d_y}\)</span> are identity matrices of appropriate sizes.</p>
 </section>
-<section id="cholesky-decomposition" class="level4">
-<h4 class="anchored" data-anchor-id="cholesky-decomposition">Cholesky Decomposition</h4>
-<p>We compute the Cholesky decomposition of <span class="math inline">\(Q\)</span>: <span class="math display">\[
-Q = LL^T
-\]</span></p>
-<p>where L is a lower triangular matrix.</p>
-</section>
 <section id="density-computation" class="level4">
 <h4 class="anchored" data-anchor-id="density-computation">Density Computation</h4>
-<p>For a Matérn field with smoothness parameter <span class="math inline">\(\nu\)</span>, we need to work with <span class="math inline">\(Q^{\nu+1}\)</span>. The key insight is that we can efficiently compute log-determinant, <span class="math inline">\(\log|Q^{\nu+1}|\)</span>, and the quadratic form, <span class="math inline">\(x^T Q^{\nu+1} x\)</span>, without explicitly forming <span class="math inline">\(Q^{\nu+1}\)</span>. We make use of the facts that</p>
+<p>For a Matérn field with smoothness parameter <span class="math inline">\(\nu\)</span>, we need to work with <span class="math inline">\(Q^{\nu+1}\)</span>. We can efficiently compute the log-determinant, <span class="math inline">\(\log|Q^{\nu+1}|\)</span>, and the quadratic form, <span class="math inline">\(x^T Q^{\nu+1} x\)</span>, without explicitly forming <span class="math inline">\(Q^{\nu+1}\)</span>. To do this, we compute the Cholesky decomposition, <span class="math inline">\(Q = LL^T\)</span>, where L is a lower triangular matrix, and make use of the following equations:</p>
 <p><span class="math display">\[
 \log|Q^{\nu+1}| = (\nu+1)\log|Q| = 2(\nu+1)\sum_{i}\log(L_{ii}),
 \]</span></p>
-<p>and</p>
 <p><span class="math display">\[
 \begin{aligned}
 x^T Q x &amp;= x^T L L^T x = ||L^T x||_2^2 \\
 x^T Q^2 x &amp;=  x^T L L^T L L^T x = ||LL^T x||_2^2 \\
-x^T Q^3 x &amp;=  x^T L L^T L L^T L L^T x = ||L^TLL^T x||_2^2,
+x^T Q^3 x &amp;=  x^T L L^T L L^T L L^T x = ||L^TLL^T x||_2^2.
 \end{aligned}
 \]</span></p>
-<p>to efficiently calculate the quadratic form using only the Cholesky factor of <span class="math inline">\(Q\)</span> instead of forming the matrix <span class="math inline">\(Q^\nu\)</span>.</p>
 </section>
 <section id="algorithm" class="level4">
 <h4 class="anchored" data-anchor-id="algorithm">Algorithm</h4>
@@ -737,16 +728,8 @@ Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2
 \tilde{Q} = DQ^{\nu+1}D
 \]</span></p>
 </section>
-<section id="cholesky-decomposition-1" class="level4">
-<h4 class="anchored" data-anchor-id="cholesky-decomposition-1">Cholesky Decomposition</h4>
-<p>We compute the Cholesky decomposition of <span class="math inline">\(Q\)</span>: <span class="math display">\[
-Q = LL^T
-\]</span></p>
-<p>where L is a lower triangular matrix.</p>
-</section>
 <section id="efficient-computation-of-scaling-matrix-d" class="level4">
 <h4 class="anchored" data-anchor-id="efficient-computation-of-scaling-matrix-d">Efficient Computation of Scaling Matrix D</h4>
-<p>Computing <span class="math inline">\(D\)</span> directly would require inverting <span class="math inline">\(Q^{\nu + 1}\)</span>, which is computationally expensive. Instead, we can efficiently compute <span class="math inline">\(D\)</span> using the following steps:</p>
 <ol type="1">
 <li>Compute the Cholesky decomposition of the original <span class="math inline">\(Q = LL^T\)</span></li>
 <li>Compute <span class="math inline">\(R = L^{-1}\)</span>, so that <span class="math inline">\(S = Q^{-1} = R^TR\)</span>.</li>
@@ -757,43 +740,23 @@ Q = LL^T
 <li>For <span class="math inline">\(\nu = 2\)</span>, we use the column-wise norm of <span class="math inline">\(RR^TR\)</span></li>
 </ol></li>
 </ol>
-<p>This gives us the matrix D without having to explicitly invert the matrix Q.</p>
 </section>
 <section id="log-determinant" class="level4">
 <h4 class="anchored" data-anchor-id="log-determinant">Log determinant</h4>
-<p>The log determinant of the scaled precision matrix <span class="math inline">\(\tilde{Q} = DQ^{\nu+1}D\)</span> can be computed efficiently using the following steps:</p>
 <ol type="1">
 <li>First, note that <span class="math inline">\(\log|\tilde{Q}| = \log|DQ^{\nu+1}D| = 2\log|D| + \log|Q^{\nu+1}|\)</span></li>
 <li>We can compute <span class="math inline">\(\log|D|\)</span> directly from the diagonal elements of D, i.e.&nbsp;<span class="math inline">\(\log|D| = \sum_i \log(D_{ii})\)</span></li>
 <li>For <span class="math inline">\(\log|Q^{\nu+1}|\)</span>, we can use the properties of the Cholesky decomposition: <span class="math inline">\(\log|Q^{\nu+1}| = (\nu+1)\log|Q| = (\nu+1)\log|LL^T| = 2(\nu+1)\sum_i \log(L_{ii})\)</span></li>
 <li>Combining these, we get <span class="math inline">\(\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})\)</span></li>
 </ol>
-<p>This allows us to compute the log determinant efficiently without explicitly forming <span class="math inline">\(Q^{\nu+1}\)</span> or its inverse.</p>
 </section>
 <section id="quadratic-form" class="level4">
 <h4 class="anchored" data-anchor-id="quadratic-form">Quadratic Form</h4>
-<p>For the quadratic form <span class="math inline">\(z^T\tilde{Q}z\)</span>, where <span class="math inline">\(z = \Phi^{-1}(u)\)</span>, we can use the following steps:</p>
 <ol type="1">
 <li>First, note that <span class="math inline">\(z^T\tilde{Q}z = z^TDQ^{\nu+1}Dz = (Dz)^TQ^{\nu+1}(Dz)\)</span></li>
 <li>Let <span class="math inline">\(y = Dz\)</span>. We can compute this element-wise as <span class="math inline">\(y_i = D_{ii}z_i\)</span></li>
-<li>Now we need to compute <span class="math inline">\(y^TQ^{\nu+1}y\)</span>. We can do this efficiently using the Cholesky factor L:
-<ol type="i">
-<li>For <span class="math inline">\(\nu = 0\)</span>: <span class="math inline">\(y^TQy = ||L^Ty||_2^2\)</span></li>
-<li>For <span class="math inline">\(\nu = 1\)</span>: <span class="math inline">\(y^TQ^2y = ||LL^Ty||_2^2\)</span></li>
-<li>For <span class="math inline">\(\nu = 2\)</span>: <span class="math inline">\(y^TQ^3y = ||L^TLL^Ty||_2^2\)</span></li>
-</ol></li>
-<li>In general, we can compute this as follows:
-<ol type="i">
-<li>Initialize <span class="math inline">\(y = Dz\)</span></li>
-<li>For j from 0 to <span class="math inline">\(\nu\)</span>:
-<ul>
-<li>If j is even: <span class="math inline">\(y = L^Ty\)</span></li>
-<li>If j is odd: <span class="math inline">\(y = Ly\)</span></li>
-</ul></li>
-<li>Compute quadratic form <span class="math inline">\(q = y^Ty\)</span></li>
-</ol></li>
+<li>Now we compute <span class="math inline">\(y^TQ^{\nu+1}y\)</span> as in the unscaled case.</li>
 </ol>
-<p>This approach allows us to compute the quadratic form efficiently without explicitly forming <span class="math inline">\(Q^{\nu+1}\)</span>.</p>
 </section>
 <section id="algorithm-1" class="level4">
 <h4 class="anchored" data-anchor-id="algorithm-1">Algorithm</h4>
@@ -806,16 +769,10 @@ Q = LL^T
 <li>For each observation <span class="math inline">\(z = \Phi^{-1}(u)\)</span>:
 <ol type="i">
 <li>Compute <span class="math inline">\(y = Dz\)</span></li>
-<li>For j from 0 to <span class="math inline">\(\nu\)</span>:
-<ul>
-<li>If j is even: <span class="math inline">\(y = L^Ty\)</span></li>
-<li>If j is odd: <span class="math inline">\(y = Ly\)</span></li>
-</ul></li>
-<li>Compute quadratic form <span class="math inline">\(q = y^Ty\)</span></li>
+<li>Compute <span class="math inline">\(y^TQ^{\nu+1}y\)</span> as in the unscaled case.</li>
 </ol></li>
 <li>Compute log-density: <span class="math inline">\(\log c(u) = -\frac{1}{2}(d\log(2\pi) + \log|\tilde{Q}| + q - z^Tz)\)</span></li>
 </ol>
-<p>This algorithm computes the Gaussian copula density using the scaled precision matrix, avoiding explicit formation or inversion of <span class="math inline">\(\tilde Q = DQ^{\nu + 1}D\)</span>.</p>
 </section>
 </section>
 </section>
