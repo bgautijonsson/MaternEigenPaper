@@ -5,7 +5,7 @@ author:
   affiliation: University of Iceland
   email: brynjolfur@hi.is
   url: bggj.is
-date: 2024/08/15
+date: 2024/08/22
 number-sections: false
 code-block-border-left: true
 ---
