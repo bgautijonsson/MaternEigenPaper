@@ -290,7 +290,7 @@ $$
 \mathbf{Q} = \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2}
 $$
 
-Now, let the two AR(1) matrices be approximated by a circulant matrix $C$ with base vector $c = [c_, c_1, ..., c_{n-1}]$. Then:
+Now, let the two AR(1) matrices be approximated by circulant matrices, $\mathbf C_\rho$, with base vectors $\mathbf c_\rho = \frac{1}{1-\rho^2}\left[1+\rho^2, -\rho, 0, ..., 0, -\rho \right]$. Then:
 
 $$
 \mathbf{Q}_{\rho_1} \approx \mathbf{C_{\rho_1}} = \frac{1}{1-\rho_1^2}
@@ -340,7 +340,7 @@ $$
 \end{pmatrix}
 $$
 
-where each $\mathbf{B_i}$ is a circulant matrix. Specifically,
+where each $\mathbf{B_i}$ is a circulant matrix. Specifically, each $\mathbf B_i = \mathbf 0$ except for
 
 $$
 \begin{aligned}
