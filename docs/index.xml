@@ -26,23 +26,6 @@ Folded Circulant Approximations</article-title>
         </institution-wrap>
       </aff>
       <history/>
-      <abstract>
-This paper presents an algorithm for efficient computation of Gaussian
-copula densities using Gaussian Markov Random Field (GMRF) precision
-structures. We introduce a Matérn-like precision matrix with unit
-marginal variance, leveraging a Kronecker sum structure that allows for
-fast eigendecomposition. The method avoids explicit formation and
-inversion of large precision matrices, making it particularly suitable
-for high-dimensional spatial data. We propose two approximation methods:
-circulant and folded circulant, which utilize the computational
-efficiency of Fast Fourier Transforms (FFTs). The circulant
-approximation treats the spatial field as if it were on a torus, where
-opposite edges are connected. The folded circulant approximation,
-however, uses a reflection boundary condition, effectively doubling the
-size of the field by reflecting the data along each coordinate axis.
-This approach potentially offers improved accuracy near field edges,
-addressing a common limitation of periodic boundary conditions.
-</abstract>
     </article-meta>
   </front>
   <body>
@@ -51,12 +34,13 @@ addressing a common limitation of periodic boundary conditions.
       <sec id="problem-formulation">
         <title>Problem Formulation</title>
         <p>Consider a spatial field on a regular
-    <inline-formula><alternatives><tex-math><![CDATA[n \times n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>n</mml:mi><mml:mo>×</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+    <inline-formula><alternatives><tex-math><![CDATA[n_1 \times n_2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>n</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>×</mml:mo><mml:msub><mml:mi>n</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
     grid. Our objective is to compute the Gaussian copula density
     efficiently for this field. This computation involves:</p>
         <list list-type="order">
           <list-item>
-            <p>Specifying a precision matrix <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
+            <p>Specifying an <inline-formula><alternatives><tex-math><![CDATA[n_1 n_2 \times n_1 n_2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>n</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:msub><mml:mi>n</mml:mi><mml:mn>2</mml:mn></mml:msub><mml:mo>×</mml:mo><mml:msub><mml:mi>n</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:msub><mml:mi>n</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
+        precision matrix <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
         that represents the spatial dependence structure.</p>
           </list-item>
           <list-item>
@@ -65,8 +49,9 @@ addressing a common limitation of periodic boundary conditions.
         has unit diagonal elements.</p>
           </list-item>
           <list-item>
-            <p>Computing the density for large spatial fields in a
-        computationally efficient manner.</p>
+            <p>Computing the log determinant, <inline-formula><alternatives><tex-math><![CDATA[\log |\mathbf Q|]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mi>𝐐</mml:mi><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>,
+        and the quadratic form <inline-formula><alternatives><tex-math><![CDATA[z^T \mathbf Q z]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>z</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mi>𝐐</mml:mi><mml:mi>z</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+        where <inline-formula><alternatives><tex-math><![CDATA[z_i = \Phi^{-1}(f_i(y_i))]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>z</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>=</mml:mo><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>f</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>y</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
           </list-item>
         </list>
       </sec>
@@ -294,7 +279,7 @@ addressing a common limitation of periodic boundary conditions.
           <disp-formula>
             <alternatives>
               <tex-math><![CDATA[
-    \mathbf{Q} = \mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1,
+    \mathbf{Q} = \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2},
     ]]></tex-math>
               <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                 <mml:mrow>
@@ -302,16 +287,34 @@ addressing a common limitation of periodic boundary conditions.
                   <mml:mo>=</mml:mo>
                   <mml:msub>
                     <mml:mi>𝐐</mml:mi>
-                    <mml:mn>1</mml:mn>
+                    <mml:msub>
+                      <mml:mi>ρ</mml:mi>
+                      <mml:mn>1</mml:mn>
+                    </mml:msub>
                   </mml:msub>
                   <mml:mo>⊗</mml:mo>
-                  <mml:mi>𝐈</mml:mi>
+                  <mml:msub>
+                    <mml:mi>𝐈</mml:mi>
+                    <mml:msub>
+                      <mml:mi>𝐧</mml:mi>
+                      <mml:mn>𝟐</mml:mn>
+                    </mml:msub>
+                  </mml:msub>
                   <mml:mo>+</mml:mo>
-                  <mml:mi>𝐈</mml:mi>
+                  <mml:msub>
+                    <mml:mi>𝐈</mml:mi>
+                    <mml:msub>
+                      <mml:mi>𝐧</mml:mi>
+                      <mml:mn>𝟏</mml:mn>
+                    </mml:msub>
+                  </mml:msub>
                   <mml:mo>⊗</mml:mo>
                   <mml:msub>
                     <mml:mi>𝐐</mml:mi>
-                    <mml:mn>1</mml:mn>
+                    <mml:msub>
+                      <mml:mi>ρ</mml:mi>
+                      <mml:mn>2</mml:mn>
+                    </mml:msub>
                   </mml:msub>
                   <mml:mo>,</mml:mo>
                 </mml:mrow>
@@ -319,17 +322,18 @@ addressing a common limitation of periodic boundary conditions.
             </alternatives>
           </disp-formula>
         </p>
-        <p>where <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+        <p>where <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
     is the precision matrix of a standardized one-dimensional AR(1)
-    process and <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
+    process with correlation <inline-formula><alternatives><tex-math><![CDATA[\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ρ</mml:mi></mml:math></alternatives></inline-formula>
+    and <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
     denotes the Kronecker product. By employing efficient
     eigendecomposition techniques, our method avoids explicit formation
     and inversion of the large precision matrix
     <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>,
     making it particularly suitable for high-dimensional spatial data.
-    In additions to the exact method, we mention approximations to
-    <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
-    using circuland and folded circulant matrices.</p>
+    In addition to the exact method, we show how the precision matrix
+    can be approximated by a folded circulant matrix wich gives a large
+    speed-up while preserving suitable boundary conditions.</p>
       </sec>
     </sec>
     <sec id="methods">
@@ -463,7 +467,7 @@ addressing a common limitation of periodic boundary conditions.
           <disp-formula>
             <alternatives>
               <tex-math><![CDATA[
-    \mathbf{Q} = (\mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1)^{(\nu + 1)}, \quad \nu \in \{0, 1, 2\}
+    \mathbf{Q} = (\mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2})^{(\nu + 1)}, \quad \nu \in \{0, 1, 2\}
     ]]></tex-math>
               <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                 <mml:mrow>
@@ -474,16 +478,34 @@ addressing a common limitation of periodic boundary conditions.
                       <mml:mo stretchy="true" form="prefix">(</mml:mo>
                       <mml:msub>
                         <mml:mi>𝐐</mml:mi>
-                        <mml:mn>1</mml:mn>
+                        <mml:msub>
+                          <mml:mi>ρ</mml:mi>
+                          <mml:mn>1</mml:mn>
+                        </mml:msub>
                       </mml:msub>
                       <mml:mo>⊗</mml:mo>
-                      <mml:mi>𝐈</mml:mi>
+                      <mml:msub>
+                        <mml:mi>𝐈</mml:mi>
+                        <mml:msub>
+                          <mml:mi>𝐧</mml:mi>
+                          <mml:mn>𝟐</mml:mn>
+                        </mml:msub>
+                      </mml:msub>
                       <mml:mo>+</mml:mo>
-                      <mml:mi>𝐈</mml:mi>
+                      <mml:msub>
+                        <mml:mi>𝐈</mml:mi>
+                        <mml:msub>
+                          <mml:mi>𝐧</mml:mi>
+                          <mml:mn>𝟏</mml:mn>
+                        </mml:msub>
+                      </mml:msub>
                       <mml:mo>⊗</mml:mo>
                       <mml:msub>
                         <mml:mi>𝐐</mml:mi>
-                        <mml:mn>1</mml:mn>
+                        <mml:msub>
+                          <mml:mi>ρ</mml:mi>
+                          <mml:mn>2</mml:mn>
+                        </mml:msub>
                       </mml:msub>
                       <mml:mo stretchy="true" form="postfix">)</mml:mo>
                     </mml:mrow>
@@ -511,13 +533,14 @@ addressing a common limitation of periodic boundary conditions.
             </alternatives>
           </disp-formula>
         </p>
-        <p>where <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
-    is the precision matrix of a one-dimensional AR(1) process:</p>
+        <p>where <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+    is the precision matrix of a one-dimensional AR(1) process with
+    correlation <inline-formula><alternatives><tex-math><![CDATA[\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ρ</mml:mi></mml:math></alternatives></inline-formula>:</p>
         <p>
           <disp-formula>
             <alternatives>
               <tex-math><![CDATA[
-    \mathbf{Q}_1 = \frac{1}{1-\rho^2}
+    \mathbf{Q}_\rho = \frac{1}{1-\rho^2}
     \begin{bmatrix}
     1 & -\rho & 0 & \cdots & 0 \\
     -\rho & 1+\rho^2 & -\rho & \cdots & 0 \\
@@ -530,7 +553,7 @@ addressing a common limitation of periodic boundary conditions.
                 <mml:mrow>
                   <mml:msub>
                     <mml:mi>𝐐</mml:mi>
-                    <mml:mn>1</mml:mn>
+                    <mml:mi>ρ</mml:mi>
                   </mml:msub>
                   <mml:mo>=</mml:mo>
                   <mml:mfrac>
@@ -656,32 +679,41 @@ addressing a common limitation of periodic boundary conditions.
         </p>
         <p>The matrix, <inline-formula><alternatives><tex-math><![CDATA[\mathbf Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>,
     is then scaled so that its inverse, <inline-formula><alternatives><tex-math><![CDATA[\mathbf \Sigma = \mathbf Q^{-1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>𝚺</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>𝐐</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:mrow></mml:math></alternatives></inline-formula>
-    has unit diagonals, i.e. <inline-formula><alternatives><tex-math><![CDATA[\mathbf \Sigma_{ii} = 1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝚺</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>.</p>
+    is a correlation matrix, i.e. <inline-formula><alternatives><tex-math><![CDATA[\mathbf \Sigma_{ii} = 1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝚺</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>.</p>
       </sec>
       <sec id="computation-process">
         <title>Computation Process</title>
-        <sec id="step-1-eigendecomposition-of-mathbfq_1">
+        <sec id="step-1-eigendecomposition-of-mathbfq_rho">
           <title>Step 1: Eigendecomposition of
-      <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula></title>
-          <p>We first compute the eigendecomposition of
-      <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>:</p>
+      <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_{\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula></title>
+          <p>We first compute the eigendecomposition of both
+      <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_{\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>$:</p>
           <p>
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \mathbf{Q}_1 = \mathbf{V}\mathbf{\Lambda}\mathbf{V}^T
+      \mathbf{Q}_{\rho} = \mathbf{V_{\rho}}\mathbf{\Lambda_\rho}\mathbf{V_\rho}^T
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
                     <mml:msub>
                       <mml:mi>𝐐</mml:mi>
-                      <mml:mn>1</mml:mn>
+                      <mml:mi>ρ</mml:mi>
                     </mml:msub>
                     <mml:mo>=</mml:mo>
-                    <mml:mi>𝐕</mml:mi>
-                    <mml:mi>𝚲</mml:mi>
-                    <mml:msup>
+                    <mml:msub>
                       <mml:mi>𝐕</mml:mi>
+                      <mml:mi>𝛒</mml:mi>
+                    </mml:msub>
+                    <mml:msub>
+                      <mml:mi>𝚲</mml:mi>
+                      <mml:mi>𝛒</mml:mi>
+                    </mml:msub>
+                    <mml:msup>
+                      <mml:msub>
+                        <mml:mi>𝐕</mml:mi>
+                        <mml:mi>𝛒</mml:mi>
+                      </mml:msub>
                       <mml:mi>T</mml:mi>
                     </mml:msup>
                   </mml:mrow>
@@ -689,16 +721,16 @@ addressing a common limitation of periodic boundary conditions.
               </alternatives>
             </disp-formula>
           </p>
-          <p>where <inline-formula><alternatives><tex-math><![CDATA[\mathbf{V}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐕</mml:mi></mml:math></alternatives></inline-formula>
-      is the matrix of eigenvectors and <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\Lambda}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝚲</mml:mi></mml:math></alternatives></inline-formula>
-      is the diagonal matrix of eigenvalues. Then, the
-      eigendecomposition of <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
-      is:</p>
+          <p>where <inline-formula><alternatives><tex-math><![CDATA[\mathbf{V_\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐕</mml:mi><mml:mi>𝛒</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      is the matrix of eigenvectors and <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\Lambda_\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝚲</mml:mi><mml:mi>𝛒</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      is the diagonal matrix of eigenvalues. Then, because of how
+      <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+      is defined, its eigendecomposition is:</p>
           <p>
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \mathbf{Q} = (\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^{(\nu + 1)}(\mathbf{V} \otimes \mathbf{V})^T.
+      \mathbf{Q} = (\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})(\mathbf{\Lambda_{\rho_1}} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda_{\rho_2}})^{(\nu + 1)}(\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})^T.
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
@@ -706,21 +738,45 @@ addressing a common limitation of periodic boundary conditions.
                     <mml:mo>=</mml:mo>
                     <mml:mrow>
                       <mml:mo stretchy="true" form="prefix">(</mml:mo>
-                      <mml:mi>𝐕</mml:mi>
+                      <mml:msub>
+                        <mml:mi>𝐕</mml:mi>
+                        <mml:msub>
+                          <mml:mi>𝛒</mml:mi>
+                          <mml:mn>𝟏</mml:mn>
+                        </mml:msub>
+                      </mml:msub>
                       <mml:mo>⊗</mml:mo>
-                      <mml:mi>𝐕</mml:mi>
+                      <mml:msub>
+                        <mml:mi>𝐕</mml:mi>
+                        <mml:msub>
+                          <mml:mi>𝛒</mml:mi>
+                          <mml:mn>𝟐</mml:mn>
+                        </mml:msub>
+                      </mml:msub>
                       <mml:mo stretchy="true" form="postfix">)</mml:mo>
                     </mml:mrow>
                     <mml:msup>
                       <mml:mrow>
                         <mml:mo stretchy="true" form="prefix">(</mml:mo>
-                        <mml:mi>𝚲</mml:mi>
+                        <mml:msub>
+                          <mml:mi>𝚲</mml:mi>
+                          <mml:msub>
+                            <mml:mi>𝛒</mml:mi>
+                            <mml:mn>𝟏</mml:mn>
+                          </mml:msub>
+                        </mml:msub>
                         <mml:mo>⊗</mml:mo>
                         <mml:mi>𝐈</mml:mi>
                         <mml:mo>+</mml:mo>
                         <mml:mi>𝐈</mml:mi>
                         <mml:mo>⊗</mml:mo>
-                        <mml:mi>𝚲</mml:mi>
+                        <mml:msub>
+                          <mml:mi>𝚲</mml:mi>
+                          <mml:msub>
+                            <mml:mi>𝛒</mml:mi>
+                            <mml:mn>𝟐</mml:mn>
+                          </mml:msub>
+                        </mml:msub>
                         <mml:mo stretchy="true" form="postfix">)</mml:mo>
                       </mml:mrow>
                       <mml:mrow>
@@ -734,9 +790,21 @@ addressing a common limitation of periodic boundary conditions.
                     <mml:msup>
                       <mml:mrow>
                         <mml:mo stretchy="true" form="prefix">(</mml:mo>
-                        <mml:mi>𝐕</mml:mi>
+                        <mml:msub>
+                          <mml:mi>𝐕</mml:mi>
+                          <mml:msub>
+                            <mml:mi>𝛒</mml:mi>
+                            <mml:mn>𝟏</mml:mn>
+                          </mml:msub>
+                        </mml:msub>
                         <mml:mo>⊗</mml:mo>
-                        <mml:mi>𝐕</mml:mi>
+                        <mml:msub>
+                          <mml:mi>𝐕</mml:mi>
+                          <mml:msub>
+                            <mml:mi>𝛒</mml:mi>
+                            <mml:mn>𝟐</mml:mn>
+                          </mml:msub>
+                        </mml:msub>
                         <mml:mo stretchy="true" form="postfix">)</mml:mo>
                       </mml:mrow>
                       <mml:mi>T</mml:mi>
@@ -747,98 +815,219 @@ addressing a common limitation of periodic boundary conditions.
               </alternatives>
             </disp-formula>
           </p>
-          <p>This means that the eigenvectors of
-      <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
-      are <inline-formula><alternatives><tex-math><![CDATA[\mathbf{v}_j \otimes \mathbf{v}_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝐯</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mi>𝐯</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
-      and the corresponding eigenvalues are
-      <inline-formula><alternatives><tex-math><![CDATA[\lambda_i + \lambda_j]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>λ</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mi>λ</mml:mi><mml:mi>j</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>.</p>
+          <p>We don’t work with the full eigendecomposition, but rather
+      utilize the fact that the eigenvalues of
+      <inline-formula><alternatives><tex-math><![CDATA[\mathbf Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
+      are <inline-formula><alternatives><tex-math><![CDATA[\left\{\lambda_{\rho_1}\right\}_i + \left\{\lambda_{\rho_2}\right\}_j]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">{</mml:mo><mml:msub><mml:mi>λ</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:msub><mml:mo stretchy="true" form="postfix">}</mml:mo></mml:mrow><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">{</mml:mo><mml:msub><mml:mi>λ</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:msub><mml:mo stretchy="true" form="postfix">}</mml:mo></mml:mrow><mml:mi>j</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
+      and their corresponding eigenvectors are
+      <inline-formula><alternatives><tex-math><![CDATA[\left\{\mathbf{v}_{\rho_1}\right\}_i \otimes \left\{\mathbf{v}_{\rho_2}\right\}_j]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">{</mml:mo><mml:msub><mml:mi>𝐯</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:msub><mml:mo stretchy="true" form="postfix">}</mml:mo></mml:mrow><mml:mi>i</mml:mi></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">{</mml:mo><mml:msub><mml:mi>𝐯</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:msub><mml:mo stretchy="true" form="postfix">}</mml:mo></mml:mrow><mml:mi>j</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
+      to iterate over each value and vector pair to compute the density
+      without forming the larger matrix.</p>
         </sec>
         <sec id="step-2-computation-of-marginal-standard-deviations">
           <title>Step 2: Computation of Marginal Standard Deviations</title>
-          <p>Using the eigendecomposition of <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>,
-      we compute the marginal standard deviations and store them in a
-      vector <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\sigma}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝛔</mml:mi></mml:math></alternatives></inline-formula>,
-      i.e. <inline-formula><alternatives><tex-math><![CDATA[\sigma_i = \sqrt{\Sigma_{ii}}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>σ</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>=</mml:mo><mml:msqrt><mml:msub><mml:mi>Σ</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub></mml:msqrt></mml:mrow></mml:math></alternatives></inline-formula>:</p>
+          <p>In order to scale <inline-formula><alternatives><tex-math><![CDATA[\mathbf Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
+      so that its inverse is a correlation matrix, we first calculate
+      <inline-formula><alternatives><tex-math><![CDATA[\sigma_i = \sqrt\Sigma_{ii}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>σ</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>=</mml:mo><mml:msub><mml:msqrt><mml:mi>Σ</mml:mi></mml:msqrt><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>,
+      <inline-formula><alternatives><tex-math><![CDATA[i = 1, \dots, n_1n_2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>i</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>n</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:msub><mml:mi>n</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>.
+      We then use these marginal standard deviations to scale the
+      eigenvectors and values. The inverse of
+      <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+      is given by:</p>
           <p>
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \mathbf{\sigma} = \sqrt{\sum_{i,j} \frac{(\mathbf{v}_j \otimes \mathbf{v}_i)^2}{(\lambda_i + \lambda_j)^\nu}}
+      \boldsymbol \Sigma = \mathbf Q^{-1} = (VAV^T)^{-1} = VA^{-1}V
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
-                    <mml:mi>𝛔</mml:mi>
+                    <mml:mi>𝚺</mml:mi>
                     <mml:mo>=</mml:mo>
-                    <mml:msqrt>
+                    <mml:msup>
+                      <mml:mi>𝐐</mml:mi>
                       <mml:mrow>
-                        <mml:munder>
-                          <mml:mo>∑</mml:mo>
-                          <mml:mrow>
-                            <mml:mi>i</mml:mi>
-                            <mml:mo>,</mml:mo>
-                            <mml:mi>j</mml:mi>
-                          </mml:mrow>
-                        </mml:munder>
-                        <mml:mfrac>
-                          <mml:msup>
-                            <mml:mrow>
-                              <mml:mo stretchy="true" form="prefix">(</mml:mo>
-                              <mml:msub>
-                                <mml:mi>𝐯</mml:mi>
-                                <mml:mi>j</mml:mi>
-                              </mml:msub>
-                              <mml:mo>⊗</mml:mo>
-                              <mml:msub>
-                                <mml:mi>𝐯</mml:mi>
-                                <mml:mi>i</mml:mi>
-                              </mml:msub>
-                              <mml:mo stretchy="true" form="postfix">)</mml:mo>
-                            </mml:mrow>
-                            <mml:mn>2</mml:mn>
-                          </mml:msup>
-                          <mml:msup>
-                            <mml:mrow>
-                              <mml:mo stretchy="true" form="prefix">(</mml:mo>
-                              <mml:msub>
-                                <mml:mi>λ</mml:mi>
-                                <mml:mi>i</mml:mi>
-                              </mml:msub>
-                              <mml:mo>+</mml:mo>
-                              <mml:msub>
-                                <mml:mi>λ</mml:mi>
-                                <mml:mi>j</mml:mi>
-                              </mml:msub>
-                              <mml:mo stretchy="true" form="postfix">)</mml:mo>
-                            </mml:mrow>
-                            <mml:mi>ν</mml:mi>
-                          </mml:msup>
-                        </mml:mfrac>
+                        <mml:mi>−</mml:mi>
+                        <mml:mn>1</mml:mn>
                       </mml:mrow>
-                    </mml:msqrt>
+                    </mml:msup>
+                    <mml:mo>=</mml:mo>
+                    <mml:msup>
+                      <mml:mrow>
+                        <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                        <mml:mi>V</mml:mi>
+                        <mml:mi>A</mml:mi>
+                        <mml:msup>
+                          <mml:mi>V</mml:mi>
+                          <mml:mi>T</mml:mi>
+                        </mml:msup>
+                        <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                      </mml:mrow>
+                      <mml:mrow>
+                        <mml:mi>−</mml:mi>
+                        <mml:mn>1</mml:mn>
+                      </mml:mrow>
+                    </mml:msup>
+                    <mml:mo>=</mml:mo>
+                    <mml:mi>V</mml:mi>
+                    <mml:msup>
+                      <mml:mi>A</mml:mi>
+                      <mml:mrow>
+                        <mml:mi>−</mml:mi>
+                        <mml:mn>1</mml:mn>
+                      </mml:mrow>
+                    </mml:msup>
+                    <mml:mi>V</mml:mi>
                   </mml:mrow>
                 </mml:math>
               </alternatives>
             </disp-formula>
           </p>
-          <p>where <inline-formula><alternatives><tex-math><![CDATA[\mathbf{v}_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐯</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
-      are the eigenvectors and <inline-formula><alternatives><tex-math><![CDATA[\lambda_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>λ</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
-      are the eigenvalues of <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>.
-      Thus, <inline-formula><alternatives><tex-math><![CDATA[\sigma]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>σ</mml:mi></mml:math></alternatives></inline-formula>
-      will be a vector of length <inline-formula><alternatives><tex-math><![CDATA[n^2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>n</mml:mi><mml:mn>2</mml:mn></mml:msup></mml:math></alternatives></inline-formula>.</p>
+          <p>The diagonal elements, <inline-formula><alternatives><tex-math><![CDATA[\boldsymbol \Sigma_{ii}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝚺</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub></mml:math></alternatives></inline-formula>,
+      are given by:</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      \Sigma_{ii} = \sum_{k=1}^{n} v_{ik} \frac{1}{\lambda_k} (v^T)_{ki} = \sum_{k=1}^{n} v_{ik} \frac{1}{\lambda_k} v_{ik} = \sum_{k=1}^{n} v_{ik}^2 \frac{1}{\lambda_k}
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mrow>
+                    <mml:msub>
+                      <mml:mi>Σ</mml:mi>
+                      <mml:mrow>
+                        <mml:mi>i</mml:mi>
+                        <mml:mi>i</mml:mi>
+                      </mml:mrow>
+                    </mml:msub>
+                    <mml:mo>=</mml:mo>
+                    <mml:munderover>
+                      <mml:mo>∑</mml:mo>
+                      <mml:mrow>
+                        <mml:mi>k</mml:mi>
+                        <mml:mo>=</mml:mo>
+                        <mml:mn>1</mml:mn>
+                      </mml:mrow>
+                      <mml:mi>n</mml:mi>
+                    </mml:munderover>
+                    <mml:msub>
+                      <mml:mi>v</mml:mi>
+                      <mml:mrow>
+                        <mml:mi>i</mml:mi>
+                        <mml:mi>k</mml:mi>
+                      </mml:mrow>
+                    </mml:msub>
+                    <mml:mfrac>
+                      <mml:mn>1</mml:mn>
+                      <mml:msub>
+                        <mml:mi>λ</mml:mi>
+                        <mml:mi>k</mml:mi>
+                      </mml:msub>
+                    </mml:mfrac>
+                    <mml:msub>
+                      <mml:mrow>
+                        <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                        <mml:msup>
+                          <mml:mi>v</mml:mi>
+                          <mml:mi>T</mml:mi>
+                        </mml:msup>
+                        <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                      </mml:mrow>
+                      <mml:mrow>
+                        <mml:mi>k</mml:mi>
+                        <mml:mi>i</mml:mi>
+                      </mml:mrow>
+                    </mml:msub>
+                    <mml:mo>=</mml:mo>
+                    <mml:munderover>
+                      <mml:mo>∑</mml:mo>
+                      <mml:mrow>
+                        <mml:mi>k</mml:mi>
+                        <mml:mo>=</mml:mo>
+                        <mml:mn>1</mml:mn>
+                      </mml:mrow>
+                      <mml:mi>n</mml:mi>
+                    </mml:munderover>
+                    <mml:msub>
+                      <mml:mi>v</mml:mi>
+                      <mml:mrow>
+                        <mml:mi>i</mml:mi>
+                        <mml:mi>k</mml:mi>
+                      </mml:mrow>
+                    </mml:msub>
+                    <mml:mfrac>
+                      <mml:mn>1</mml:mn>
+                      <mml:msub>
+                        <mml:mi>λ</mml:mi>
+                        <mml:mi>k</mml:mi>
+                      </mml:msub>
+                    </mml:mfrac>
+                    <mml:msub>
+                      <mml:mi>v</mml:mi>
+                      <mml:mrow>
+                        <mml:mi>i</mml:mi>
+                        <mml:mi>k</mml:mi>
+                      </mml:mrow>
+                    </mml:msub>
+                    <mml:mo>=</mml:mo>
+                    <mml:munderover>
+                      <mml:mo>∑</mml:mo>
+                      <mml:mrow>
+                        <mml:mi>k</mml:mi>
+                        <mml:mo>=</mml:mo>
+                        <mml:mn>1</mml:mn>
+                      </mml:mrow>
+                      <mml:mi>n</mml:mi>
+                    </mml:munderover>
+                    <mml:msubsup>
+                      <mml:mi>v</mml:mi>
+                      <mml:mrow>
+                        <mml:mi>i</mml:mi>
+                        <mml:mi>k</mml:mi>
+                      </mml:mrow>
+                      <mml:mn>2</mml:mn>
+                    </mml:msubsup>
+                    <mml:mfrac>
+                      <mml:mn>1</mml:mn>
+                      <mml:msub>
+                        <mml:mi>λ</mml:mi>
+                        <mml:mi>k</mml:mi>
+                      </mml:msub>
+                    </mml:mfrac>
+                  </mml:mrow>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
+          <p>This means that the <inline-formula><alternatives><tex-math><![CDATA[i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>i</mml:mi></mml:math></alternatives></inline-formula>’th
+      marginal variance, <inline-formula><alternatives><tex-math><![CDATA[\sigma_i^2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msubsup><mml:mi>σ</mml:mi><mml:mi>i</mml:mi><mml:mn>2</mml:mn></mml:msubsup></mml:math></alternatives></inline-formula>,
+      is a weighted sum of the reciprocals of the eigenvalues of
+      <inline-formula><alternatives><tex-math><![CDATA[\mathbf Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
+      where the weights are the squares of the
+      <inline-formula><alternatives><tex-math><![CDATA[i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>i</mml:mi></mml:math></alternatives></inline-formula>’th
+      value in each eigenvector. This means that we can calculate the
+      marginal standard deviations by iterating over the eigenvalues and
+      -vectors of <inline-formula><alternatives><tex-math><![CDATA[Q_{\rho_1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:msub></mml:math></alternatives></inline-formula>
+      and <inline-formula><alternatives><tex-math><![CDATA[Q_{\rho_2}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:msub></mml:math></alternatives></inline-formula>
+      and cumulating their values according to the formula above, then
+      taking the element-wise square roots.</p>
         </sec>
         <sec id="step-3-scaling-the-eigendecomposition">
           <title>Step 3: Scaling the Eigendecomposition</title>
-          <p>We scale the eigendecomposition of
+          <p>To scale the eigendecomposition of
       <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
-      using the marginal standard deviations:</p>
+      using the marginal standard deviations, we define a diagonal
+      matrix <inline-formula><alternatives><tex-math><![CDATA[\mathbf{D}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐃</mml:mi></mml:math></alternatives></inline-formula>,
+      where <inline-formula><alternatives><tex-math><![CDATA[D_{ii} = \sigma_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>D</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:msub><mml:mi>σ</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
+      and scale the precision matrix as:</p>
           <p>
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
       \begin{aligned}
-      \mathbf{\widetilde  Q} &= \mathbf{D}\mathbf{Q}\mathbf{D} \\
-      &= \mathbf{D}(\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T\mathbf{D} \\
-      &= (\mathbf{\widetilde V} \otimes \mathbf{\widetilde V})(\mathbf{\widetilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\widetilde \Lambda})(\mathbf{\widetilde V} \otimes \mathbf{\widetilde V})^T
+      \mathbf{\widetilde  Q} &= \mathbf{D}\mathbf{Q}^{\nu+1}\mathbf{D} \\
+      &= \mathbf{D}\mathbf{V}\mathbf{\Lambda}^{\nu+1}\mathbf{V}^T\mathbf{D} \\
+      &= \mathbf{\widetilde V}\mathbf{\widetilde\Lambda}\mathbf{\widetilde V}^T.
       \end{aligned}
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
@@ -853,44 +1042,33 @@ addressing a common limitation of periodic boundary conditions.
                       <mml:mtd columnalign="left" style="text-align: left">
                         <mml:mo>=</mml:mo>
                         <mml:mi>𝐃</mml:mi>
-                        <mml:mi>𝐐</mml:mi>
-                        <mml:mi>𝐃</mml:mi>
-                      </mml:mtd>
-                    </mml:mtr>
-                    <mml:mtr>
-                      <mml:mtd columnalign="right" style="text-align: right"/>
-                      <mml:mtd columnalign="left" style="text-align: left">
-                        <mml:mo>=</mml:mo>
-                        <mml:mi>𝐃</mml:mi>
-                        <mml:mrow>
-                          <mml:mo stretchy="true" form="prefix">(</mml:mo>
-                          <mml:mi>𝐕</mml:mi>
-                          <mml:mo>⊗</mml:mo>
-                          <mml:mi>𝐕</mml:mi>
-                          <mml:mo stretchy="true" form="postfix">)</mml:mo>
-                        </mml:mrow>
                         <mml:msup>
+                          <mml:mi>𝐐</mml:mi>
                           <mml:mrow>
-                            <mml:mo stretchy="true" form="prefix">(</mml:mo>
-                            <mml:mi>𝚲</mml:mi>
-                            <mml:mo>⊗</mml:mo>
-                            <mml:mi>𝐈</mml:mi>
+                            <mml:mi>ν</mml:mi>
                             <mml:mo>+</mml:mo>
-                            <mml:mi>𝐈</mml:mi>
-                            <mml:mo>⊗</mml:mo>
-                            <mml:mi>𝚲</mml:mi>
-                            <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                            <mml:mn>1</mml:mn>
                           </mml:mrow>
-                          <mml:mi>ν</mml:mi>
+                        </mml:msup>
+                        <mml:mi>𝐃</mml:mi>
+                      </mml:mtd>
+                    </mml:mtr>
+                    <mml:mtr>
+                      <mml:mtd columnalign="right" style="text-align: right"/>
+                      <mml:mtd columnalign="left" style="text-align: left">
+                        <mml:mo>=</mml:mo>
+                        <mml:mi>𝐃</mml:mi>
+                        <mml:mi>𝐕</mml:mi>
+                        <mml:msup>
+                          <mml:mi>𝚲</mml:mi>
+                          <mml:mrow>
+                            <mml:mi>ν</mml:mi>
+                            <mml:mo>+</mml:mo>
+                            <mml:mn>1</mml:mn>
+                          </mml:mrow>
                         </mml:msup>
                         <mml:msup>
-                          <mml:mrow>
-                            <mml:mo stretchy="true" form="prefix">(</mml:mo>
-                            <mml:mi>𝐕</mml:mi>
-                            <mml:mo>⊗</mml:mo>
-                            <mml:mi>𝐕</mml:mi>
-                            <mml:mo stretchy="true" form="postfix">)</mml:mo>
-                          </mml:mrow>
+                          <mml:mi>𝐕</mml:mi>
                           <mml:mi>T</mml:mi>
                         </mml:msup>
                         <mml:mi>𝐃</mml:mi>
@@ -900,52 +1078,22 @@ addressing a common limitation of periodic boundary conditions.
                       <mml:mtd columnalign="right" style="text-align: right"/>
                       <mml:mtd columnalign="left" style="text-align: left">
                         <mml:mo>=</mml:mo>
-                        <mml:mrow>
-                          <mml:mo stretchy="true" form="prefix">(</mml:mo>
-                          <mml:mover>
-                            <mml:mi>𝐕</mml:mi>
-                            <mml:mo accent="true">̃</mml:mo>
-                          </mml:mover>
-                          <mml:mo>⊗</mml:mo>
-                          <mml:mover>
-                            <mml:mi>𝐕</mml:mi>
-                            <mml:mo accent="true">̃</mml:mo>
-                          </mml:mover>
-                          <mml:mo stretchy="true" form="postfix">)</mml:mo>
-                        </mml:mrow>
-                        <mml:mrow>
-                          <mml:mo stretchy="true" form="prefix">(</mml:mo>
-                          <mml:mover>
-                            <mml:mi>𝚲</mml:mi>
-                            <mml:mo accent="true">̃</mml:mo>
-                          </mml:mover>
-                          <mml:mo>⊗</mml:mo>
-                          <mml:mi>𝐈</mml:mi>
-                          <mml:mo>+</mml:mo>
-                          <mml:mi>𝐈</mml:mi>
-                          <mml:mo>⊗</mml:mo>
-                          <mml:mover>
-                            <mml:mi>𝚲</mml:mi>
-                            <mml:mo accent="true">̃</mml:mo>
-                          </mml:mover>
-                          <mml:mo stretchy="true" form="postfix">)</mml:mo>
-                        </mml:mrow>
+                        <mml:mover>
+                          <mml:mi>𝐕</mml:mi>
+                          <mml:mo accent="true">̃</mml:mo>
+                        </mml:mover>
+                        <mml:mover>
+                          <mml:mi>𝚲</mml:mi>
+                          <mml:mo accent="true">̃</mml:mo>
+                        </mml:mover>
                         <mml:msup>
-                          <mml:mrow>
-                            <mml:mo stretchy="true" form="prefix">(</mml:mo>
-                            <mml:mover>
-                              <mml:mi>𝐕</mml:mi>
-                              <mml:mo accent="true">̃</mml:mo>
-                            </mml:mover>
-                            <mml:mo>⊗</mml:mo>
-                            <mml:mover>
-                              <mml:mi>𝐕</mml:mi>
-                              <mml:mo accent="true">̃</mml:mo>
-                            </mml:mover>
-                            <mml:mo stretchy="true" form="postfix">)</mml:mo>
-                          </mml:mrow>
+                          <mml:mover>
+                            <mml:mi>𝐕</mml:mi>
+                            <mml:mo accent="true">̃</mml:mo>
+                          </mml:mover>
                           <mml:mi>T</mml:mi>
                         </mml:msup>
+                        <mml:mi>.</mml:mi>
                       </mml:mtd>
                     </mml:mtr>
                   </mml:mtable>
@@ -953,8 +1101,13 @@ addressing a common limitation of periodic boundary conditions.
               </alternatives>
             </disp-formula>
           </p>
-          <p>where <inline-formula><alternatives><tex-math><![CDATA[\mathbf{D}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐃</mml:mi></mml:math></alternatives></inline-formula>
-      is a diagonal matrix with <inline-formula><alternatives><tex-math><![CDATA[D_{ii} = \sigma_i]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>D</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:msub><mml:mi>σ</mml:mi><mml:mi>i</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>.</p>
+          <p>In practice, we don’t scale the whole eigendecomposition.
+      Instead, we rescale each value/vector pair individually as we
+      iterate over the eigenvectors and values of
+      <inline-formula><alternatives><tex-math><![CDATA[Q_{\rho_1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:msub></mml:math></alternatives></inline-formula>
+      and <inline-formula><alternatives><tex-math><![CDATA[Q_{\rho_2}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:msub></mml:math></alternatives></inline-formula>
+      to create the corresponding values and vectors for the larger
+      matrix.</p>
         </sec>
         <sec id="step-4-efficient-computation-of-log-density">
           <title>Step 4: Efficient Computation of Log-Density</title>
@@ -962,18 +1115,21 @@ addressing a common limitation of periodic boundary conditions.
       compute:</p>
           <list list-type="order">
             <list-item>
-              <p>Log-determinant: <inline-formula><alternatives><tex-math><![CDATA[\log|\mathbf{\widetilde Q}| = \sum_{i,j} \log(\widetilde\lambda_i + \widetilde\lambda_j)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mover><mml:mi>𝐐</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:msub><mml:mo>∑</mml:mo><mml:mrow><mml:mi>i</mml:mi><mml:mo>,</mml:mo><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
+              <p>Log-determinant: <inline-formula><alternatives><tex-math><![CDATA[\log|\mathbf{\widetilde Q}| = \sum_{i,j} \log(\widetilde\lambda_{ij})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">|</mml:mo><mml:mover><mml:mi>𝐐</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo stretchy="true" form="postfix">|</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:msub><mml:mo>∑</mml:mo><mml:mrow><mml:mi>i</mml:mi><mml:mo>,</mml:mo><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>log</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>,
+          where <inline-formula><alternatives><tex-math><![CDATA[\widetilde\lambda_{ij}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub></mml:math></alternatives></inline-formula>
+          is <inline-formula><alternatives><tex-math><![CDATA[\left( \left\{\lambda_{\rho_1}\right\}_i + \left\{\lambda_{\rho_2}\right\}_j \right)^{\nu+1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">{</mml:mo><mml:msub><mml:mi>λ</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:msub><mml:mo stretchy="true" form="postfix">}</mml:mo></mml:mrow><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">{</mml:mo><mml:msub><mml:mi>λ</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:msub><mml:mo stretchy="true" form="postfix">}</mml:mo></mml:mrow><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mrow><mml:mi>ν</mml:mi><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:math></alternatives></inline-formula>
+          after rescaling with marginal standard deviations.</p>
             </list-item>
             <list-item>
-              <p>Quadratic form: <inline-formula><alternatives><tex-math><![CDATA[\mathbf{z}^T\mathbf{\widetilde Q}\mathbf{z} = \sum_{i,j} (\widetilde\lambda_i + \widetilde\lambda_j) y_{ij}^2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>𝐳</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mover><mml:mi>𝐐</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>𝐳</mml:mi><mml:mo>=</mml:mo><mml:msub><mml:mo>∑</mml:mo><mml:mrow><mml:mi>i</mml:mi><mml:mo>,</mml:mo><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>i</mml:mi></mml:msub><mml:mo>+</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:msubsup><mml:mi>y</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow><mml:mn>2</mml:mn></mml:msubsup></mml:mrow></mml:math></alternatives></inline-formula>,
-          where <inline-formula><alternatives><tex-math><![CDATA[y_{ij} = (\mathbf{\widetilde v}_j \otimes \mathbf{\widetilde v}_i)^T\mathbf{z}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>y</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>𝐯</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>j</mml:mi></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mover><mml:mi>𝐯</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>i</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mi>T</mml:mi></mml:msup><mml:mi>𝐳</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+              <p>Quadratic form: <inline-formula><alternatives><tex-math><![CDATA[\mathbf{z}^T\mathbf{\widetilde Q}\mathbf{z} = \sum_{i,j} (\widetilde\lambda_{ij}) y_{ij}^2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>𝐳</mml:mi><mml:mi>T</mml:mi></mml:msup><mml:mover><mml:mi>𝐐</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mi>𝐳</mml:mi><mml:mo>=</mml:mo><mml:msub><mml:mo>∑</mml:mo><mml:mrow><mml:mi>i</mml:mi><mml:mo>,</mml:mo><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mover><mml:mi>λ</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:msubsup><mml:mi>y</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow><mml:mn>2</mml:mn></mml:msubsup></mml:mrow></mml:math></alternatives></inline-formula>,
+          where <inline-formula><alternatives><tex-math><![CDATA[y_{ij} = \left(\left\{\mathbf{v}_{\rho_1}\right\}_i \otimes \left\{\mathbf{v}_{\rho_2}\right\}_j\right)^T\mathbf{z}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>y</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">{</mml:mo><mml:msub><mml:mi>𝐯</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:msub><mml:mo stretchy="true" form="postfix">}</mml:mo></mml:mrow><mml:mi>i</mml:mi></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mrow><mml:mo stretchy="true" form="prefix">{</mml:mo><mml:msub><mml:mi>𝐯</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:msub><mml:mo stretchy="true" form="postfix">}</mml:mo></mml:mrow><mml:mi>j</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mi>T</mml:mi></mml:msup><mml:mi>𝐳</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>.</p>
             </list-item>
           </list>
-          <p>This approach allows for efficient computation of the Gaussian
-      copula density without explicitly forming the full
-      <inline-formula><alternatives><tex-math><![CDATA[n^2 \times n^2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>n</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mo>×</mml:mo><mml:msup><mml:mi>n</mml:mi><mml:mn>2</mml:mn></mml:msup></mml:mrow></mml:math></alternatives></inline-formula>
-      precision matrix <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
-      or its inverse <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\Sigma}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝚺</mml:mi></mml:math></alternatives></inline-formula>.</p>
+          <p>This approach allows us to calculate the density of the spatial
+      copula by calculating and iterating over the spectral
+      decomposition of the smaller matrices, avoiding the formation of
+      <inline-formula><alternatives><tex-math><![CDATA[\mathbf Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
+      alltogether.</p>
         </sec>
       </sec>
       <sec id="circulant-and-folded-circulant-approximations">
@@ -1200,21 +1356,14 @@ addressing a common limitation of periodic boundary conditions.
           are given by the Discrete Fourier Transform (DFT) of
           <inline-formula><alternatives><tex-math><![CDATA[c]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>c</mml:mi></mml:math></alternatives></inline-formula>:
           <disp-formula><alternatives><tex-math><![CDATA[
-          \lambda_k = \sum_{j=0}^{n-1} c_j e^{-2\pi i jk/n}, \quad k = 0, 1, ..., n-1
-          ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:msub><mml:mi>λ</mml:mi><mml:mi>k</mml:mi></mml:msub><mml:mo>=</mml:mo><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>j</mml:mi><mml:mo>=</mml:mo><mml:mn>0</mml:mn></mml:mrow><mml:mrow><mml:mi>n</mml:mi><mml:mo>−</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:munderover><mml:msub><mml:mi>c</mml:mi><mml:mi>j</mml:mi></mml:msub><mml:msup><mml:mi>e</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>2</mml:mn><mml:mi>π</mml:mi><mml:mi>i</mml:mi><mml:mi>j</mml:mi><mml:mi>k</mml:mi><mml:mi>/</mml:mi><mml:mi>n</mml:mi></mml:mrow></mml:msup><mml:mo>,</mml:mo><mml:mspace width="1.0em"/><mml:mi>k</mml:mi><mml:mo>=</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mi>.</mml:mi><mml:mi>.</mml:mi><mml:mi>.</mml:mi><mml:mo>,</mml:mo><mml:mi>n</mml:mi><mml:mo>−</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:math></alternatives></disp-formula></p>
+          \lambda = \text{DFT}(c)
+          ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:mi>λ</mml:mi><mml:mo>=</mml:mo><mml:mtext mathvariant="normal">DFT</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>c</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></disp-formula></p>
             </list-item>
             <list-item>
               <p>Matrix-vector multiplication can be performed using the
           FFT: <disp-formula><alternatives><tex-math><![CDATA[
-          Cv = \frac1n\text{DFT}(\text{DFT}(c) \odot \text{IDFT}(v))
-          ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:mi>C</mml:mi><mml:mi>v</mml:mi><mml:mo>=</mml:mo><mml:mfrac><mml:mn>1</mml:mn><mml:mi>n</mml:mi></mml:mfrac><mml:mtext mathvariant="normal">DFT</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mtext mathvariant="normal">DFT</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>c</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>⊙</mml:mo><mml:mtext mathvariant="normal">IDFT</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>v</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></disp-formula></p>
-            </list-item>
-            <list-item>
-              <p>The determinant of <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>
-          is the product of its eigenvalues:
-          <disp-formula><alternatives><tex-math><![CDATA[
-          \det(C) = \prod_{k=0}^{n-1} \lambda_k
-          ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:mo>det</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>C</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:munderover><mml:mo>∏</mml:mo><mml:mrow><mml:mi>k</mml:mi><mml:mo>=</mml:mo><mml:mn>0</mml:mn></mml:mrow><mml:mrow><mml:mi>n</mml:mi><mml:mo>−</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:munderover><mml:msub><mml:mi>λ</mml:mi><mml:mi>k</mml:mi></mml:msub></mml:mrow></mml:math></alternatives></disp-formula></p>
+          Cv = \text{DFT}(\text{DFT}(c) \odot \text{IDFT}(v))
+          ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:mi>C</mml:mi><mml:mi>v</mml:mi><mml:mo>=</mml:mo><mml:mtext mathvariant="normal">DFT</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mtext mathvariant="normal">DFT</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>c</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>⊙</mml:mo><mml:mtext mathvariant="normal">IDFT</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>v</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></disp-formula></p>
             </list-item>
             <list-item>
               <p>When <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>
@@ -1482,56 +1631,31 @@ addressing a common limitation of periodic boundary conditions.
           <list list-type="order">
             <list-item>
               <p>The eigenvalues of <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>
-          are given by the 2D DFT of <inline-formula><alternatives><tex-math><![CDATA[\mathbf c]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐜</mml:mi></mml:math></alternatives></inline-formula>:
-          <disp-formula><alternatives><tex-math><![CDATA[
-          \Lambda_{k,l} = \sum_{i=0}^{n-1} \sum_{j=0}^{N-1} c_{ij} e^{-2\pi i (ki/n + lj/N)}, \quad k = 0, \dots, n-1, l = 0, \dots, N-1
-          ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:msub><mml:mi>Λ</mml:mi><mml:mrow><mml:mi>k</mml:mi><mml:mo>,</mml:mo><mml:mi>l</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>i</mml:mi><mml:mo>=</mml:mo><mml:mn>0</mml:mn></mml:mrow><mml:mrow><mml:mi>n</mml:mi><mml:mo>−</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:munderover><mml:munderover><mml:mo>∑</mml:mo><mml:mrow><mml:mi>j</mml:mi><mml:mo>=</mml:mo><mml:mn>0</mml:mn></mml:mrow><mml:mrow><mml:mi>N</mml:mi><mml:mo>−</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:munderover><mml:msub><mml:mi>c</mml:mi><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:msup><mml:mi>e</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>2</mml:mn><mml:mi>π</mml:mi><mml:mi>i</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>k</mml:mi><mml:mi>i</mml:mi><mml:mi>/</mml:mi><mml:mi>n</mml:mi><mml:mo>+</mml:mo><mml:mi>l</mml:mi><mml:mi>j</mml:mi><mml:mi>/</mml:mi><mml:mi>N</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:msup><mml:mo>,</mml:mo><mml:mspace width="1.0em"/><mml:mi>k</mml:mi><mml:mo>=</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:mi>n</mml:mi><mml:mo>−</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mi>l</mml:mi><mml:mo>=</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:mi>N</mml:mi><mml:mo>−</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:math></alternatives></disp-formula></p>
+          are given by the 2D DFT of <inline-formula><alternatives><tex-math><![CDATA[\mathbf c]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐜</mml:mi></mml:math></alternatives></inline-formula>.</p>
             </list-item>
             <list-item>
               <p>Matrix-vector multiplication can be performed using the 2D
-          FFT: <disp-formula><alternatives><tex-math><![CDATA[
-          Cv = \text{IDFT2}(\text{DFT2}(c) \odot \text{DFT2}(v))
-          ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:mi>C</mml:mi><mml:mi>v</mml:mi><mml:mo>=</mml:mo><mml:mtext mathvariant="normal">IDFT2</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mtext mathvariant="normal">DFT2</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>c</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>⊙</mml:mo><mml:mtext mathvariant="normal">DFT2</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>v</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></disp-formula></p>
+          FFT.</p>
             </list-item>
             <list-item>
-              <p>The determinant of <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>
-          is the product of its eigenvalues:
-          <disp-formula><alternatives><tex-math><![CDATA[
-          \det(C) = \prod_{k=0}^{n-1} \prod_{l=0}^{N-1} \Lambda_{k,l}
-          ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:mo>det</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>C</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:munderover><mml:mo>∏</mml:mo><mml:mrow><mml:mi>k</mml:mi><mml:mo>=</mml:mo><mml:mn>0</mml:mn></mml:mrow><mml:mrow><mml:mi>n</mml:mi><mml:mo>−</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:munderover><mml:munderover><mml:mo>∏</mml:mo><mml:mrow><mml:mi>l</mml:mi><mml:mo>=</mml:mo><mml:mn>0</mml:mn></mml:mrow><mml:mrow><mml:mi>N</mml:mi><mml:mo>−</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:munderover><mml:msub><mml:mi>Λ</mml:mi><mml:mrow><mml:mi>k</mml:mi><mml:mo>,</mml:mo><mml:mi>l</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:math></alternatives></disp-formula></p>
+              <p>When <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>
+          is non singular, then the inverse is also a BCCB matrix and
+          thus determined by its base matrix.</p>
             </list-item>
           </list>
         </sec>
-        <sec id="computational-advantages">
-          <title>Computational Advantages</title>
-          <p>The circulant structure allows for efficient computation using
-      the Fast Fourier Transform (FFT):</p>
-          <list list-type="order">
-            <list-item>
-              <p>Matrix-vector multiplication: For a circulant matrix C with
-          base c and a vector v <disp-formula><alternatives><tex-math><![CDATA[
-          Cv = \sqrt{n} \text{DFT}(\text{DFT}(c) \odot \text{IDFT}(v)),
-          ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:mi>C</mml:mi><mml:mi>v</mml:mi><mml:mo>=</mml:mo><mml:msqrt><mml:mi>n</mml:mi></mml:msqrt><mml:mtext mathvariant="normal">DFT</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mtext mathvariant="normal">DFT</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>c</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>⊙</mml:mo><mml:mtext mathvariant="normal">IDFT</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>v</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mo>,</mml:mo></mml:mrow></mml:math></alternatives></disp-formula></p>
-            </list-item>
-            <list-item>
-              <p>Matrix inverse: The base of <inline-formula><alternatives><tex-math><![CDATA[C^{-1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>C</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:math></alternatives></inline-formula>
-          is given by <disp-formula><alternatives><tex-math><![CDATA[
-          \frac{1}{n} \text{IDFT}(\text{DFT}(c)^{-1}).
-          ]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:mrow><mml:mfrac><mml:mn>1</mml:mn><mml:mi>n</mml:mi></mml:mfrac><mml:mtext mathvariant="normal">IDFT</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mtext mathvariant="normal">DFT</mml:mtext><mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>c</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow><mml:mi>.</mml:mi></mml:mrow></mml:math></alternatives></disp-formula></p>
-            </list-item>
-          </list>
-        </sec>
-        <sec id="approximations-for-q1">
-          <title>Approximations for Q1</title>
-          <p>Let <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
-      be the precision matrix of a one-dimensional AR(1) process with n
-      observations. The exact form of <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+        <sec id="approximations-for-q_rho">
+          <title>Approximations for <inline-formula><alternatives><tex-math><![CDATA[Q_{\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula></title>
+          <p>Let <inline-formula><alternatives><tex-math><![CDATA[Q_{\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      be the precision matrix of a one-dimensional AR(1) process with
+      correlation <inline-formula><alternatives><tex-math><![CDATA[\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ρ</mml:mi></mml:math></alternatives></inline-formula>.
+      The exact form of <inline-formula><alternatives><tex-math><![CDATA[Q_{\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
       is:</p>
           <p>
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \mathbf{Q}_1 = \frac{1}{1-\rho^2}
+      \mathbf{Q}_\rho = \frac{1}{1-\rho^2}
       \begin{bmatrix}
       1 & -\rho & 0 & \cdots & 0 \\
       -\rho & 1+\rho^2 & -\rho & \cdots & 0 \\
@@ -1544,7 +1668,7 @@ addressing a common limitation of periodic boundary conditions.
                   <mml:mrow>
                     <mml:msub>
                       <mml:mi>𝐐</mml:mi>
-                      <mml:mn>1</mml:mn>
+                      <mml:mi>ρ</mml:mi>
                     </mml:msub>
                     <mml:mo>=</mml:mo>
                     <mml:mfrac>
@@ -1670,14 +1794,14 @@ addressing a common limitation of periodic boundary conditions.
           </p>
           <sec id="circulant-approximation">
             <title>Circulant Approximation</title>
-            <p>The circulant approximation to <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>,
-        denoted as <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_1^{(circ)}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msubsup><mml:mi>𝐐</mml:mi><mml:mn>1</mml:mn><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>c</mml:mi><mml:mi>i</mml:mi><mml:mi>r</mml:mi><mml:mi>c</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:msubsup></mml:math></alternatives></inline-formula>,
+            <p>The circulant approximation to <inline-formula><alternatives><tex-math><![CDATA[Q_\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>,
+        denoted as <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_\rho^{(circ)}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msubsup><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>c</mml:mi><mml:mi>i</mml:mi><mml:mi>r</mml:mi><mml:mi>c</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:msubsup></mml:math></alternatives></inline-formula>,
         is:</p>
             <p>
               <disp-formula>
                 <alternatives>
                   <tex-math><![CDATA[
-        \mathbf{Q}_1^{(circ)} = \frac{1}{1-\rho^2}
+        \mathbf{Q}_\rho^{(circ)} = \frac{1}{1-\rho^2}
         \begin{bmatrix}
         1+\rho^2 & -\rho & 0 & \cdots & 0 & -\rho \\
         -\rho & 1+\rho^2 & -\rho & \cdots & 0 & 0 \\
@@ -1690,7 +1814,7 @@ addressing a common limitation of periodic boundary conditions.
                     <mml:mrow>
                       <mml:msubsup>
                         <mml:mi>𝐐</mml:mi>
-                        <mml:mn>1</mml:mn>
+                        <mml:mi>ρ</mml:mi>
                         <mml:mrow>
                           <mml:mo stretchy="true" form="prefix">(</mml:mo>
                           <mml:mi>c</mml:mi>
@@ -1856,7 +1980,7 @@ addressing a common limitation of periodic boundary conditions.
           <sec id="folded-circulant-approximation">
             <title>Folded Circulant Approximation</title>
             <p>The folded circulant approximation,
-        <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_1^{(fold)}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msubsup><mml:mi>𝐐</mml:mi><mml:mn>1</mml:mn><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>f</mml:mi><mml:mi>o</mml:mi><mml:mi>l</mml:mi><mml:mi>d</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:msubsup></mml:math></alternatives></inline-formula>,
+        <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_\rho^{(fold)}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msubsup><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>f</mml:mi><mml:mi>o</mml:mi><mml:mi>l</mml:mi><mml:mi>d</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:msubsup></mml:math></alternatives></inline-formula>,
         is based on a reflected version of the data. We double the data
         by reflecting it, giving us the data
         <inline-formula><alternatives><tex-math><![CDATA[x_1,  \dots, x_n, x_n, \dots, x_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>x</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>.
@@ -1869,7 +1993,7 @@ addressing a common limitation of periodic boundary conditions.
               <disp-formula>
                 <alternatives>
                   <tex-math><![CDATA[
-        \mathbf{Q}_1^{(fold)} = \frac{1}{1-\rho^2}
+        \mathbf{Q}_\rho^{(fold)} = \frac{1}{1-\rho^2}
         \begin{bmatrix}
         1-\rho+\rho^2 & -\rho & 0 & \cdots & 0 & 0 \\
         -\rho & 1+\rho^2 & -\rho & \cdots & 0 & 0 \\
@@ -1882,7 +2006,7 @@ addressing a common limitation of periodic boundary conditions.
                     <mml:mrow>
                       <mml:msubsup>
                         <mml:mi>𝐐</mml:mi>
-                        <mml:mn>1</mml:mn>
+                        <mml:mi>ρ</mml:mi>
                         <mml:mrow>
                           <mml:mo stretchy="true" form="prefix">(</mml:mo>
                           <mml:mi>f</mml:mi>
@@ -2054,14 +2178,14 @@ addressing a common limitation of periodic boundary conditions.
         <sec id="extension-to-the-full-q-matrix">
           <title>Extension to the Full Q Matrix</title>
           <p>For a two-dimensional spatial field on an
-      <inline-formula><alternatives><tex-math><![CDATA[n \times n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>n</mml:mi><mml:mo>×</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+      <inline-formula><alternatives><tex-math><![CDATA[n_1 \times n_2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>n</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>×</mml:mo><mml:msub><mml:mi>n</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
       grid, we construct the full precision matrix Q using a Kronecker
       sum:</p>
           <p>
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \mathbf{Q} = (\mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1)^{(\nu + 1)}
+      \mathbf{Q} = \left( \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2} \right)^{(\nu + 1)}, \quad \nu \in \{0, 1, 2\}
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
@@ -2072,16 +2196,34 @@ addressing a common limitation of periodic boundary conditions.
                         <mml:mo stretchy="true" form="prefix">(</mml:mo>
                         <mml:msub>
                           <mml:mi>𝐐</mml:mi>
-                          <mml:mn>1</mml:mn>
+                          <mml:msub>
+                            <mml:mi>ρ</mml:mi>
+                            <mml:mn>1</mml:mn>
+                          </mml:msub>
                         </mml:msub>
                         <mml:mo>⊗</mml:mo>
-                        <mml:mi>𝐈</mml:mi>
+                        <mml:msub>
+                          <mml:mi>𝐈</mml:mi>
+                          <mml:msub>
+                            <mml:mi>𝐧</mml:mi>
+                            <mml:mn>𝟐</mml:mn>
+                          </mml:msub>
+                        </mml:msub>
                         <mml:mo>+</mml:mo>
-                        <mml:mi>𝐈</mml:mi>
+                        <mml:msub>
+                          <mml:mi>𝐈</mml:mi>
+                          <mml:msub>
+                            <mml:mi>𝐧</mml:mi>
+                            <mml:mn>𝟏</mml:mn>
+                          </mml:msub>
+                        </mml:msub>
                         <mml:mo>⊗</mml:mo>
                         <mml:msub>
                           <mml:mi>𝐐</mml:mi>
-                          <mml:mn>1</mml:mn>
+                          <mml:msub>
+                            <mml:mi>ρ</mml:mi>
+                            <mml:mn>2</mml:mn>
+                          </mml:msub>
                         </mml:msub>
                         <mml:mo stretchy="true" form="postfix">)</mml:mo>
                       </mml:mrow>
@@ -2093,17 +2235,28 @@ addressing a common limitation of periodic boundary conditions.
                         <mml:mo stretchy="true" form="postfix">)</mml:mo>
                       </mml:mrow>
                     </mml:msup>
+                    <mml:mo>,</mml:mo>
+                    <mml:mspace width="1.0em"/>
+                    <mml:mi>ν</mml:mi>
+                    <mml:mo>∈</mml:mo>
+                    <mml:mo stretchy="false" form="prefix">{</mml:mo>
+                    <mml:mn>0</mml:mn>
+                    <mml:mo>,</mml:mo>
+                    <mml:mn>1</mml:mn>
+                    <mml:mo>,</mml:mo>
+                    <mml:mn>2</mml:mn>
+                    <mml:mo stretchy="false" form="postfix">}</mml:mo>
                   </mml:mrow>
                 </mml:math>
               </alternatives>
             </disp-formula>
           </p>
           <p>where <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
-      denotes the Kronecker product, I is the
-      <inline-formula><alternatives><tex-math><![CDATA[n \times n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>n</mml:mi><mml:mo>×</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+      denotes the Kronecker product, <inline-formula><alternatives><tex-math><![CDATA[I_n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>I</mml:mi><mml:mi>n</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      is the <inline-formula><alternatives><tex-math><![CDATA[n \times n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>n</mml:mi><mml:mo>×</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
       identity matrix, and <inline-formula><alternatives><tex-math><![CDATA[\nu]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ν</mml:mi></mml:math></alternatives></inline-formula>
       is a smoothness parameter.</p>
-          <p>When we approximate <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+          <p>When we approximate <inline-formula><alternatives><tex-math><![CDATA[Q_\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
       with a circulant matrix, this Kronecker sum results in a
       block-circulant matrix with circulant blocks (BCCB). To see this,
       let’s consider the case where <inline-formula><alternatives><tex-math><![CDATA[\nu = 0]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>ν</mml:mi><mml:mo>=</mml:mo><mml:mn>0</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>
@@ -2112,7 +2265,7 @@ addressing a common limitation of periodic boundary conditions.
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \mathbf{Q} = \mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1
+      \mathbf{Q} = \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2}
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
@@ -2120,60 +2273,145 @@ addressing a common limitation of periodic boundary conditions.
                     <mml:mo>=</mml:mo>
                     <mml:msub>
                       <mml:mi>𝐐</mml:mi>
-                      <mml:mn>1</mml:mn>
+                      <mml:msub>
+                        <mml:mi>ρ</mml:mi>
+                        <mml:mn>1</mml:mn>
+                      </mml:msub>
                     </mml:msub>
                     <mml:mo>⊗</mml:mo>
-                    <mml:mi>𝐈</mml:mi>
+                    <mml:msub>
+                      <mml:mi>𝐈</mml:mi>
+                      <mml:msub>
+                        <mml:mi>𝐧</mml:mi>
+                        <mml:mn>𝟐</mml:mn>
+                      </mml:msub>
+                    </mml:msub>
                     <mml:mo>+</mml:mo>
-                    <mml:mi>𝐈</mml:mi>
+                    <mml:msub>
+                      <mml:mi>𝐈</mml:mi>
+                      <mml:msub>
+                        <mml:mi>𝐧</mml:mi>
+                        <mml:mn>𝟏</mml:mn>
+                      </mml:msub>
+                    </mml:msub>
                     <mml:mo>⊗</mml:mo>
                     <mml:msub>
                       <mml:mi>𝐐</mml:mi>
-                      <mml:mn>1</mml:mn>
+                      <mml:msub>
+                        <mml:mi>ρ</mml:mi>
+                        <mml:mn>2</mml:mn>
+                      </mml:msub>
                     </mml:msub>
                   </mml:mrow>
                 </mml:math>
               </alternatives>
             </disp-formula>
           </p>
-          <p>Now, let <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
-      be approximated by a circulant matrix C with base vector
-      <inline-formula><alternatives><tex-math><![CDATA[c = [c_, c_1, ..., c_{n-1}]]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>c</mml:mi><mml:mo>=</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">[</mml:mo><mml:msub><mml:mi>c</mml:mi><mml:mo>,</mml:mo></mml:msub><mml:msub><mml:mi>c</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>.</mml:mi><mml:mi>.</mml:mi><mml:mi>.</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>c</mml:mi><mml:mrow><mml:mi>n</mml:mi><mml:mo>−</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">]</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>.
+          <p>Now, let the two AR(1) matrices be approximated by a circulant
+      matrix <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>
+      with base vector <inline-formula><alternatives><tex-math><![CDATA[c = [c_, c_1, ..., c_{n-1}]]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>c</mml:mi><mml:mo>=</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">[</mml:mo><mml:msub><mml:mi>c</mml:mi><mml:mo>,</mml:mo></mml:msub><mml:msub><mml:mi>c</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>.</mml:mi><mml:mi>.</mml:mi><mml:mi>.</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>c</mml:mi><mml:mrow><mml:mi>n</mml:mi><mml:mo>−</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">]</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>.
       Then:</p>
           <p>
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \mathbf{Q}_1 \approx \mathbf{C} = 
-      \begin{pmatrix}
-      c_0 & c_1 & \cdots & c_{n-1} \\
-      c_{n-1} & c_0 & \cdots & c_{n-2} \\
-      \vdots & \vdots & \ddots & \vdots \\
-      c_1 & c_2 & \cdots & c_0
-      \end{pmatrix}
+      \mathbf{Q}_{\rho_1} \approx \mathbf{C_{\rho_1}} = \frac{1}{1-\rho_1^2}
+      \begin{bmatrix}
+      1+\rho_1^2 & -\rho_1 & 0 & \cdots & 0 & -\rho_1 \\
+      -\rho_1 & 1+\rho_1^2 & -\rho_1 & \cdots & 0 & 0 \\
+      0 & -\rho_1 & 1+\rho_1^2 & \cdots & 0 & 0 \\
+      \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+      -\rho_1 & 0 & 0 & \cdots & -\rho_1 & 1+\rho_1^2
+      \end{bmatrix},
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
                     <mml:msub>
                       <mml:mi>𝐐</mml:mi>
-                      <mml:mn>1</mml:mn>
+                      <mml:msub>
+                        <mml:mi>ρ</mml:mi>
+                        <mml:mn>1</mml:mn>
+                      </mml:msub>
                     </mml:msub>
                     <mml:mo>≈</mml:mo>
-                    <mml:mi>𝐂</mml:mi>
+                    <mml:msub>
+                      <mml:mi>𝐂</mml:mi>
+                      <mml:msub>
+                        <mml:mi>𝛒</mml:mi>
+                        <mml:mn>𝟏</mml:mn>
+                      </mml:msub>
+                    </mml:msub>
                     <mml:mo>=</mml:mo>
+                    <mml:mfrac>
+                      <mml:mn>1</mml:mn>
+                      <mml:mrow>
+                        <mml:mn>1</mml:mn>
+                        <mml:mo>−</mml:mo>
+                        <mml:msubsup>
+                          <mml:mi>ρ</mml:mi>
+                          <mml:mn>1</mml:mn>
+                          <mml:mn>2</mml:mn>
+                        </mml:msubsup>
+                      </mml:mrow>
+                    </mml:mfrac>
                     <mml:mrow>
-                      <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                      <mml:mo stretchy="true" form="prefix">[</mml:mo>
                       <mml:mtable>
                         <mml:mtr>
                           <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>1</mml:mn>
+                            <mml:mo>+</mml:mo>
+                            <mml:msubsup>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
+                              <mml:mn>2</mml:mn>
+                            </mml:msubsup>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
                             <mml:msub>
-                              <mml:mi>c</mml:mi>
-                              <mml:mn>0</mml:mn>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
                             </mml:msub>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
                             <mml:msub>
-                              <mml:mi>c</mml:mi>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
+                            <mml:msub>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>1</mml:mn>
+                            <mml:mo>+</mml:mo>
+                            <mml:msubsup>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
+                              <mml:mn>2</mml:mn>
+                            </mml:msubsup>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
+                            <mml:msub>
+                              <mml:mi>ρ</mml:mi>
                               <mml:mn>1</mml:mn>
                             </mml:msub>
                           </mml:mtd>
@@ -2181,48 +2419,46 @@ addressing a common limitation of periodic boundary conditions.
                             <mml:mi>⋯</mml:mi>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:msub>
-                              <mml:mi>c</mml:mi>
-                              <mml:mrow>
-                                <mml:mi>n</mml:mi>
-                                <mml:mo>−</mml:mo>
-                                <mml:mn>1</mml:mn>
-                              </mml:mrow>
-                            </mml:msub>
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
                           </mml:mtd>
                         </mml:mtr>
                         <mml:mtr>
                           <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
                             <mml:msub>
-                              <mml:mi>c</mml:mi>
-                              <mml:mrow>
-                                <mml:mi>n</mml:mi>
-                                <mml:mo>−</mml:mo>
-                                <mml:mn>1</mml:mn>
-                              </mml:mrow>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
                             </mml:msub>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:msub>
-                              <mml:mi>c</mml:mi>
-                              <mml:mn>0</mml:mn>
-                            </mml:msub>
+                            <mml:mn>1</mml:mn>
+                            <mml:mo>+</mml:mo>
+                            <mml:msubsup>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
+                              <mml:mn>2</mml:mn>
+                            </mml:msubsup>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mi>⋯</mml:mi>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:msub>
-                              <mml:mi>c</mml:mi>
-                              <mml:mrow>
-                                <mml:mi>n</mml:mi>
-                                <mml:mo>−</mml:mo>
-                                <mml:mn>2</mml:mn>
-                              </mml:mrow>
-                            </mml:msub>
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
                           </mml:mtd>
                         </mml:mtr>
                         <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mi>⋮</mml:mi>
                           </mml:mtd>
@@ -2235,124 +2471,214 @@ addressing a common limitation of periodic boundary conditions.
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mi>⋮</mml:mi>
                           </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
+                          </mml:mtd>
                         </mml:mtr>
                         <mml:mtr>
                           <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
                             <mml:msub>
-                              <mml:mi>c</mml:mi>
+                              <mml:mi>ρ</mml:mi>
                               <mml:mn>1</mml:mn>
                             </mml:msub>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:msub>
-                              <mml:mi>c</mml:mi>
-                              <mml:mn>2</mml:mn>
-                            </mml:msub>
+                            <mml:mn>0</mml:mn>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>0</mml:mn>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mi>⋯</mml:mi>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
                             <mml:msub>
-                              <mml:mi>c</mml:mi>
-                              <mml:mn>0</mml:mn>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
                             </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mn>1</mml:mn>
+                            <mml:mo>+</mml:mo>
+                            <mml:msubsup>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
+                              <mml:mn>2</mml:mn>
+                            </mml:msubsup>
                           </mml:mtd>
                         </mml:mtr>
                       </mml:mtable>
-                      <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                      <mml:mo stretchy="true" form="postfix">]</mml:mo>
                     </mml:mrow>
+                    <mml:mo>,</mml:mo>
                   </mml:mrow>
                 </mml:math>
               </alternatives>
             </disp-formula>
           </p>
-          <p>The Kronecker product <inline-formula><alternatives><tex-math><![CDATA[C \otimes I]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>C</mml:mi><mml:mo>⊗</mml:mo><mml:mi>I</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+          <p>and <inline-formula><alternatives><tex-math><![CDATA[C_{\rho_2}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>C</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:msub></mml:math></alternatives></inline-formula>
+      is defined similarly. The Kronecker product
+      <inline-formula><alternatives><tex-math><![CDATA[\mathbf C_{\rho_1} \otimes \mathbf I_{n_2}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝐂</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mi>𝐈</mml:mi><mml:msub><mml:mi>n</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
       results in a block matrix where each block is a scalar multiple of
-      I:</p>
+      <inline-formula><alternatives><tex-math><![CDATA[I_{n_2}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>I</mml:mi><mml:msub><mml:mi>n</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:msub></mml:math></alternatives></inline-formula>:</p>
           <p>
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \mathbf{C} \otimes \mathbf{I} = 
+      \mathbf{C_{\rho_1}} \otimes \mathbf{I_{n_2}} = \frac{1}{1-\rho_1^2}
       \begin{pmatrix}
-      c_0\mathbf{I} & c_1\mathbf{I} & \cdots & c_{n-1}\mathbf{I} \\
-      c_{n-1}\mathbf{I} & c_0\mathbf{I} & \cdots & c_{n-2}\mathbf{I} \\
-      \vdots & \vdots & \ddots & \vdots \\
-      c_1\mathbf{I} & c_2\mathbf{I} & \cdots & c_0\mathbf{I}
-      \end{pmatrix}
+      (1+\rho_1^2)\mathbf{I_{n_2}} & -\rho_1\mathbf{I_{n_2}} & \dots & \cdots & -\rho_1\mathbf{I_{n_2}} \\
+      -\rho_1\mathbf{I_{n_2}} & (1+\rho_1^2)\mathbf{I_{n_2}} & -\rho_1 \mathbf{I_{n_2}} & \cdots & \vdots  \\
+      \vdots & \ddots & \ddots & \ddots & \vdots \\
+      \vdots & \ddots & -\rho_1\mathbf{I_{n_2}} & (1+\rho_1^2)\mathbf{I_{n_2}} & -\rho_1 \mathbf{I_{n_2}}  \\
+      -\rho_1\mathbf{I_{n_2}} & \dots & \cdots & -\rho_1 \mathbf{I_{n_2}} & (1+\rho_1^2)\mathbf{I_{n_2}}
+      \end{pmatrix}.
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
-                    <mml:mi>𝐂</mml:mi>
+                    <mml:msub>
+                      <mml:mi>𝐂</mml:mi>
+                      <mml:msub>
+                        <mml:mi>𝛒</mml:mi>
+                        <mml:mn>𝟏</mml:mn>
+                      </mml:msub>
+                    </mml:msub>
                     <mml:mo>⊗</mml:mo>
-                    <mml:mi>𝐈</mml:mi>
+                    <mml:msub>
+                      <mml:mi>𝐈</mml:mi>
+                      <mml:msub>
+                        <mml:mi>𝐧</mml:mi>
+                        <mml:mn>𝟐</mml:mn>
+                      </mml:msub>
+                    </mml:msub>
                     <mml:mo>=</mml:mo>
+                    <mml:mfrac>
+                      <mml:mn>1</mml:mn>
+                      <mml:mrow>
+                        <mml:mn>1</mml:mn>
+                        <mml:mo>−</mml:mo>
+                        <mml:msubsup>
+                          <mml:mi>ρ</mml:mi>
+                          <mml:mn>1</mml:mn>
+                          <mml:mn>2</mml:mn>
+                        </mml:msubsup>
+                      </mml:mrow>
+                    </mml:mfrac>
                     <mml:mrow>
                       <mml:mo stretchy="true" form="prefix">(</mml:mo>
                       <mml:mtable>
                         <mml:mtr>
                           <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mrow>
+                              <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                              <mml:mn>1</mml:mn>
+                              <mml:mo>+</mml:mo>
+                              <mml:msubsup>
+                                <mml:mi>ρ</mml:mi>
+                                <mml:mn>1</mml:mn>
+                                <mml:mn>2</mml:mn>
+                              </mml:msubsup>
+                              <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                            </mml:mrow>
                             <mml:msub>
-                              <mml:mi>c</mml:mi>
-                              <mml:mn>0</mml:mn>
+                              <mml:mi>𝐈</mml:mi>
+                              <mml:msub>
+                                <mml:mi>𝐧</mml:mi>
+                                <mml:mn>𝟐</mml:mn>
+                              </mml:msub>
                             </mml:msub>
-                            <mml:mi>𝐈</mml:mi>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
                             <mml:msub>
-                              <mml:mi>c</mml:mi>
+                              <mml:mi>ρ</mml:mi>
                               <mml:mn>1</mml:mn>
                             </mml:msub>
-                            <mml:mi>𝐈</mml:mi>
+                            <mml:msub>
+                              <mml:mi>𝐈</mml:mi>
+                              <mml:msub>
+                                <mml:mi>𝐧</mml:mi>
+                                <mml:mn>𝟐</mml:mn>
+                              </mml:msub>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>…</mml:mi>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mi>⋯</mml:mi>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
                             <mml:msub>
-                              <mml:mi>c</mml:mi>
-                              <mml:mrow>
-                                <mml:mi>n</mml:mi>
-                                <mml:mo>−</mml:mo>
-                                <mml:mn>1</mml:mn>
-                              </mml:mrow>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
                             </mml:msub>
-                            <mml:mi>𝐈</mml:mi>
+                            <mml:msub>
+                              <mml:mi>𝐈</mml:mi>
+                              <mml:msub>
+                                <mml:mi>𝐧</mml:mi>
+                                <mml:mn>𝟐</mml:mn>
+                              </mml:msub>
+                            </mml:msub>
                           </mml:mtd>
                         </mml:mtr>
                         <mml:mtr>
                           <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
                             <mml:msub>
-                              <mml:mi>c</mml:mi>
-                              <mml:mrow>
-                                <mml:mi>n</mml:mi>
-                                <mml:mo>−</mml:mo>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                            <mml:msub>
+                              <mml:mi>𝐈</mml:mi>
+                              <mml:msub>
+                                <mml:mi>𝐧</mml:mi>
+                                <mml:mn>𝟐</mml:mn>
+                              </mml:msub>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mrow>
+                              <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                              <mml:mn>1</mml:mn>
+                              <mml:mo>+</mml:mo>
+                              <mml:msubsup>
+                                <mml:mi>ρ</mml:mi>
                                 <mml:mn>1</mml:mn>
-                              </mml:mrow>
-                            </mml:msub>
-                            <mml:mi>𝐈</mml:mi>
-                          </mml:mtd>
-                          <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:msub>
-                              <mml:mi>c</mml:mi>
-                              <mml:mn>0</mml:mn>
-                            </mml:msub>
-                            <mml:mi>𝐈</mml:mi>
-                          </mml:mtd>
-                          <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mi>⋯</mml:mi>
-                          </mml:mtd>
-                          <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:msub>
-                              <mml:mi>c</mml:mi>
-                              <mml:mrow>
-                                <mml:mi>n</mml:mi>
-                                <mml:mo>−</mml:mo>
                                 <mml:mn>2</mml:mn>
-                              </mml:mrow>
+                              </mml:msubsup>
+                              <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                            </mml:mrow>
+                            <mml:msub>
+                              <mml:mi>𝐈</mml:mi>
+                              <mml:msub>
+                                <mml:mi>𝐧</mml:mi>
+                                <mml:mn>𝟐</mml:mn>
+                              </mml:msub>
                             </mml:msub>
-                            <mml:mi>𝐈</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
+                            <mml:msub>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                            <mml:msub>
+                              <mml:mi>𝐈</mml:mi>
+                              <mml:msub>
+                                <mml:mi>𝐧</mml:mi>
+                                <mml:mn>𝟐</mml:mn>
+                              </mml:msub>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋯</mml:mi>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>⋮</mml:mi>
                           </mml:mtd>
                         </mml:mtr>
                         <mml:mtr>
@@ -2360,7 +2686,10 @@ addressing a common limitation of periodic boundary conditions.
                             <mml:mi>⋮</mml:mi>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mi>⋮</mml:mi>
+                            <mml:mo>⋱</mml:mo>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mo>⋱</mml:mo>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mo>⋱</mml:mo>
@@ -2371,64 +2700,170 @@ addressing a common limitation of periodic boundary conditions.
                         </mml:mtr>
                         <mml:mtr>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:msub>
-                              <mml:mi>c</mml:mi>
-                              <mml:mn>1</mml:mn>
-                            </mml:msub>
-                            <mml:mi>𝐈</mml:mi>
+                            <mml:mi>⋮</mml:mi>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mo>⋱</mml:mo>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
                             <mml:msub>
-                              <mml:mi>c</mml:mi>
-                              <mml:mn>2</mml:mn>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
                             </mml:msub>
-                            <mml:mi>𝐈</mml:mi>
+                            <mml:msub>
+                              <mml:mi>𝐈</mml:mi>
+                              <mml:msub>
+                                <mml:mi>𝐧</mml:mi>
+                                <mml:mn>𝟐</mml:mn>
+                              </mml:msub>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mrow>
+                              <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                              <mml:mn>1</mml:mn>
+                              <mml:mo>+</mml:mo>
+                              <mml:msubsup>
+                                <mml:mi>ρ</mml:mi>
+                                <mml:mn>1</mml:mn>
+                                <mml:mn>2</mml:mn>
+                              </mml:msubsup>
+                              <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                            </mml:mrow>
+                            <mml:msub>
+                              <mml:mi>𝐈</mml:mi>
+                              <mml:msub>
+                                <mml:mi>𝐧</mml:mi>
+                                <mml:mn>𝟐</mml:mn>
+                              </mml:msub>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
+                            <mml:msub>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                            <mml:msub>
+                              <mml:mi>𝐈</mml:mi>
+                              <mml:msub>
+                                <mml:mi>𝐧</mml:mi>
+                                <mml:mn>𝟐</mml:mn>
+                              </mml:msub>
+                            </mml:msub>
+                          </mml:mtd>
+                        </mml:mtr>
+                        <mml:mtr>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
+                            <mml:msub>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                            <mml:msub>
+                              <mml:mi>𝐈</mml:mi>
+                              <mml:msub>
+                                <mml:mi>𝐧</mml:mi>
+                                <mml:mn>𝟐</mml:mn>
+                              </mml:msub>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>…</mml:mi>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mi>⋯</mml:mi>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mi>−</mml:mi>
                             <mml:msub>
-                              <mml:mi>c</mml:mi>
-                              <mml:mn>0</mml:mn>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
                             </mml:msub>
-                            <mml:mi>𝐈</mml:mi>
+                            <mml:msub>
+                              <mml:mi>𝐈</mml:mi>
+                              <mml:msub>
+                                <mml:mi>𝐧</mml:mi>
+                                <mml:mn>𝟐</mml:mn>
+                              </mml:msub>
+                            </mml:msub>
+                          </mml:mtd>
+                          <mml:mtd columnalign="center" style="text-align: center">
+                            <mml:mrow>
+                              <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                              <mml:mn>1</mml:mn>
+                              <mml:mo>+</mml:mo>
+                              <mml:msubsup>
+                                <mml:mi>ρ</mml:mi>
+                                <mml:mn>1</mml:mn>
+                                <mml:mn>2</mml:mn>
+                              </mml:msubsup>
+                              <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                            </mml:mrow>
+                            <mml:msub>
+                              <mml:mi>𝐈</mml:mi>
+                              <mml:msub>
+                                <mml:mi>𝐧</mml:mi>
+                                <mml:mn>𝟐</mml:mn>
+                              </mml:msub>
+                            </mml:msub>
                           </mml:mtd>
                         </mml:mtr>
                       </mml:mtable>
                       <mml:mo stretchy="true" form="postfix">)</mml:mo>
                     </mml:mrow>
+                    <mml:mi>.</mml:mi>
                   </mml:mrow>
                 </mml:math>
               </alternatives>
             </disp-formula>
           </p>
-          <p>Similarly, I ⊗ C results in a block matrix where each block is
-      a copy of C:</p>
+          <p>Similarly, <inline-formula><alternatives><tex-math><![CDATA[\mathbf I_{n_1} \otimes \mathbf C_{\rho_2}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝐈</mml:mi><mml:msub><mml:mi>n</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:msub><mml:mo>⊗</mml:mo><mml:msub><mml:mi>𝐂</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
+      results in a block diagonal matrix where each block is a copy of
+      <inline-formula><alternatives><tex-math><![CDATA[C_{\rho_2}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>C</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:msub></mml:math></alternatives></inline-formula>:</p>
           <p>
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \mathbf{I} \otimes \mathbf{C} = 
+      \mathbf{I_{n_1}} \otimes \mathbf{C_{\rho_2}} = 
       \begin{pmatrix}
-      \mathbf{C} & \mathbf{0} & \cdots & \mathbf{0} \\
-      \mathbf{0} & \mathbf{C} & \cdots & \mathbf{0} \\
+      \mathbf{C_{\rho_2}} & \mathbf{0} & \cdots & \mathbf{0} \\
+      \mathbf{0} & \mathbf{C_{\rho_2}} & \cdots & \mathbf{0} \\
       \vdots & \vdots & \ddots & \vdots \\
-      \mathbf{0} & \mathbf{0} & \cdots & \mathbf{C}
-      \end{pmatrix}
+      \mathbf{0} & \mathbf{0} & \cdots & \mathbf{C_{\rho_2}}
+      \end{pmatrix}.
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
-                    <mml:mi>𝐈</mml:mi>
+                    <mml:msub>
+                      <mml:mi>𝐈</mml:mi>
+                      <mml:msub>
+                        <mml:mi>𝐧</mml:mi>
+                        <mml:mn>𝟏</mml:mn>
+                      </mml:msub>
+                    </mml:msub>
                     <mml:mo>⊗</mml:mo>
-                    <mml:mi>𝐂</mml:mi>
+                    <mml:msub>
+                      <mml:mi>𝐂</mml:mi>
+                      <mml:msub>
+                        <mml:mi>𝛒</mml:mi>
+                        <mml:mn>𝟐</mml:mn>
+                      </mml:msub>
+                    </mml:msub>
                     <mml:mo>=</mml:mo>
                     <mml:mrow>
                       <mml:mo stretchy="true" form="prefix">(</mml:mo>
                       <mml:mtable>
                         <mml:mtr>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mi>𝐂</mml:mi>
+                            <mml:msub>
+                              <mml:mi>𝐂</mml:mi>
+                              <mml:msub>
+                                <mml:mi>𝛒</mml:mi>
+                                <mml:mn>𝟐</mml:mn>
+                              </mml:msub>
+                            </mml:msub>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mn>𝟎</mml:mn>
@@ -2445,7 +2880,13 @@ addressing a common limitation of periodic boundary conditions.
                             <mml:mn>𝟎</mml:mn>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mi>𝐂</mml:mi>
+                            <mml:msub>
+                              <mml:mi>𝐂</mml:mi>
+                              <mml:msub>
+                                <mml:mi>𝛒</mml:mi>
+                                <mml:mn>𝟐</mml:mn>
+                              </mml:msub>
+                            </mml:msub>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mi>⋯</mml:mi>
@@ -2479,12 +2920,19 @@ addressing a common limitation of periodic boundary conditions.
                             <mml:mi>⋯</mml:mi>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mi>𝐂</mml:mi>
+                            <mml:msub>
+                              <mml:mi>𝐂</mml:mi>
+                              <mml:msub>
+                                <mml:mi>𝛒</mml:mi>
+                                <mml:mn>𝟐</mml:mn>
+                              </mml:msub>
+                            </mml:msub>
                           </mml:mtd>
                         </mml:mtr>
                       </mml:mtable>
                       <mml:mo stretchy="true" form="postfix">)</mml:mo>
                     </mml:mrow>
+                    <mml:mi>.</mml:mi>
                   </mml:mrow>
                 </mml:math>
               </alternatives>
@@ -2496,10 +2944,10 @@ addressing a common limitation of periodic boundary conditions.
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \mathbf{Q} \approx \mathbf{C} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{C} = 
+      \mathbf{Q} \approx \mathbf C_{\rho_1} \otimes \mathbf I_{n_2} + \mathbf I_{n_1} \otimes \mathbf C_{\rho_2} = 
       \begin{pmatrix}
-      \mathbf{B}_0 & \mathbf{B}_1 & \cdots & \mathbf{B}_{n-1} \\
-      \mathbf{B}_{n-1} & \mathbf{B}_0 & \cdots & \mathbf{B}_{n-2} \\
+      \mathbf{B}_0 & \mathbf{B}_1 & \cdots & \mathbf{B}_{n_1-1} \\
+      \mathbf{B}_{n_1-1} & \mathbf{B}_0 & \cdots & \mathbf{B}_{n_1-2} \\
       \vdots & \vdots & \ddots & \vdots \\
       \mathbf{B}_1 & \mathbf{B}_2 & \cdots & \mathbf{B}_0
       \end{pmatrix}
@@ -2508,13 +2956,37 @@ addressing a common limitation of periodic boundary conditions.
                   <mml:mrow>
                     <mml:mi>𝐐</mml:mi>
                     <mml:mo>≈</mml:mo>
-                    <mml:mi>𝐂</mml:mi>
+                    <mml:msub>
+                      <mml:mi>𝐂</mml:mi>
+                      <mml:msub>
+                        <mml:mi>ρ</mml:mi>
+                        <mml:mn>1</mml:mn>
+                      </mml:msub>
+                    </mml:msub>
                     <mml:mo>⊗</mml:mo>
-                    <mml:mi>𝐈</mml:mi>
+                    <mml:msub>
+                      <mml:mi>𝐈</mml:mi>
+                      <mml:msub>
+                        <mml:mi>n</mml:mi>
+                        <mml:mn>2</mml:mn>
+                      </mml:msub>
+                    </mml:msub>
                     <mml:mo>+</mml:mo>
-                    <mml:mi>𝐈</mml:mi>
+                    <mml:msub>
+                      <mml:mi>𝐈</mml:mi>
+                      <mml:msub>
+                        <mml:mi>n</mml:mi>
+                        <mml:mn>1</mml:mn>
+                      </mml:msub>
+                    </mml:msub>
                     <mml:mo>⊗</mml:mo>
-                    <mml:mi>𝐂</mml:mi>
+                    <mml:msub>
+                      <mml:mi>𝐂</mml:mi>
+                      <mml:msub>
+                        <mml:mi>ρ</mml:mi>
+                        <mml:mn>2</mml:mn>
+                      </mml:msub>
+                    </mml:msub>
                     <mml:mo>=</mml:mo>
                     <mml:mrow>
                       <mml:mo stretchy="true" form="prefix">(</mml:mo>
@@ -2539,7 +3011,10 @@ addressing a common limitation of periodic boundary conditions.
                             <mml:msub>
                               <mml:mi>𝐁</mml:mi>
                               <mml:mrow>
-                                <mml:mi>n</mml:mi>
+                                <mml:msub>
+                                  <mml:mi>n</mml:mi>
+                                  <mml:mn>1</mml:mn>
+                                </mml:msub>
                                 <mml:mo>−</mml:mo>
                                 <mml:mn>1</mml:mn>
                               </mml:mrow>
@@ -2551,7 +3026,10 @@ addressing a common limitation of periodic boundary conditions.
                             <mml:msub>
                               <mml:mi>𝐁</mml:mi>
                               <mml:mrow>
-                                <mml:mi>n</mml:mi>
+                                <mml:msub>
+                                  <mml:mi>n</mml:mi>
+                                  <mml:mn>1</mml:mn>
+                                </mml:msub>
                                 <mml:mo>−</mml:mo>
                                 <mml:mn>1</mml:mn>
                               </mml:mrow>
@@ -2570,7 +3048,10 @@ addressing a common limitation of periodic boundary conditions.
                             <mml:msub>
                               <mml:mi>𝐁</mml:mi>
                               <mml:mrow>
-                                <mml:mi>n</mml:mi>
+                                <mml:msub>
+                                  <mml:mi>n</mml:mi>
+                                  <mml:mn>1</mml:mn>
+                                </mml:msub>
                                 <mml:mo>−</mml:mo>
                                 <mml:mn>2</mml:mn>
                               </mml:mrow>
@@ -2623,10 +3104,127 @@ addressing a common limitation of periodic boundary conditions.
             </disp-formula>
           </p>
           <p>where each <inline-formula><alternatives><tex-math><![CDATA[\mathbf{B_i}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐁</mml:mi><mml:mi>𝐢</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
-      is a circulant matrix. Specifically,
-      <inline-formula><alternatives><tex-math><![CDATA[\mathbf{B_0} = c_0I + C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝐁</mml:mi><mml:mn>𝟎</mml:mn></mml:msub><mml:mo>=</mml:mo><mml:msub><mml:mi>c</mml:mi><mml:mn>0</mml:mn></mml:msub><mml:mi>I</mml:mi><mml:mo>+</mml:mo><mml:mi>C</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>,
-      and for <inline-formula><alternatives><tex-math><![CDATA[i \neq 0]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>i</mml:mi><mml:mo>≠</mml:mo><mml:mn>0</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>,
-      <inline-formula><alternatives><tex-math><![CDATA[\mathbf{B_i} = c_iI]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝐁</mml:mi><mml:mi>𝐢</mml:mi></mml:msub><mml:mo>=</mml:mo><mml:msub><mml:mi>c</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mi>I</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>.</p>
+      is a circulant matrix. Specifically,</p>
+          <p>
+            <disp-formula>
+              <alternatives>
+                <tex-math><![CDATA[
+      \begin{aligned}
+      \mathbf{B_0} &= \frac{(1+\rho_1^2)}{(1 - \rho_1^2)}\mathbf{I_{n_2}} + \mathbf C_{\rho_2}, \quad \text{and} \\
+      \mathbf{B_1} &= \mathbf{B_{n_1 - 1}} = \frac{-\rho_1}{(1 - \rho_1^2)}\mathbf{I_{n_2}}.
+      \end{aligned}
+      ]]></tex-math>
+                <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+                  <mml:mtable>
+                    <mml:mtr>
+                      <mml:mtd columnalign="right" style="text-align: right">
+                        <mml:msub>
+                          <mml:mi>𝐁</mml:mi>
+                          <mml:mn>𝟎</mml:mn>
+                        </mml:msub>
+                      </mml:mtd>
+                      <mml:mtd columnalign="left" style="text-align: left">
+                        <mml:mo>=</mml:mo>
+                        <mml:mfrac>
+                          <mml:mrow>
+                            <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                            <mml:mn>1</mml:mn>
+                            <mml:mo>+</mml:mo>
+                            <mml:msubsup>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
+                              <mml:mn>2</mml:mn>
+                            </mml:msubsup>
+                            <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                          </mml:mrow>
+                          <mml:mrow>
+                            <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                            <mml:mn>1</mml:mn>
+                            <mml:mo>−</mml:mo>
+                            <mml:msubsup>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
+                              <mml:mn>2</mml:mn>
+                            </mml:msubsup>
+                            <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                          </mml:mrow>
+                        </mml:mfrac>
+                        <mml:msub>
+                          <mml:mi>𝐈</mml:mi>
+                          <mml:msub>
+                            <mml:mi>𝐧</mml:mi>
+                            <mml:mn>𝟐</mml:mn>
+                          </mml:msub>
+                        </mml:msub>
+                        <mml:mo>+</mml:mo>
+                        <mml:msub>
+                          <mml:mi>𝐂</mml:mi>
+                          <mml:msub>
+                            <mml:mi>ρ</mml:mi>
+                            <mml:mn>2</mml:mn>
+                          </mml:msub>
+                        </mml:msub>
+                        <mml:mo>,</mml:mo>
+                        <mml:mspace width="1.0em"/>
+                        <mml:mtext mathvariant="normal">and</mml:mtext>
+                      </mml:mtd>
+                    </mml:mtr>
+                    <mml:mtr>
+                      <mml:mtd columnalign="right" style="text-align: right">
+                        <mml:msub>
+                          <mml:mi>𝐁</mml:mi>
+                          <mml:mn>𝟏</mml:mn>
+                        </mml:msub>
+                      </mml:mtd>
+                      <mml:mtd columnalign="left" style="text-align: left">
+                        <mml:mo>=</mml:mo>
+                        <mml:msub>
+                          <mml:mi>𝐁</mml:mi>
+                          <mml:mrow>
+                            <mml:msub>
+                              <mml:mi>𝐧</mml:mi>
+                              <mml:mn>𝟏</mml:mn>
+                            </mml:msub>
+                            <mml:mo mathvariant="bold">−</mml:mo>
+                            <mml:mn>𝟏</mml:mn>
+                          </mml:mrow>
+                        </mml:msub>
+                        <mml:mo>=</mml:mo>
+                        <mml:mfrac>
+                          <mml:mrow>
+                            <mml:mi>−</mml:mi>
+                            <mml:msub>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                          </mml:mrow>
+                          <mml:mrow>
+                            <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                            <mml:mn>1</mml:mn>
+                            <mml:mo>−</mml:mo>
+                            <mml:msubsup>
+                              <mml:mi>ρ</mml:mi>
+                              <mml:mn>1</mml:mn>
+                              <mml:mn>2</mml:mn>
+                            </mml:msubsup>
+                            <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                          </mml:mrow>
+                        </mml:mfrac>
+                        <mml:msub>
+                          <mml:mi>𝐈</mml:mi>
+                          <mml:msub>
+                            <mml:mi>𝐧</mml:mi>
+                            <mml:mn>𝟐</mml:mn>
+                          </mml:msub>
+                        </mml:msub>
+                        <mml:mi>.</mml:mi>
+                      </mml:mtd>
+                    </mml:mtr>
+                  </mml:mtable>
+                </mml:math>
+              </alternatives>
+            </disp-formula>
+          </p>
           <p>This BCCB structure allows us to use 2D FFT for efficient
       computations. The base matrix <inline-formula><alternatives><tex-math><![CDATA[\mathbf c]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐜</mml:mi></mml:math></alternatives></inline-formula>
       for this BCCB structure is:</p>
@@ -2635,11 +3233,11 @@ addressing a common limitation of periodic boundary conditions.
               <alternatives>
                 <tex-math><![CDATA[
       \mathbf{c} = \begin{bmatrix}
-      2+2\rho^2 & -\rho & 0 & \cdots  & -\rho \\
-      -\rho & 0 & 0 & \cdots  & 0 \\
+      \frac{(1+\rho_1^2)}{(1 - \rho_1^2)} + \frac{(1+\rho_2^2)}{(1 - \rho_2^2)} & \frac{-\rho_1}{(1 - \rho_1^2)} & 0 & \cdots  & \frac{-\rho_1}{(1 - \rho_1^2)} \\
+      \frac{-\rho_2}{(1 - \rho_2^2)} & 0 & 0 & \cdots  & 0 \\
       0 & 0 & 0 & \cdots  & 0 \\
       \vdots & \vdots & \vdots & \ddots &  \vdots \\
-      -\rho & 0 & 0 & \cdots  & 0
+      \frac{-\rho_2}{(1 - \rho_2^2)} & 0 & 0 & \cdots  & 0
       \end{bmatrix}
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
@@ -2651,17 +3249,77 @@ addressing a common limitation of periodic boundary conditions.
                       <mml:mtable>
                         <mml:mtr>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mn>2</mml:mn>
+                            <mml:mfrac>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>+</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>1</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>−</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>1</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                            </mml:mfrac>
                             <mml:mo>+</mml:mo>
-                            <mml:mn>2</mml:mn>
-                            <mml:msup>
-                              <mml:mi>ρ</mml:mi>
-                              <mml:mn>2</mml:mn>
-                            </mml:msup>
+                            <mml:mfrac>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>+</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>2</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>−</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>2</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                            </mml:mfrac>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mi>−</mml:mi>
-                            <mml:mi>ρ</mml:mi>
+                            <mml:mfrac>
+                              <mml:mrow>
+                                <mml:mi>−</mml:mi>
+                                <mml:msub>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>1</mml:mn>
+                                </mml:msub>
+                              </mml:mrow>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>−</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>1</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                            </mml:mfrac>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mn>0</mml:mn>
@@ -2670,14 +3328,50 @@ addressing a common limitation of periodic boundary conditions.
                             <mml:mi>⋯</mml:mi>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mi>−</mml:mi>
-                            <mml:mi>ρ</mml:mi>
+                            <mml:mfrac>
+                              <mml:mrow>
+                                <mml:mi>−</mml:mi>
+                                <mml:msub>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>1</mml:mn>
+                                </mml:msub>
+                              </mml:mrow>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>−</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>1</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                            </mml:mfrac>
                           </mml:mtd>
                         </mml:mtr>
                         <mml:mtr>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mi>−</mml:mi>
-                            <mml:mi>ρ</mml:mi>
+                            <mml:mfrac>
+                              <mml:mrow>
+                                <mml:mi>−</mml:mi>
+                                <mml:msub>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msub>
+                              </mml:mrow>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>−</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>2</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                            </mml:mfrac>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mn>0</mml:mn>
@@ -2728,8 +3422,26 @@ addressing a common limitation of periodic boundary conditions.
                         </mml:mtr>
                         <mml:mtr>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mi>−</mml:mi>
-                            <mml:mi>ρ</mml:mi>
+                            <mml:mfrac>
+                              <mml:mrow>
+                                <mml:mi>−</mml:mi>
+                                <mml:msub>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msub>
+                              </mml:mrow>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>−</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>2</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                            </mml:mfrac>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mn>0</mml:mn>
@@ -2754,7 +3466,7 @@ addressing a common limitation of periodic boundary conditions.
           </p>
           <p>This base matrix <inline-formula><alternatives><tex-math><![CDATA[c]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>c</mml:mi></mml:math></alternatives></inline-formula>
       captures the structure of the precision matrix
-      <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
+      <inline-formula><alternatives><tex-math><![CDATA[\mathbf Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
       and allows for efficient computation of eigenvalues using the 2D
       Fast Fourier Transform (FFT), enabling rapid calculation of the
       log-determinant and quadratic forms needed for the Gaussian copula
@@ -2770,18 +3482,23 @@ addressing a common limitation of periodic boundary conditions.
     step-by-step process:</p>
         <sec id="construct-the-base-matrix">
           <title>1. Construct the Base Matrix</title>
-          <p>First, we construct the base matrix c for our BCCB
-      approximation of Q. For an n × n grid, c is an n × n matrix:</p>
+          <p>First, we construct the base matrix
+      <inline-formula><alternatives><tex-math><![CDATA[\mathbf c]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐜</mml:mi></mml:math></alternatives></inline-formula>
+      for our BCCB approximation of <inline-formula><alternatives><tex-math><![CDATA[\mathbf Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>.
+      For an <inline-formula><alternatives><tex-math><![CDATA[n_1 \times n_2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>n</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>×</mml:mo><mml:msub><mml:mi>n</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
+      grid, <inline-formula><alternatives><tex-math><![CDATA[\mathbf c]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐜</mml:mi></mml:math></alternatives></inline-formula>
+      is an <inline-formula><alternatives><tex-math><![CDATA[n_2 \times n_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>n</mml:mi><mml:mn>2</mml:mn></mml:msub><mml:mo>×</mml:mo><mml:msub><mml:mi>n</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
+      matrix:</p>
           <p>
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
       \mathbf{c} = \begin{bmatrix}
-      2+2\rho^2 & -\rho & 0 & \cdots & 0 & -\rho \\
-      -\rho & 0 & 0 & \cdots & 0 & 0 \\
-      0 & 0 & 0 & \cdots & 0 & 0 \\
-      \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
-      -\rho & 0 & 0 & \cdots & 0 & 0
+      \frac{(1+\rho_1^2)}{(1 - \rho_1^2)} + \frac{(1+\rho_2^2)}{(1 - \rho_2^2)} & \frac{-\rho_1}{(1 - \rho_1^2)} & 0 & \cdots  & \frac{-\rho_1}{(1 - \rho_1^2)} \\
+      \frac{-\rho_2}{(1 - \rho_2^2)} & 0 & 0 & \cdots  & 0 \\
+      0 & 0 & 0 & \cdots  & 0 \\
+      \vdots & \vdots & \vdots & \ddots &  \vdots \\
+      \frac{-\rho_2}{(1 - \rho_2^2)} & 0 & 0 & \cdots  & 0
       \end{bmatrix}
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
@@ -2793,17 +3510,77 @@ addressing a common limitation of periodic boundary conditions.
                       <mml:mtable>
                         <mml:mtr>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mn>2</mml:mn>
+                            <mml:mfrac>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>+</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>1</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>−</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>1</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                            </mml:mfrac>
                             <mml:mo>+</mml:mo>
-                            <mml:mn>2</mml:mn>
-                            <mml:msup>
-                              <mml:mi>ρ</mml:mi>
-                              <mml:mn>2</mml:mn>
-                            </mml:msup>
+                            <mml:mfrac>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>+</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>2</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>−</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>2</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                            </mml:mfrac>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mi>−</mml:mi>
-                            <mml:mi>ρ</mml:mi>
+                            <mml:mfrac>
+                              <mml:mrow>
+                                <mml:mi>−</mml:mi>
+                                <mml:msub>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>1</mml:mn>
+                                </mml:msub>
+                              </mml:mrow>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>−</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>1</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                            </mml:mfrac>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mn>0</mml:mn>
@@ -2812,17 +3589,50 @@ addressing a common limitation of periodic boundary conditions.
                             <mml:mi>⋯</mml:mi>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mn>0</mml:mn>
-                          </mml:mtd>
-                          <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mi>−</mml:mi>
-                            <mml:mi>ρ</mml:mi>
+                            <mml:mfrac>
+                              <mml:mrow>
+                                <mml:mi>−</mml:mi>
+                                <mml:msub>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>1</mml:mn>
+                                </mml:msub>
+                              </mml:mrow>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>−</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>1</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                            </mml:mfrac>
                           </mml:mtd>
                         </mml:mtr>
                         <mml:mtr>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mi>−</mml:mi>
-                            <mml:mi>ρ</mml:mi>
+                            <mml:mfrac>
+                              <mml:mrow>
+                                <mml:mi>−</mml:mi>
+                                <mml:msub>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msub>
+                              </mml:mrow>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>−</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>2</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                            </mml:mfrac>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mn>0</mml:mn>
@@ -2832,9 +3642,6 @@ addressing a common limitation of periodic boundary conditions.
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mi>⋯</mml:mi>
-                          </mml:mtd>
-                          <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mn>0</mml:mn>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mn>0</mml:mn>
@@ -2852,9 +3659,6 @@ addressing a common limitation of periodic boundary conditions.
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mi>⋯</mml:mi>
-                          </mml:mtd>
-                          <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mn>0</mml:mn>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mn>0</mml:mn>
@@ -2876,14 +3680,29 @@ addressing a common limitation of periodic boundary conditions.
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mi>⋮</mml:mi>
                           </mml:mtd>
-                          <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mi>⋮</mml:mi>
-                          </mml:mtd>
                         </mml:mtr>
                         <mml:mtr>
                           <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mi>−</mml:mi>
-                            <mml:mi>ρ</mml:mi>
+                            <mml:mfrac>
+                              <mml:mrow>
+                                <mml:mi>−</mml:mi>
+                                <mml:msub>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msub>
+                              </mml:mrow>
+                              <mml:mrow>
+                                <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                                <mml:mn>1</mml:mn>
+                                <mml:mo>−</mml:mo>
+                                <mml:msubsup>
+                                  <mml:mi>ρ</mml:mi>
+                                  <mml:mn>2</mml:mn>
+                                  <mml:mn>2</mml:mn>
+                                </mml:msubsup>
+                                <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                              </mml:mrow>
+                            </mml:mfrac>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mn>0</mml:mn>
@@ -2893,9 +3712,6 @@ addressing a common limitation of periodic boundary conditions.
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mi>⋯</mml:mi>
-                          </mml:mtd>
-                          <mml:mtd columnalign="center" style="text-align: center">
-                            <mml:mn>0</mml:mn>
                           </mml:mtd>
                           <mml:mtd columnalign="center" style="text-align: center">
                             <mml:mn>0</mml:mn>
@@ -2914,8 +3730,10 @@ addressing a common limitation of periodic boundary conditions.
         </sec>
         <sec id="compute-initial-eigenvalues">
           <title>2. Compute Initial Eigenvalues</title>
-          <p>We compute the initial eigenvalues of Q using the 2D Fast
-      Fourier Transform (FFT) of c:</p>
+          <p>We compute the initial eigenvalues of
+      <inline-formula><alternatives><tex-math><![CDATA[\mathbf Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
+      using the 2D Fast Fourier Transform (FFT) of
+      <inline-formula><alternatives><tex-math><![CDATA[\mathbf c]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐜</mml:mi></mml:math></alternatives></inline-formula>:</p>
           <p>
             <disp-formula>
               <alternatives>
@@ -2951,8 +3769,9 @@ addressing a common limitation of periodic boundary conditions.
       Eigenvalues</title>
           <p>An important property of Block Circulant with Circulant Blocks
       (BCCB) matrices is that the inverse of a BCCB matrix is also a
-      BCCB matrix with a constant diagonal. We use this to efficiently
-      compute the marginal variance and rescale the eigenvalues:</p>
+      BCCB matrix, and the marginal variance is the first element in its
+      first circulant block. We use this to efficiently compute the
+      marginal variance and rescale the eigenvalues:</p>
           <list list-type="alpha-lower">
             <list-item>
               <p>Compute the element-wise inverse of
@@ -2960,7 +3779,7 @@ addressing a common limitation of periodic boundary conditions.
           <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\Lambda^{inv}} = 1 / \boldsymbol{\Lambda}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>𝚲</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msup><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mi>/</mml:mi><mml:mi>𝚲</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
             </list-item>
             <list-item>
-              <p>Compute the base of <inline-formula><alternatives><tex-math><![CDATA[Q^{-1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>Q</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:math></alternatives></inline-formula>
+              <p>Compute the base of <inline-formula><alternatives><tex-math><![CDATA[\mathbf Q^{-1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>𝐐</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:math></alternatives></inline-formula>
           using inverse 2D FFT: <inline-formula><alternatives><tex-math><![CDATA[\mathbf{c_{inv}} = \text{IFFT2}(\mathbf{{\Lambda^{inv}}})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝐜</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:mtext mathvariant="normal">IFFT2</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msup><mml:mi>𝚲</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msup><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
             </list-item>
             <list-item>
@@ -3113,7 +3932,7 @@ addressing a common limitation of periodic boundary conditions.
     each coordinate axis, effectively doubling the size of the field.
     Other than that, the algorithmic implementation is the same except
     that the circulant approximation matrices to
-    <inline-formula><alternatives><tex-math><![CDATA[Q_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>Q</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:math></alternatives></inline-formula>
+    <inline-formula><alternatives><tex-math><![CDATA[\mathbf Q_{\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
     are now <inline-formula><alternatives><tex-math><![CDATA[2n \times 2n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mn>2</mml:mn><mml:mi>n</mml:mi><mml:mo>×</mml:mo><mml:mn>2</mml:mn><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>.</p>
         <p>First, we reflect the data along each coordinate axis. For a 2D
     spatial field represented by an <inline-formula><alternatives><tex-math><![CDATA[n \times n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>n</mml:mi><mml:mo>×</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
@@ -3123,12 +3942,12 @@ addressing a common limitation of periodic boundary conditions.
             <alternatives>
               <tex-math><![CDATA[
     \begin{bmatrix}
-    x_{11} & \cdots & x_{1n} & x_{1n} & \cdots & x_{11} \\
+    x_{11} & \cdots & x_{1n_2} & x_{1n_2} & \cdots & x_{11} \\
     \vdots & \ddots & \vdots & \vdots & \ddots & \vdots \\
-    x_{n1} & \cdots & x_{nn} & x_{nn} & \cdots & x_{n1} \\
-    x_{n1} & \cdots & x_{nn} & x_{nn} & \cdots & x_{n1} \\
+    x_{n_11} & \cdots & x_{n_1n_2} & x_{n_1n_2} & \cdots & x_{n_11} \\
+    x_{n_11} & \cdots & x_{n_1n_2} & x_{n_1n_2} & \cdots & x_{n_11} \\
     \vdots & \ddots & \vdots & \vdots & \ddots & \vdots \\
-    x_{11} & \cdots & x_{1n} & x_{1n} & \cdots & x_{11}
+    x_{11} & \cdots & x_{1n_2} & x_{1n_2} & \cdots & x_{11}
     \end{bmatrix}
     ]]></tex-math>
               <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
@@ -3150,7 +3969,10 @@ addressing a common limitation of periodic boundary conditions.
                           <mml:mi>x</mml:mi>
                           <mml:mrow>
                             <mml:mn>1</mml:mn>
-                            <mml:mi>n</mml:mi>
+                            <mml:msub>
+                              <mml:mi>n</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msub>
                           </mml:mrow>
                         </mml:msub>
                       </mml:mtd>
@@ -3159,7 +3981,10 @@ addressing a common limitation of periodic boundary conditions.
                           <mml:mi>x</mml:mi>
                           <mml:mrow>
                             <mml:mn>1</mml:mn>
-                            <mml:mi>n</mml:mi>
+                            <mml:msub>
+                              <mml:mi>n</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msub>
                           </mml:mrow>
                         </mml:msub>
                       </mml:mtd>
@@ -3197,10 +4022,10 @@ addressing a common limitation of periodic boundary conditions.
                       <mml:mtd columnalign="center" style="text-align: center">
                         <mml:msub>
                           <mml:mi>x</mml:mi>
-                          <mml:mrow>
+                          <mml:msub>
                             <mml:mi>n</mml:mi>
-                            <mml:mn>1</mml:mn>
-                          </mml:mrow>
+                            <mml:mn>11</mml:mn>
+                          </mml:msub>
                         </mml:msub>
                       </mml:mtd>
                       <mml:mtd columnalign="center" style="text-align: center">
@@ -3210,8 +4035,14 @@ addressing a common limitation of periodic boundary conditions.
                         <mml:msub>
                           <mml:mi>x</mml:mi>
                           <mml:mrow>
-                            <mml:mi>n</mml:mi>
-                            <mml:mi>n</mml:mi>
+                            <mml:msub>
+                              <mml:mi>n</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                            <mml:msub>
+                              <mml:mi>n</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msub>
                           </mml:mrow>
                         </mml:msub>
                       </mml:mtd>
@@ -3219,8 +4050,14 @@ addressing a common limitation of periodic boundary conditions.
                         <mml:msub>
                           <mml:mi>x</mml:mi>
                           <mml:mrow>
-                            <mml:mi>n</mml:mi>
-                            <mml:mi>n</mml:mi>
+                            <mml:msub>
+                              <mml:mi>n</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                            <mml:msub>
+                              <mml:mi>n</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msub>
                           </mml:mrow>
                         </mml:msub>
                       </mml:mtd>
@@ -3230,10 +4067,10 @@ addressing a common limitation of periodic boundary conditions.
                       <mml:mtd columnalign="center" style="text-align: center">
                         <mml:msub>
                           <mml:mi>x</mml:mi>
-                          <mml:mrow>
+                          <mml:msub>
                             <mml:mi>n</mml:mi>
-                            <mml:mn>1</mml:mn>
-                          </mml:mrow>
+                            <mml:mn>11</mml:mn>
+                          </mml:msub>
                         </mml:msub>
                       </mml:mtd>
                     </mml:mtr>
@@ -3241,10 +4078,10 @@ addressing a common limitation of periodic boundary conditions.
                       <mml:mtd columnalign="center" style="text-align: center">
                         <mml:msub>
                           <mml:mi>x</mml:mi>
-                          <mml:mrow>
+                          <mml:msub>
                             <mml:mi>n</mml:mi>
-                            <mml:mn>1</mml:mn>
-                          </mml:mrow>
+                            <mml:mn>11</mml:mn>
+                          </mml:msub>
                         </mml:msub>
                       </mml:mtd>
                       <mml:mtd columnalign="center" style="text-align: center">
@@ -3254,8 +4091,14 @@ addressing a common limitation of periodic boundary conditions.
                         <mml:msub>
                           <mml:mi>x</mml:mi>
                           <mml:mrow>
-                            <mml:mi>n</mml:mi>
-                            <mml:mi>n</mml:mi>
+                            <mml:msub>
+                              <mml:mi>n</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                            <mml:msub>
+                              <mml:mi>n</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msub>
                           </mml:mrow>
                         </mml:msub>
                       </mml:mtd>
@@ -3263,8 +4106,14 @@ addressing a common limitation of periodic boundary conditions.
                         <mml:msub>
                           <mml:mi>x</mml:mi>
                           <mml:mrow>
-                            <mml:mi>n</mml:mi>
-                            <mml:mi>n</mml:mi>
+                            <mml:msub>
+                              <mml:mi>n</mml:mi>
+                              <mml:mn>1</mml:mn>
+                            </mml:msub>
+                            <mml:msub>
+                              <mml:mi>n</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msub>
                           </mml:mrow>
                         </mml:msub>
                       </mml:mtd>
@@ -3274,10 +4123,10 @@ addressing a common limitation of periodic boundary conditions.
                       <mml:mtd columnalign="center" style="text-align: center">
                         <mml:msub>
                           <mml:mi>x</mml:mi>
-                          <mml:mrow>
+                          <mml:msub>
                             <mml:mi>n</mml:mi>
-                            <mml:mn>1</mml:mn>
-                          </mml:mrow>
+                            <mml:mn>11</mml:mn>
+                          </mml:msub>
                         </mml:msub>
                       </mml:mtd>
                     </mml:mtr>
@@ -3316,7 +4165,10 @@ addressing a common limitation of periodic boundary conditions.
                           <mml:mi>x</mml:mi>
                           <mml:mrow>
                             <mml:mn>1</mml:mn>
-                            <mml:mi>n</mml:mi>
+                            <mml:msub>
+                              <mml:mi>n</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msub>
                           </mml:mrow>
                         </mml:msub>
                       </mml:mtd>
@@ -3325,7 +4177,10 @@ addressing a common limitation of periodic boundary conditions.
                           <mml:mi>x</mml:mi>
                           <mml:mrow>
                             <mml:mn>1</mml:mn>
-                            <mml:mi>n</mml:mi>
+                            <mml:msub>
+                              <mml:mi>n</mml:mi>
+                              <mml:mn>2</mml:mn>
+                            </mml:msub>
                           </mml:mrow>
                         </mml:msub>
                       </mml:mtd>
@@ -3346,7 +4201,7 @@ addressing a common limitation of periodic boundary conditions.
             </alternatives>
           </disp-formula>
         </p>
-        <p>This reflection creates a <inline-formula><alternatives><tex-math><![CDATA[2n \times 2n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mn>2</mml:mn><mml:mi>n</mml:mi><mml:mo>×</mml:mo><mml:mn>2</mml:mn><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
+        <p>This reflection creates a <inline-formula><alternatives><tex-math><![CDATA[2n_1 \times 2n_2]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mn>2</mml:mn><mml:msub><mml:mi>n</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>×</mml:mo><mml:mn>2</mml:mn><mml:msub><mml:mi>n</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>
     matrix. The matrix is then stacked in lexicographic order before
     entering into the quadratic forms.</p>
       </sec>
@@ -3369,131 +4224,132 @@ addressing a common limitation of periodic boundary conditions.
         scaled to have unit marginal variance.</p>
           </caption>
           <table>
+            <colgroup>
+              <col width="8%"/>
+              <col width="10%"/>
+              <col width="7%"/>
+              <col width="16%"/>
+              <col width="11%"/>
+              <col width="21%"/>
+              <col width="8%"/>
+              <col width="18%"/>
+            </colgroup>
             <thead>
               <tr>
                 <th>Q_size</th>
-                <th>Exact</th>
+                <th>Cholesky</th>
+                <th>Eigen</th>
+                <th>Eigen Speed-Up</th>
                 <th>Circulant</th>
-                <th/>
+                <th>Circulant Speed-Up</th>
                 <th>Folded</th>
-                <th/>
+                <th>Folded Speed-Up</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td/>
-                <td>Time</td>
-                <td>Time</td>
-                <td>Speed-Up</td>
-                <td>Time</td>
-                <td>Speed-Up</td>
-              </tr>
-              <tr>
                 <td>100x100</td>
-                <td>194.69μs</td>
-                <td>33.89μs</td>
-                <td>5.75x</td>
-                <td>44.77μs</td>
-                <td>4.35x</td>
+                <td>27.14µs</td>
+                <td>96.86µs</td>
+                <td>0.28x</td>
+                <td>28.3µs</td>
+                <td>0.96x</td>
+                <td>35.88µs</td>
+                <td>0.76x</td>
               </tr>
               <tr>
                 <td>400x400</td>
-                <td>309.61μs</td>
-                <td>37.45μs</td>
-                <td>8.27x</td>
-                <td>122.78μs</td>
-                <td>2.52x</td>
+                <td>335.09µs</td>
+                <td>270.48µs</td>
+                <td>1.24x</td>
+                <td>35.0µs</td>
+                <td>9.58x</td>
+                <td>113.12µs</td>
+                <td>2.96x</td>
               </tr>
               <tr>
                 <td>900x900</td>
-                <td>790.30μs</td>
-                <td>85.65μs</td>
-                <td>9.23x</td>
-                <td>155.47μs</td>
-                <td>5.08x</td>
+                <td>1.95ms</td>
+                <td>758.11µs</td>
+                <td>2.57x</td>
+                <td>87.4µs</td>
+                <td>22.28x</td>
+                <td>178.17µs</td>
+                <td>10.93x</td>
               </tr>
               <tr>
                 <td>1600x1600</td>
+                <td>6.08ms</td>
                 <td>1.96ms</td>
-                <td>98.71μs</td>
-                <td>19.86x</td>
-                <td>243.64μs</td>
-                <td>8.05x</td>
+                <td>3.11x</td>
+                <td>110.4µs</td>
+                <td>55.12x</td>
+                <td>332.16µs</td>
+                <td>18.31x</td>
+              </tr>
+              <tr>
+                <td>2500x2500</td>
+                <td>15.24ms</td>
+                <td>4.43ms</td>
+                <td>3.44x</td>
+                <td>141.0µs</td>
+                <td>108.07x</td>
+                <td>489.25µs</td>
+                <td>31.15x</td>
               </tr>
               <tr>
                 <td>3600x3600</td>
-                <td>8.66ms</td>
-                <td>151.70μs</td>
-                <td>57.1x</td>
-                <td>484.07μs</td>
-                <td>17.89x</td>
+                <td>31.28ms</td>
+                <td>8.53ms</td>
+                <td>3.67x</td>
+                <td>175.2µs</td>
+                <td>178.52x</td>
+                <td>653.15µs</td>
+                <td>47.89x</td>
+              </tr>
+              <tr>
+                <td>4900x4900</td>
+                <td>68.73ms</td>
+                <td>16.37ms</td>
+                <td>4.2x</td>
+                <td>229.8µs</td>
+                <td>299.02x</td>
+                <td>864.75µs</td>
+                <td>79.48x</td>
+              </tr>
+              <tr>
+                <td>6400x6400</td>
+                <td>121.65ms</td>
+                <td>30.95ms</td>
+                <td>3.93x</td>
+                <td>300.1µs</td>
+                <td>405.38x</td>
+                <td>1.16ms</td>
+                <td>104.96x</td>
+              </tr>
+              <tr>
+                <td>8100x8100</td>
+                <td>196.57ms</td>
+                <td>47.82ms</td>
+                <td>4.11x</td>
+                <td>470.5µs</td>
+                <td>417.83x</td>
+                <td>1.55ms</td>
+                <td>126.68x</td>
               </tr>
               <tr>
                 <td>10000x10000</td>
-                <td>71.81ms</td>
-                <td>343.07μs</td>
-                <td>209.31x</td>
-                <td>1.36ms</td>
-                <td>52.76x</td>
-              </tr>
-              <tr>
-                <td>19600x19600</td>
-                <td>246.40ms</td>
-                <td>667.58μs</td>
-                <td>369.09x</td>
-                <td>2.89ms</td>
-                <td>85.32x</td>
-              </tr>
-              <tr>
-                <td>40000x40000</td>
-                <td>997.32ms</td>
-                <td>1.44ms</td>
-                <td>694.46x</td>
-                <td>7.69ms</td>
-                <td>129.69x</td>
+                <td>288.79ms</td>
+                <td>74.03ms</td>
+                <td>3.9x</td>
+                <td>429.8µs</td>
+                <td>671.87x</td>
+                <td>1.74ms</td>
+                <td>166.37x</td>
               </tr>
             </tbody>
           </table>
         </table-wrap>
-        <p>The results demonstrate significant computational gains from both
-    approximation methods, with the efficiency advantage increasing for
-    larger grid sizes. Key observations include:</p>
-        <list list-type="order">
-          <list-item>
-            <p><bold>Scalability</bold>: Both approximation methods show
-        superior scalability compared to the exact method. As the grid
-        size increases, the speed-up factor generally increases,
-        indicating that the approximations become increasingly
-        advantageous for larger spatial fields.</p>
-          </list-item>
-          <list-item>
-            <p><bold>Circulant Approximation Performance</bold>: The
-        circulant approximation consistently outperforms the folded
-        circulant approximation in terms of speed. For the largest grid
-        size (40000x40000), it achieves a remarkable 694.46x speed-up
-        over the exact method.</p>
-          </list-item>
-          <list-item>
-            <p><bold>Folded Circulant Approximation</bold>: While not as
-        fast as the circulant approximation, the folded circulant method
-        still offers substantial speed improvements, reaching a 129.69x
-        speed-up for the 40000x40000 grid.</p>
-          </list-item>
-          <list-item>
-            <p><bold>Trade-off Considerations</bold>: The choice between the
-        circulant and folded circulant approximations may depend on the
-        specific requirements of the application. While the circulant
-        approximation is faster, the folded circulant method may offer
-        better accuracy, particularly near the edges of the spatial
-        field.</p>
-          </list-item>
-        </list>
-        <p>These results underscore the practical value of our approximation
-    methods, especially for large-scale spatial analyses where
-    computational efficiency is crucial. The substantial speed-ups
-    achieved, particularly for larger grids, demonstrate the potential
-    of these methods to enable the analysis of much larger spatial
-    datasets than previously feasible with exact methods.</p>
       </sec>
     </sec>
     <sec id="appendix">

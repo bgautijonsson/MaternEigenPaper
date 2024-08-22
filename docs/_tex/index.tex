@@ -143,7 +143,7 @@
 \makeatletter
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, frame hidden, sharp corners, interior hidden, enhanced, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, breakable, interior hidden, frame hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, sharp corners]}{\end{tcolorbox}}\fi
 \makeatother
 
 \ifLuaTeX
@@ -178,45 +178,28 @@ Circulant Approximations}
 \makeatletter
 \begin{document}
 \maketitle
-\begin{abstract}
-This paper presents an algorithm for efficient computation of Gaussian
-copula densities using Gaussian Markov Random Field (GMRF) precision
-structures. We introduce a Matérn-like precision matrix with unit
-marginal variance, leveraging a Kronecker sum structure that allows for
-fast eigendecomposition. The method avoids explicit formation and
-inversion of large precision matrices, making it particularly suitable
-for high-dimensional spatial data. We propose two approximation methods:
-circulant and folded circulant, which utilize the computational
-efficiency of Fast Fourier Transforms (FFTs). The circulant
-approximation treats the spatial field as if it were on a torus, where
-opposite edges are connected. The folded circulant approximation,
-however, uses a reflection boundary condition, effectively doubling the
-size of the field by reflecting the data along each coordinate axis.
-This approach potentially offers improved accuracy near field edges,
-addressing a common limitation of periodic boundary conditions.
-\end{abstract}
 
 
 \section{Introduction}\label{introduction}
 
 \subsection{Problem Formulation}\label{problem-formulation}
 
-Consider a spatial field on a regular \(n \times n\) grid. Our objective
-is to compute the Gaussian copula density efficiently for this field.
-This computation involves:
+Consider a spatial field on a regular \(n_1 \times n_2\) grid. Our
+objective is to compute the Gaussian copula density efficiently for this
+field. This computation involves:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Specifying a precision matrix \(\mathbf{Q}\) that represents the
-  spatial dependence structure.
+  Specifying an \(n_1 n_2 \times n_1 n_2\) precision matrix
+  \(\mathbf{Q}\) that represents the spatial dependence structure.
 \item
   Ensuring the implied covariance matrix
   \(\mathbf{\Sigma} = \mathbf{Q}^{-1}\) has unit diagonal elements.
 \item
-  Computing the density for large spatial fields in a computationally
-  efficient manner.
+  Computing the log determinant, \(\log |\mathbf Q|\), and the quadratic
+  form \(z^T \mathbf Q z\) where \(z_i = \Phi^{-1}(f_i(y_i))\)
 \end{enumerate}
 
 \subsection{Review}\label{review}
@@ -279,17 +262,18 @@ The key innovation lies in leveraging the special structure of the
 precision matrix:
 
 \[
-\mathbf{Q} = \mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1,
+\mathbf{Q} = \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2},
 \]
 
-where \(\mathbf{Q}_1\) is the precision matrix of a standardized
-one-dimensional AR(1) process and \(\otimes\) denotes the Kronecker
-product. By employing efficient eigendecomposition techniques, our
-method avoids explicit formation and inversion of the large precision
-matrix \(\mathbf{Q}\), making it particularly suitable for
-high-dimensional spatial data. In additions to the exact method, we
-mention approximations to \(\mathbf{Q}\) using circuland and folded
-circulant matrices.
+where \(\mathbf{Q}_\rho\) is the precision matrix of a standardized
+one-dimensional AR(1) process with correlation \(\rho\) and \(\otimes\)
+denotes the Kronecker product. By employing efficient eigendecomposition
+techniques, our method avoids explicit formation and inversion of the
+large precision matrix \(\mathbf{Q}\), making it particularly suitable
+for high-dimensional spatial data. In addition to the exact method, we
+show how the precision matrix can be approximated by a folded circulant
+matrix wich gives a large speed-up while preserving suitable boundary
+conditions.
 
 \section{Methods}\label{methods}
 
@@ -323,14 +307,14 @@ Structure}\label{precision-matrix-structure}
 We define the precision matrix \(\mathbf{Q}\) as:
 
 \[
-\mathbf{Q} = (\mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1)^{(\nu + 1)}, \quad \nu \in \{0, 1, 2\}
+\mathbf{Q} = (\mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2})^{(\nu + 1)}, \quad \nu \in \{0, 1, 2\}
 \]
 
-where \(\mathbf{Q}_1\) is the precision matrix of a one-dimensional
-AR(1) process:
+where \(\mathbf{Q}_\rho\) is the precision matrix of a one-dimensional
+AR(1) process with correlation \(\rho\):
 
 \[
-\mathbf{Q}_1 = \frac{1}{1-\rho^2}
+\mathbf{Q}_\rho = \frac{1}{1-\rho^2}
 \begin{bmatrix}
 1 & -\rho & 0 & \cdots & 0 \\
 -\rho & 1+\rho^2 & -\rho & \cdots & 0 \\
@@ -341,62 +325,81 @@ AR(1) process:
 \]
 
 The matrix, \(\mathbf Q\), is then scaled so that its inverse,
-\(\mathbf \Sigma = \mathbf Q^{-1}\) has unit diagonals,
+\(\mathbf \Sigma = \mathbf Q^{-1}\) is a correlation matrix,
 i.e.~\(\mathbf \Sigma_{ii} = 1\).
 
 \subsection{Computation Process}\label{computation-process}
 
 \subsubsection{\texorpdfstring{Step 1: Eigendecomposition of
-\(\mathbf{Q}_1\)}{Step 1: Eigendecomposition of \textbackslash mathbf\{Q\}\_1}}\label{step-1-eigendecomposition-of-mathbfq_1}
+\(\mathbf{Q}_{\rho}\)}{Step 1: Eigendecomposition of \textbackslash mathbf\{Q\}\_\{\textbackslash rho\}}}\label{step-1-eigendecomposition-of-mathbfq_rho}
 
-We first compute the eigendecomposition of \(\mathbf{Q}_1\):
-
-\[
-\mathbf{Q}_1 = \mathbf{V}\mathbf{\Lambda}\mathbf{V}^T
-\]
-
-where \(\mathbf{V}\) is the matrix of eigenvectors and
-\(\mathbf{\Lambda}\) is the diagonal matrix of eigenvalues. Then, the
-eigendecomposition of \(\mathbf{Q}\) is:
+We first compute the eigendecomposition of both \(\mathbf{Q}_{\rho}\)\$:
 
 \[
-\mathbf{Q} = (\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^{(\nu + 1)}(\mathbf{V} \otimes \mathbf{V})^T.
+\mathbf{Q}_{\rho} = \mathbf{V_{\rho}}\mathbf{\Lambda_\rho}\mathbf{V_\rho}^T
 \]
 
-This means that the eigenvectors of \(\mathbf{Q}\) are
-\(\mathbf{v}_j \otimes \mathbf{v}_i\) and the corresponding eigenvalues
-are \(\lambda_i + \lambda_j\).
+where \(\mathbf{V_\rho}\) is the matrix of eigenvectors and
+\(\mathbf{\Lambda_\rho}\) is the diagonal matrix of eigenvalues. Then,
+because of how \(Q\) is defined, its eigendecomposition is:
+
+\[
+\mathbf{Q} = (\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})(\mathbf{\Lambda_{\rho_1}} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda_{\rho_2}})^{(\nu + 1)}(\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})^T.
+\]
+
+We don't work with the full eigendecomposition, but rather utilize the
+fact that the eigenvalues of \(\mathbf Q\) are
+\(\left\{\lambda_{\rho_1}\right\}_i + \left\{\lambda_{\rho_2}\right\}_j\)
+and their corresponding eigenvectors are
+\(\left\{\mathbf{v}_{\rho_1}\right\}_i \otimes \left\{\mathbf{v}_{\rho_2}\right\}_j\)
+to iterate over each value and vector pair to compute the density
+without forming the larger matrix.
 
 \subsubsection{Step 2: Computation of Marginal Standard
 Deviations}\label{step-2-computation-of-marginal-standard-deviations}
 
-Using the eigendecomposition of \(\mathbf{Q}_1\), we compute the
-marginal standard deviations and store them in a vector
-\(\mathbf{\sigma}\), i.e.~\(\sigma_i = \sqrt{\Sigma_{ii}}\):
+In order to scale \(\mathbf Q\) so that its inverse is a correlation
+matrix, we first calculate \(\sigma_i = \sqrt\Sigma_{ii}\),
+\(i = 1, \dots, n_1n_2\). We then use these marginal standard deviations
+to scale the eigenvectors and values. The inverse of \(Q\) is given by:
 
 \[
-\mathbf{\sigma} = \sqrt{\sum_{i,j} \frac{(\mathbf{v}_j \otimes \mathbf{v}_i)^2}{(\lambda_i + \lambda_j)^\nu}}
+\boldsymbol \Sigma = \mathbf Q^{-1} = (VAV^T)^{-1} = VA^{-1}V
 \]
 
-where \(\mathbf{v}_i\) are the eigenvectors and \(\lambda_i\) are the
-eigenvalues of \(\mathbf{Q}_1\). Thus, \(\sigma\) will be a vector of
-length \(n^2\).
+The diagonal elements, \(\boldsymbol \Sigma_{ii}\), are given by:
+
+\[
+\Sigma_{ii} = \sum_{k=1}^{n} v_{ik} \frac{1}{\lambda_k} (v^T)_{ki} = \sum_{k=1}^{n} v_{ik} \frac{1}{\lambda_k} v_{ik} = \sum_{k=1}^{n} v_{ik}^2 \frac{1}{\lambda_k}
+\]
+
+This means that the \(i\)'th marginal variance, \(\sigma_i^2\), is a
+weighted sum of the reciprocals of the eigenvalues of \(\mathbf Q\)
+where the weights are the squares of the \(i\)'th value in each
+eigenvector. This means that we can calculate the marginal standard
+deviations by iterating over the eigenvalues and -vectors of
+\(Q_{\rho_1}\) and \(Q_{\rho_2}\) and cumulating their values according
+to the formula above, then taking the element-wise square roots.
 
 \subsubsection{Step 3: Scaling the
 Eigendecomposition}\label{step-3-scaling-the-eigendecomposition}
 
-We scale the eigendecomposition of \(\mathbf{Q}\) using the marginal
-standard deviations:
+To scale the eigendecomposition of \(\mathbf{Q}\) using the marginal
+standard deviations, we define a diagonal matrix \(\mathbf{D}\), where
+\(D_{ii} = \sigma_i\) and scale the precision matrix as:
 
 \[
 \begin{aligned}
-\mathbf{\widetilde  Q} &= \mathbf{D}\mathbf{Q}\mathbf{D} \\
-&= \mathbf{D}(\mathbf{V} \otimes \mathbf{V})(\mathbf{\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda})^\nu(\mathbf{V} \otimes \mathbf{V})^T\mathbf{D} \\
-&= (\mathbf{\widetilde V} \otimes \mathbf{\widetilde V})(\mathbf{\widetilde\Lambda} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\widetilde \Lambda})(\mathbf{\widetilde V} \otimes \mathbf{\widetilde V})^T
+\mathbf{\widetilde  Q} &= \mathbf{D}\mathbf{Q}^{\nu+1}\mathbf{D} \\
+&= \mathbf{D}\mathbf{V}\mathbf{\Lambda}^{\nu+1}\mathbf{V}^T\mathbf{D} \\
+&= \mathbf{\widetilde V}\mathbf{\widetilde\Lambda}\mathbf{\widetilde V}^T.
 \end{aligned}
 \]
 
-where \(\mathbf{D}\) is a diagonal matrix with \(D_{ii} = \sigma_i\).
+In practice, we don't scale the whole eigendecomposition. Instead, we
+rescale each value/vector pair individually as we iterate over the
+eigenvectors and values of \(Q_{\rho_1}\) and \(Q_{\rho_2}\) to create
+the corresponding values and vectors for the larger matrix.
 
 \subsubsection{Step 4: Efficient Computation of
 Log-Density}\label{step-4-efficient-computation-of-log-density}
@@ -407,17 +410,20 @@ Using this scaled eigendecomposition, we efficiently compute:
 \def\labelenumi{\arabic{enumi}.}
 \item
   Log-determinant:
-  \(\log|\mathbf{\widetilde Q}| = \sum_{i,j} \log(\widetilde\lambda_i + \widetilde\lambda_j)\)
+  \(\log|\mathbf{\widetilde Q}| = \sum_{i,j} \log(\widetilde\lambda_{ij})\),
+  where \(\widetilde\lambda_{ij}\) is
+  \(\left( \left\{\lambda_{\rho_1}\right\}_i + \left\{\lambda_{\rho_2}\right\}_j \right)^{\nu+1}\)
+  after rescaling with marginal standard deviations.
 \item
   Quadratic form:
-  \(\mathbf{z}^T\mathbf{\widetilde Q}\mathbf{z} = \sum_{i,j} (\widetilde\lambda_i + \widetilde\lambda_j) y_{ij}^2\),
+  \(\mathbf{z}^T\mathbf{\widetilde Q}\mathbf{z} = \sum_{i,j} (\widetilde\lambda_{ij}) y_{ij}^2\),
   where
-  \(y_{ij} = (\mathbf{\widetilde v}_j \otimes \mathbf{\widetilde v}_i)^T\mathbf{z}\)
+  \(y_{ij} = \left(\left\{\mathbf{v}_{\rho_1}\right\}_i \otimes \left\{\mathbf{v}_{\rho_2}\right\}_j\right)^T\mathbf{z}\).
 \end{enumerate}
 
-This approach allows for efficient computation of the Gaussian copula
-density without explicitly forming the full \(n^2 \times n^2\) precision
-matrix \(\mathbf{Q}\) or its inverse \(\mathbf{\Sigma}\).
+This approach allows us to calculate the density of the spatial copula
+by calculating and iterating over the spectral decomposition of the
+smaller matrices, avoiding the formation of \(\mathbf Q\) alltogether.
 
 \subsection{Circulant and Folded Circulant
 Approximations}\label{circulant-and-folded-circulant-approximations}
@@ -451,15 +457,11 @@ plays a crucial role in efficient computations. In particular:
 \item
   The eigenvalues of \(C\) are given by the Discrete Fourier Transform
   (DFT) of \(c\): \[
-  \lambda_k = \sum_{j=0}^{n-1} c_j e^{-2\pi i jk/n}, \quad k = 0, 1, ..., n-1
+  \lambda = \text{DFT}(c)
   \]
 \item
   Matrix-vector multiplication can be performed using the FFT: \[
-  Cv = \frac1n\text{DFT}(\text{DFT}(c) \odot \text{IDFT}(v))
-  \]
-\item
-  The determinant of \(C\) is the product of its eigenvalues: \[
-  \det(C) = \prod_{k=0}^{n-1} \lambda_k
+  Cv = \text{DFT}(\text{DFT}(c) \odot \text{IDFT}(v))
   \]
 \item
   When \(C\) is non singular, then the inverse is circulant and thus
@@ -499,44 +501,22 @@ determines the BCCB matrix and is central to efficient computations:
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  The eigenvalues of \(C\) are given by the 2D DFT of \(\mathbf c\): \[
-  \Lambda_{k,l} = \sum_{i=0}^{n-1} \sum_{j=0}^{N-1} c_{ij} e^{-2\pi i (ki/n + lj/N)}, \quad k = 0, \dots, n-1, l = 0, \dots, N-1
-  \]
+  The eigenvalues of \(C\) are given by the 2D DFT of \(\mathbf c\).
 \item
-  Matrix-vector multiplication can be performed using the 2D FFT: \[
-  Cv = \text{IDFT2}(\text{DFT2}(c) \odot \text{DFT2}(v))
-  \]
+  Matrix-vector multiplication can be performed using the 2D FFT.
 \item
-  The determinant of \(C\) is the product of its eigenvalues: \[
-  \det(C) = \prod_{k=0}^{n-1} \prod_{l=0}^{N-1} \Lambda_{k,l}
-  \]
+  When \(C\) is non singular, then the inverse is also a BCCB matrix and
+  thus determined by its base matrix.
 \end{enumerate}
 
-\subsubsection{Computational Advantages}\label{computational-advantages}
+\subsubsection{\texorpdfstring{Approximations for
+\(Q_{\rho}\)}{Approximations for Q\_\{\textbackslash rho\}}}\label{approximations-for-q_rho}
 
-The circulant structure allows for efficient computation using the Fast
-Fourier Transform (FFT):
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item
-  Matrix-vector multiplication: For a circulant matrix C with base c and
-  a vector v \[
-  Cv = \sqrt{n} \text{DFT}(\text{DFT}(c) \odot \text{IDFT}(v)),
-  \]
-\item
-  Matrix inverse: The base of \(C^{-1}\) is given by \[
-  \frac{1}{n} \text{IDFT}(\text{DFT}(c)^{-1}).
-  \]
-\end{enumerate}
-
-\subsubsection{Approximations for Q1}\label{approximations-for-q1}
-
-Let \(Q_1\) be the precision matrix of a one-dimensional AR(1) process
-with n observations. The exact form of \(Q_1\) is:
+Let \(Q_{\rho}\) be the precision matrix of a one-dimensional AR(1)
+process with correlation \(\rho\). The exact form of \(Q_{\rho}\) is:
 
 \[
-\mathbf{Q}_1 = \frac{1}{1-\rho^2}
+\mathbf{Q}_\rho = \frac{1}{1-\rho^2}
 \begin{bmatrix}
 1 & -\rho & 0 & \cdots & 0 \\
 -\rho & 1+\rho^2 & -\rho & \cdots & 0 \\
@@ -548,11 +528,11 @@ with n observations. The exact form of \(Q_1\) is:
 
 \paragraph{Circulant Approximation}\label{circulant-approximation}
 
-The circulant approximation to \(Q_1\), denoted as
-\(\mathbf{Q}_1^{(circ)}\), is:
+The circulant approximation to \(Q_\rho\), denoted as
+\(\mathbf{Q}_\rho^{(circ)}\), is:
 
 \[
-\mathbf{Q}_1^{(circ)} = \frac{1}{1-\rho^2}
+\mathbf{Q}_\rho^{(circ)} = \frac{1}{1-\rho^2}
 \begin{bmatrix}
 1+\rho^2 & -\rho & 0 & \cdots & 0 & -\rho \\
 -\rho & 1+\rho^2 & -\rho & \cdots & 0 & 0 \\
@@ -568,14 +548,14 @@ effectively wrapping the data around a circle.
 \paragraph{Folded Circulant
 Approximation}\label{folded-circulant-approximation}
 
-The folded circulant approximation, \(\mathbf{Q}_1^{(fold)}\), is based
-on a reflected version of the data. We double the data by reflecting it,
-giving us the data \(x_1,  \dots, x_n, x_n, \dots, x_1\). We then model
-this doubled data with a \(2n \times 2n\) circulant matrix. If written
-out as an \(n \times n\) matrix, it takes the form:
+The folded circulant approximation, \(\mathbf{Q}_\rho^{(fold)}\), is
+based on a reflected version of the data. We double the data by
+reflecting it, giving us the data \(x_1,  \dots, x_n, x_n, \dots, x_1\).
+We then model this doubled data with a \(2n \times 2n\) circulant
+matrix. If written out as an \(n \times n\) matrix, it takes the form:
 
 \[
-\mathbf{Q}_1^{(fold)} = \frac{1}{1-\rho^2}
+\mathbf{Q}_\rho^{(fold)} = \frac{1}{1-\rho^2}
 \begin{bmatrix}
 1-\rho+\rho^2 & -\rho & 0 & \cdots & 0 & 0 \\
 -\rho & 1+\rho^2 & -\rho & \cdots & 0 & 0 \\
@@ -593,96 +573,104 @@ circulant approximation.
 \subsubsection{Extension to the Full Q
 Matrix}\label{extension-to-the-full-q-matrix}
 
-For a two-dimensional spatial field on an \(n \times n\) grid, we
+For a two-dimensional spatial field on an \(n_1 \times n_2\) grid, we
 construct the full precision matrix Q using a Kronecker sum:
 
 \[
-\mathbf{Q} = (\mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1)^{(\nu + 1)}
+\mathbf{Q} = \left( \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2} \right)^{(\nu + 1)}, \quad \nu \in \{0, 1, 2\}
 \]
 
-where \(\otimes\) denotes the Kronecker product, I is the \(n \times n\)
-identity matrix, and \(\nu\) is a smoothness parameter.
+where \(\otimes\) denotes the Kronecker product, \(I_n\) is the
+\(n \times n\) identity matrix, and \(\nu\) is a smoothness parameter.
 
-When we approximate \(Q_1\) with a circulant matrix, this Kronecker sum
-results in a block-circulant matrix with circulant blocks (BCCB). To see
-this, let's consider the case where \(\nu = 0\) for simplicity:
+When we approximate \(Q_\rho\) with a circulant matrix, this Kronecker
+sum results in a block-circulant matrix with circulant blocks (BCCB). To
+see this, let's consider the case where \(\nu = 0\) for simplicity:
 
 \[
-\mathbf{Q} = \mathbf{Q}_1 \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{Q}_1
+\mathbf{Q} = \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2}
 \]
 
-Now, let \(Q_1\) be approximated by a circulant matrix C with base
-vector \(c = [c_, c_1, ..., c_{n-1}]\). Then:
+Now, let the two AR(1) matrices be approximated by a circulant matrix
+\(C\) with base vector \(c = [c_, c_1, ..., c_{n-1}]\). Then:
 
 \[
-\mathbf{Q}_1 \approx \mathbf{C} = 
+\mathbf{Q}_{\rho_1} \approx \mathbf{C_{\rho_1}} = \frac{1}{1-\rho_1^2}
+\begin{bmatrix}
+1+\rho_1^2 & -\rho_1 & 0 & \cdots & 0 & -\rho_1 \\
+-\rho_1 & 1+\rho_1^2 & -\rho_1 & \cdots & 0 & 0 \\
+0 & -\rho_1 & 1+\rho_1^2 & \cdots & 0 & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+-\rho_1 & 0 & 0 & \cdots & -\rho_1 & 1+\rho_1^2
+\end{bmatrix},
+\]
+
+and \(C_{\rho_2}\) is defined similarly. The Kronecker product
+\(\mathbf C_{\rho_1} \otimes \mathbf I_{n_2}\) results in a block matrix
+where each block is a scalar multiple of \(I_{n_2}\):
+
+\[
+\mathbf{C_{\rho_1}} \otimes \mathbf{I_{n_2}} = \frac{1}{1-\rho_1^2}
 \begin{pmatrix}
-c_0 & c_1 & \cdots & c_{n-1} \\
-c_{n-1} & c_0 & \cdots & c_{n-2} \\
-\vdots & \vdots & \ddots & \vdots \\
-c_1 & c_2 & \cdots & c_0
-\end{pmatrix}
+(1+\rho_1^2)\mathbf{I_{n_2}} & -\rho_1\mathbf{I_{n_2}} & \dots & \cdots & -\rho_1\mathbf{I_{n_2}} \\
+-\rho_1\mathbf{I_{n_2}} & (1+\rho_1^2)\mathbf{I_{n_2}} & -\rho_1 \mathbf{I_{n_2}} & \cdots & \vdots  \\
+\vdots & \ddots & \ddots & \ddots & \vdots \\
+\vdots & \ddots & -\rho_1\mathbf{I_{n_2}} & (1+\rho_1^2)\mathbf{I_{n_2}} & -\rho_1 \mathbf{I_{n_2}}  \\
+-\rho_1\mathbf{I_{n_2}} & \dots & \cdots & -\rho_1 \mathbf{I_{n_2}} & (1+\rho_1^2)\mathbf{I_{n_2}}
+\end{pmatrix}.
 \]
 
-The Kronecker product \(C \otimes I\) results in a block matrix where
-each block is a scalar multiple of I:
+Similarly, \(\mathbf I_{n_1} \otimes \mathbf C_{\rho_2}\) results in a
+block diagonal matrix where each block is a copy of \(C_{\rho_2}\):
 
 \[
-\mathbf{C} \otimes \mathbf{I} = 
+\mathbf{I_{n_1}} \otimes \mathbf{C_{\rho_2}} = 
 \begin{pmatrix}
-c_0\mathbf{I} & c_1\mathbf{I} & \cdots & c_{n-1}\mathbf{I} \\
-c_{n-1}\mathbf{I} & c_0\mathbf{I} & \cdots & c_{n-2}\mathbf{I} \\
+\mathbf{C_{\rho_2}} & \mathbf{0} & \cdots & \mathbf{0} \\
+\mathbf{0} & \mathbf{C_{\rho_2}} & \cdots & \mathbf{0} \\
 \vdots & \vdots & \ddots & \vdots \\
-c_1\mathbf{I} & c_2\mathbf{I} & \cdots & c_0\mathbf{I}
-\end{pmatrix}
-\]
-
-Similarly, I ⊗ C results in a block matrix where each block is a copy of
-C:
-
-\[
-\mathbf{I} \otimes \mathbf{C} = 
-\begin{pmatrix}
-\mathbf{C} & \mathbf{0} & \cdots & \mathbf{0} \\
-\mathbf{0} & \mathbf{C} & \cdots & \mathbf{0} \\
-\vdots & \vdots & \ddots & \vdots \\
-\mathbf{0} & \mathbf{0} & \cdots & \mathbf{C}
-\end{pmatrix}
+\mathbf{0} & \mathbf{0} & \cdots & \mathbf{C_{\rho_2}}
+\end{pmatrix}.
 \]
 
 The sum of these two matrices is a block-circulant matrix with circulant
 blocks:
 
 \[
-\mathbf{Q} \approx \mathbf{C} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{C} = 
+\mathbf{Q} \approx \mathbf C_{\rho_1} \otimes \mathbf I_{n_2} + \mathbf I_{n_1} \otimes \mathbf C_{\rho_2} = 
 \begin{pmatrix}
-\mathbf{B}_0 & \mathbf{B}_1 & \cdots & \mathbf{B}_{n-1} \\
-\mathbf{B}_{n-1} & \mathbf{B}_0 & \cdots & \mathbf{B}_{n-2} \\
+\mathbf{B}_0 & \mathbf{B}_1 & \cdots & \mathbf{B}_{n_1-1} \\
+\mathbf{B}_{n_1-1} & \mathbf{B}_0 & \cdots & \mathbf{B}_{n_1-2} \\
 \vdots & \vdots & \ddots & \vdots \\
 \mathbf{B}_1 & \mathbf{B}_2 & \cdots & \mathbf{B}_0
 \end{pmatrix}
 \]
 
 where each \(\mathbf{B_i}\) is a circulant matrix. Specifically,
-\(\mathbf{B_0} = c_0I + C\), and for \(i \neq 0\),
-\(\mathbf{B_i} = c_iI\).
+
+\[
+\begin{aligned}
+\mathbf{B_0} &= \frac{(1+\rho_1^2)}{(1 - \rho_1^2)}\mathbf{I_{n_2}} + \mathbf C_{\rho_2}, \quad \text{and} \\
+\mathbf{B_1} &= \mathbf{B_{n_1 - 1}} = \frac{-\rho_1}{(1 - \rho_1^2)}\mathbf{I_{n_2}}.
+\end{aligned}
+\]
 
 This BCCB structure allows us to use 2D FFT for efficient computations.
 The base matrix \(\mathbf c\) for this BCCB structure is:
 
 \[
 \mathbf{c} = \begin{bmatrix}
-2+2\rho^2 & -\rho & 0 & \cdots  & -\rho \\
--\rho & 0 & 0 & \cdots  & 0 \\
+\frac{(1+\rho_1^2)}{(1 - \rho_1^2)} + \frac{(1+\rho_2^2)}{(1 - \rho_2^2)} & \frac{-\rho_1}{(1 - \rho_1^2)} & 0 & \cdots  & \frac{-\rho_1}{(1 - \rho_1^2)} \\
+\frac{-\rho_2}{(1 - \rho_2^2)} & 0 & 0 & \cdots  & 0 \\
 0 & 0 & 0 & \cdots  & 0 \\
 \vdots & \vdots & \vdots & \ddots &  \vdots \\
--\rho & 0 & 0 & \cdots  & 0
+\frac{-\rho_2}{(1 - \rho_2^2)} & 0 & 0 & \cdots  & 0
 \end{bmatrix}
 \]
 
 This base matrix \(c\) captures the structure of the precision matrix
-\(Q\) and allows for efficient computation of eigenvalues using the 2D
-Fast Fourier Transform (FFT), enabling rapid calculation of the
+\(\mathbf Q\) and allows for efficient computation of eigenvalues using
+the 2D Fast Fourier Transform (FFT), enabling rapid calculation of the
 log-determinant and quadratic forms needed for the Gaussian copula
 density.
 
@@ -698,16 +686,17 @@ process:
 \subsubsection{1. Construct the Base
 Matrix}\label{construct-the-base-matrix}
 
-First, we construct the base matrix c for our BCCB approximation of Q.
-For an n × n grid, c is an n × n matrix:
+First, we construct the base matrix \(\mathbf c\) for our BCCB
+approximation of \(\mathbf Q\). For an \(n_1 \times n_2\) grid,
+\(\mathbf c\) is an \(n_2 \times n_1\) matrix:
 
 \[
 \mathbf{c} = \begin{bmatrix}
-2+2\rho^2 & -\rho & 0 & \cdots & 0 & -\rho \\
--\rho & 0 & 0 & \cdots & 0 & 0 \\
-0 & 0 & 0 & \cdots & 0 & 0 \\
-\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
--\rho & 0 & 0 & \cdots & 0 & 0
+\frac{(1+\rho_1^2)}{(1 - \rho_1^2)} + \frac{(1+\rho_2^2)}{(1 - \rho_2^2)} & \frac{-\rho_1}{(1 - \rho_1^2)} & 0 & \cdots  & \frac{-\rho_1}{(1 - \rho_1^2)} \\
+\frac{-\rho_2}{(1 - \rho_2^2)} & 0 & 0 & \cdots  & 0 \\
+0 & 0 & 0 & \cdots  & 0 \\
+\vdots & \vdots & \vdots & \ddots &  \vdots \\
+\frac{-\rho_2}{(1 - \rho_2^2)} & 0 & 0 & \cdots  & 0
 \end{bmatrix}
 \]
 
@@ -717,8 +706,8 @@ matrix.
 \subsubsection{2. Compute Initial
 Eigenvalues}\label{compute-initial-eigenvalues}
 
-We compute the initial eigenvalues of Q using the 2D Fast Fourier
-Transform (FFT) of c:
+We compute the initial eigenvalues of \(\mathbf Q\) using the 2D Fast
+Fourier Transform (FFT) of \(\mathbf c\):
 
 \[
 \boldsymbol{\Lambda} = \text{FFT2}(\mathbf{c})^{\nu+1}
@@ -730,9 +719,10 @@ where ν is the smoothness parameter.
 Eigenvalues}\label{compute-marginal-variance-and-rescale-eigenvalues}
 
 An important property of Block Circulant with Circulant Blocks (BCCB)
-matrices is that the inverse of a BCCB matrix is also a BCCB matrix with
-a constant diagonal. We use this to efficiently compute the marginal
-variance and rescale the eigenvalues:
+matrices is that the inverse of a BCCB matrix is also a BCCB matrix, and
+the marginal variance is the first element in its first circulant block.
+We use this to efficiently compute the marginal variance and rescale the
+eigenvalues:
 
 \begin{enumerate}
 \def\labelenumi{\alph{enumi}.}
@@ -741,7 +731,7 @@ variance and rescale the eigenvalues:
   Compute the element-wise inverse of \(\boldsymbol{\Lambda}\):
   \(\mathbf{\Lambda^{inv}} = 1 / \boldsymbol{\Lambda}\)
 \item
-  Compute the base of \(Q^{-1}\) using inverse 2D FFT:
+  Compute the base of \(\mathbf Q^{-1}\) using inverse 2D FFT:
   \(\mathbf{c_{inv}} = \text{IFFT2}(\mathbf{{\Lambda^{inv}}})\)
 \item
   The marginal variance is given by the first element of
@@ -806,7 +796,7 @@ can provide better accuracy near the edges of the spatial field. This
 method is based on the idea of reflecting the data along each coordinate
 axis, effectively doubling the size of the field. Other than that, the
 algorithmic implementation is the same except that the circulant
-approximation matrices to \(Q_1\) are now \(2n \times 2n\).
+approximation matrices to \(\mathbf Q_{\rho}\) are now \(2n \times 2n\).
 
 First, we reflect the data along each coordinate axis. For a 2D spatial
 field represented by an \(n \times n\) matrix, the reflected data takes
@@ -814,17 +804,18 @@ the form:
 
 \[
 \begin{bmatrix}
-x_{11} & \cdots & x_{1n} & x_{1n} & \cdots & x_{11} \\
+x_{11} & \cdots & x_{1n_2} & x_{1n_2} & \cdots & x_{11} \\
 \vdots & \ddots & \vdots & \vdots & \ddots & \vdots \\
-x_{n1} & \cdots & x_{nn} & x_{nn} & \cdots & x_{n1} \\
-x_{n1} & \cdots & x_{nn} & x_{nn} & \cdots & x_{n1} \\
+x_{n_11} & \cdots & x_{n_1n_2} & x_{n_1n_2} & \cdots & x_{n_11} \\
+x_{n_11} & \cdots & x_{n_1n_2} & x_{n_1n_2} & \cdots & x_{n_11} \\
 \vdots & \ddots & \vdots & \vdots & \ddots & \vdots \\
-x_{11} & \cdots & x_{1n} & x_{1n} & \cdots & x_{11}
+x_{11} & \cdots & x_{1n_2} & x_{1n_2} & \cdots & x_{11}
 \end{bmatrix}
 \]
 
-This reflection creates a \(2n \times 2n\) matrix. The matrix is then
-stacked in lexicographic order before entering into the quadratic forms.
+This reflection creates a \(2n_1 \times 2n_2\) matrix. The matrix is
+then stacked in lexicographic order before entering into the quadratic
+forms.
 
 \section{Results}\label{results}
 
@@ -837,68 +828,81 @@ approximations, along with the speed-up factor relative to the exact
 method. Each calculation was performed twenty times and the median times
 are shown in the table.
 
-\begin{longtable}[]{@{}llllll@{}}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.0808}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1010}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.0707}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1616}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1111}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.2121}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.0808}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1818}}@{}}
 \caption{Table 1. Benchmarking how long it takes to evaluate the density
 of a Mátern(\(\nu\))-like field with correlation parameter \(\rho\),
 scaled to have unit marginal variance.}\tabularnewline
 \toprule\noalign{}
-Q\_size & Exact & Circulant & & Folded & \\
+\begin{minipage}[b]{\linewidth}\raggedright
+Q\_size
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Cholesky
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Eigen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Eigen Speed-Up
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Circulant
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Circulant Speed-Up
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Folded
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Folded Speed-Up
+\end{minipage} \\
 \midrule\noalign{}
 \endfirsthead
 \toprule\noalign{}
-Q\_size & Exact & Circulant & & Folded & \\
+\begin{minipage}[b]{\linewidth}\raggedright
+Q\_size
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Cholesky
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Eigen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Eigen Speed-Up
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Circulant
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Circulant Speed-Up
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Folded
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Folded Speed-Up
+\end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-& Time & Time & Speed-Up & Time & Speed-Up \\
-100x100 & 194.69μs & 33.89μs & 5.75x & 44.77μs & 4.35x \\
-400x400 & 309.61μs & 37.45μs & 8.27x & 122.78μs & 2.52x \\
-900x900 & 790.30μs & 85.65μs & 9.23x & 155.47μs & 5.08x \\
-1600x1600 & 1.96ms & 98.71μs & 19.86x & 243.64μs & 8.05x \\
-3600x3600 & 8.66ms & 151.70μs & 57.1x & 484.07μs & 17.89x \\
-10000x10000 & 71.81ms & 343.07μs & 209.31x & 1.36ms & 52.76x \\
-19600x19600 & 246.40ms & 667.58μs & 369.09x & 2.89ms & 85.32x \\
-40000x40000 & 997.32ms & 1.44ms & 694.46x & 7.69ms & 129.69x \\
+100x100 & 27.14µs & 96.86µs & 0.28x & 28.3µs & 0.96x & 35.88µs &
+0.76x \\
+400x400 & 335.09µs & 270.48µs & 1.24x & 35.0µs & 9.58x & 113.12µs &
+2.96x \\
+900x900 & 1.95ms & 758.11µs & 2.57x & 87.4µs & 22.28x & 178.17µs &
+10.93x \\
+1600x1600 & 6.08ms & 1.96ms & 3.11x & 110.4µs & 55.12x & 332.16µs &
+18.31x \\
+2500x2500 & 15.24ms & 4.43ms & 3.44x & 141.0µs & 108.07x & 489.25µs &
+31.15x \\
+3600x3600 & 31.28ms & 8.53ms & 3.67x & 175.2µs & 178.52x & 653.15µs &
+47.89x \\
+4900x4900 & 68.73ms & 16.37ms & 4.2x & 229.8µs & 299.02x & 864.75µs &
+79.48x \\
+6400x6400 & 121.65ms & 30.95ms & 3.93x & 300.1µs & 405.38x & 1.16ms &
+104.96x \\
+8100x8100 & 196.57ms & 47.82ms & 4.11x & 470.5µs & 417.83x & 1.55ms &
+126.68x \\
+10000x10000 & 288.79ms & 74.03ms & 3.9x & 429.8µs & 671.87x & 1.74ms &
+166.37x \\
 \end{longtable}
-
-The results demonstrate significant computational gains from both
-approximation methods, with the efficiency advantage increasing for
-larger grid sizes. Key observations include:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item
-  \textbf{Scalability}: Both approximation methods show superior
-  scalability compared to the exact method. As the grid size increases,
-  the speed-up factor generally increases, indicating that the
-  approximations become increasingly advantageous for larger spatial
-  fields.
-\item
-  \textbf{Circulant Approximation Performance}: The circulant
-  approximation consistently outperforms the folded circulant
-  approximation in terms of speed. For the largest grid size
-  (40000x40000), it achieves a remarkable 694.46x speed-up over the
-  exact method.
-\item
-  \textbf{Folded Circulant Approximation}: While not as fast as the
-  circulant approximation, the folded circulant method still offers
-  substantial speed improvements, reaching a 129.69x speed-up for the
-  40000x40000 grid.
-\item
-  \textbf{Trade-off Considerations}: The choice between the circulant
-  and folded circulant approximations may depend on the specific
-  requirements of the application. While the circulant approximation is
-  faster, the folded circulant method may offer better accuracy,
-  particularly near the edges of the spatial field.
-\end{enumerate}
-
-These results underscore the practical value of our approximation
-methods, especially for large-scale spatial analyses where computational
-efficiency is crucial. The substantial speed-ups achieved, particularly
-for larger grids, demonstrate the potential of these methods to enable
-the analysis of much larger spatial datasets than previously feasible
-with exact methods.
 
 \section{Appendix}\label{appendix}
 
