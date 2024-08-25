@@ -55,7 +55,27 @@
       @media screen {
       pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
       }
-    </style>
+      /* CSS for citations */
+      div.csl-bib-body { }
+      div.csl-entry {
+        clear: both;
+        margin-bottom: 0em;
+      }
+      .hanging-indent div.csl-entry {
+        margin-left:2em;
+        text-indent:-2em;
+      }
+      div.csl-left-margin {
+        min-width:2em;
+        float:left;
+      }
+      div.csl-right-inline {
+        margin-left:2em;
+        padding-left:1em;
+      }
+      div.csl-indent {
+        margin-left: 2em;
+      }    </style>
 
     <style>
       body.hypothesis-enabled #quarto-embed-header {
@@ -171,6 +191,17 @@
 <meta name="citation_year" content="2024">
 <meta name="citation_online_date" content="2024-08-22">
 <meta name="citation_language" content="en">
+<meta name="citation_reference" content="citation_title=Gaussian Markov Random Fields: Theory and Applications;,citation_author=Havard Rue;,citation_author=Leonhard Held;,citation_publication_date=2005-02-18;,citation_cover_date=2005-02-18;,citation_year=2005;,citation_language=en;">
+<meta name="citation_reference" content="citation_title=Spatial Analysis;,citation_author=John T. Kent;,citation_author=Kanti V. Mardia;,citation_publication_date=2022-05-31;,citation_cover_date=2022-05-31;,citation_year=2022;,citation_language=en;">
+<meta name="citation_reference" content="citation_title=On edge correction of conditional and intrinsic autoregressions;,citation_author=D Mondal;,citation_publication_date=2018-06-01;,citation_cover_date=2018-06-01;,citation_year=2018;,citation_fulltext_html_url=https://doi.org/10.1093/biomet/asy014;,citation_issue=2;,citation_doi=10.1093/biomet/asy014;,citation_volume=105;,citation_journal_title=Biometrika;">
+<meta name="citation_reference" content="citation_title=First-order intrinsic autoregressions and the de wijs process;,citation_author=Julian Besag;,citation_author=Debashis Mondal;,citation_publication_date=2005-12-01;,citation_cover_date=2005-12-01;,citation_year=2005;,citation_fulltext_html_url=https://doi.org/10.1093/biomet/92.4.909;,citation_issue=4;,citation_doi=10.1093/biomet/92.4.909;,citation_volume=92;,citation_journal_title=Biometrika;">
+<meta name="citation_reference" content="citation_title=Approximate Bayesian inference for latent Gaussian models by using integrated nested Laplace approximations;,citation_author=Håvard Rue;,citation_author=Sara Martino;,citation_author=Nicolas Chopin;,citation_publication_date=2009;,citation_cover_date=2009;,citation_year=2009;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-9868.2008.00700.x;,citation_issue=2;,citation_doi=10.1111/j.1467-9868.2008.00700.x;,citation_volume=71;,citation_language=en;,citation_journal_title=Journal of the Royal Statistical Society: Series B (Statistical Methodology);">
+<meta name="citation_reference" content="citation_title=Fonctions de répartition à n dimensions et leurs marges;,citation_author=M. Sklar;,citation_publication_date=1959;,citation_cover_date=1959;,citation_year=1959;,citation_fulltext_html_url=https://hal.science/hal-04094463;,citation_issue=3;,citation_volume=VIII;,citation_journal_title=Annales de l’ISUP;">
+<meta name="citation_reference" content="citation_title=Multivariate models and multivariate dependence concepts;,citation_author=Harry Joe;,citation_publication_date=1997-05-01;,citation_cover_date=1997-05-01;,citation_year=1997;">
+<meta name="citation_reference" content="citation_title=An introduction to copulas;,citation_author=Roger B. Nelsen;,citation_publication_date=2006;,citation_cover_date=2006;,citation_year=2006;,citation_language=en;,citation_series_title=Springer series in statistics;">
+<meta name="citation_reference" content="citation_title=An explicit link between Gaussian fields and Gaussian Markov random fields: the stochastic partial differential equation approach;,citation_author=Finn Lindgren;,citation_author=Håvard Rue;,citation_author=Johan Lindström;,citation_publication_date=2011;,citation_cover_date=2011;,citation_year=2011;,citation_fulltext_html_url=https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-9868.2011.00777.x;,citation_issue=4;,citation_doi=10.1111/j.1467-9868.2011.00777.x;,citation_volume=73;,citation_language=en;,citation_journal_title=Journal of the Royal Statistical Society: Series B (Statistical Methodology);">
+<meta name="citation_reference" content="citation_title=Matrix Analysis for Scientists and Engineers | SIAM Publications Library;,citation_fulltext_html_url=https://epubs.siam.org/doi/book/10.1137/1.9780898717907;,citation_language=en;">
+<meta name="citation_reference" content="citation_title=Toeplitz and circulant matrices: A review;,citation_author=Robert M. Gray;,citation_publication_date=2006-01-30;,citation_cover_date=2006-01-30;,citation_year=2006;,citation_fulltext_html_url=https://www.nowpublishers.com/article/Details/CIT-006;,citation_issue=3;,citation_doi=10.1561/0100000006;,citation_volume=2;,citation_language=en-US;,citation_journal_title=Foundations and Trends® in Communications and Information Theory;">
 </head>
 
   <body class="quarto-notebook">
@@ -315,7 +346,7 @@
 </section>
 <section id="review" class="level2">
 <h2 class="anchored" data-anchor-id="review">Review</h2>
-<p>Gaussian Markov Random Fields (GMRFs) and copulas are two powerful statistical tools, each offering unique strengths in modeling complex data structures. GMRFs excel in capturing spatial and temporal dependencies, particularly in fields such as environmental science, epidemiology, and image analysis. Their ability to represent local dependencies through sparse precision matrices makes them computationally attractive for high-dimensional problems. Copulas, on the other hand, provide a flexible framework for modeling multivariate dependencies, allowing separate specification of marginal distributions and their joint behavior.</p>
+<p>Gaussian Markov Random Fields (GMRFs) and copulas are two powerful statistical tools, each offering unique strengths in modeling complex data structures. GMRFs excel in capturing spatial and temporal dependencies, particularly in fields such as environmental science, epidemiology, and image analysis <span class="citation" data-cites="rue2005">(<a href="#ref-rue2005" role="doc-biblioref">Rue and Held 2005</a>)</span>. Their ability to represent local dependencies through sparse precision matrices makes them computationally attractive for high-dimensional problems. Copulas, on the other hand, provide a flexible framework for modeling multivariate dependencies, allowing separate specification of marginal distributions and their joint behavior.</p>
 <p>The Gaussian copula, in particular, has gained popularity due to its interpretability and connection to the multivariate normal distribution. However, combining GMRFs with copulas has historically been computationally challenging, limiting their joint application to smaller datasets or simpler models.</p>
 <p>Let <span class="math inline">\(\mathbf{X} = (X_1, X_2, \ldots, X_n)\)</span> be a multivariate random vector with marginal distribution functions <span class="math inline">\(F_i\)</span> for <span class="math inline">\(i = 1, 2, \ldots, n\)</span>. The joint distribution function of <span class="math inline">\(\mathbf{X}\)</span> can be written as:</p>
 <p><span class="math display">\[
@@ -326,13 +357,13 @@ F_{\mathbf{X}}(\mathbf{x}) = C(F_1(x_1), F_2(x_2), \ldots, F_n(x_n)),
 C(u_1, u_2, \ldots, u_n) = \Phi_\mathbf{Q}(\Phi^{-1}(u_1), \Phi^{-1}(u_2), \ldots, \Phi^{-1}(u_n)),
 \]</span></p>
 <p>where <span class="math inline">\(\Phi_\mathbf{Q}\)</span> is the joint cumulative distribution function of a multivariate normal distribution with mean vector <span class="math inline">\(\mathbf{0}\)</span> and precision matrix <span class="math inline">\(\mathbf{Q}\)</span>, and <span class="math inline">\(\Phi^{-1}\)</span> is the inverse of the standard normal cumulative distribution function.</p>
-<p>A critical requirement for the precision matrix <span class="math inline">\(\mathbf{Q}\)</span> governing the GMRF copula <span class="math inline">\(C\)</span> is that <span class="math inline">\(\mathbf{\Sigma} = \mathbf{Q}^{-1}\)</span> should have a unit diagonal, i.e.&nbsp;the marginal variance is equal to one everywhere.. This ensures it operates on the same scale as the transformed data, <span class="math inline">\(\Phi^{-1}(u_i)\)</span>. However, this can be challenging as GMRFs are typically defined in terms of precision matrices that often imply non-unit marginal variances.</p>
+<p>A critical requirement for the precision matrix <span class="math inline">\(\mathbf{Q}\)</span> governing the GMRF copula <span class="math inline">\(C\)</span> is that <span class="math inline">\(\mathbf{\Sigma} = \mathbf{Q}^{-1}\)</span> should have a unit diagonal, i.e.&nbsp;the marginal variance is equal to one everywhere. This ensures it operates on the same scale as the transformed data, <span class="math inline">\(\Phi^{-1}(u_i)\)</span>. However, this can be challenging as GMRFs are typically defined in terms of precision matrices that often imply non-unit marginal variances.</p>
 <p>This paper presents a novel algorithm that bridges the gap between GMRFs and copulas, allowing for fast and efficient computation of Gaussian copula densities using GMRF precision structures. Our method focuses on creating a Matérn-like precision matrix <span class="math inline">\(\mathbf{Q}\)</span> with unit marginal variance and efficiently computing the multivariate Gaussian copula density of <span class="math inline">\(\mathbf{Z} = \Phi^{-1}(\mathbf{u})\)</span>, where <span class="math inline">\(u_i \sim \text{Uniform}(0, 1)\)</span>, <span class="math inline">\(i = 1, \dots, n\)</span>.</p>
 <p>The key innovation lies in leveraging the special structure of the precision matrix:</p>
 <p><span class="math display">\[
 \mathbf{Q} = \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2},
 \]</span></p>
-<p>where <span class="math inline">\(\mathbf{Q}_\rho\)</span> is the precision matrix of a standardized one-dimensional AR(1) process with correlation <span class="math inline">\(\rho\)</span> and <span class="math inline">\(\otimes\)</span> denotes the Kronecker product. By employing efficient eigendecomposition techniques, our method avoids explicit formation and inversion of the large precision matrix <span class="math inline">\(\mathbf{Q}\)</span>, making it particularly suitable for high-dimensional spatial data. In addition to the exact method, we show how the precision matrix can be approximated by a folded circulant matrix wich gives a large speed-up while preserving suitable boundary conditions.</p>
+<p>where <span class="math inline">\(\mathbf{Q}_\rho\)</span> is the precision matrix of a standardized one-dimensional AR(1) process with correlation <span class="math inline">\(\rho\)</span> and <span class="math inline">\(\otimes\)</span> denotes the Kronecker product. By employing efficient eigendecomposition techniques, our method avoids explicit formation and inversion of the large precision matrix <span class="math inline">\(\mathbf{Q}\)</span>, making it particularly suitable for high-dimensional spatial data. In addition to the exact method, we show how the precision matrix can be approximated by a folded circulant matrix wich gives a large speed-up while preserving suitable boundary conditions <span class="citation" data-cites="kent2022">(<a href="#ref-kent2022" role="doc-biblioref">Kent and Mardia 2022</a>)</span>.</p>
 </section>
 </section>
 <section id="methods" class="level1">
@@ -352,7 +383,7 @@ c(\mathbf{u}) = |\mathbf{Q}|^{1/2} \exp\left(-\frac{1}{2}\mathbf{z}^T(\mathbf{Q}
 </section>
 <section id="precision-matrix-structure" class="level2">
 <h2 class="anchored" data-anchor-id="precision-matrix-structure">Precision Matrix Structure</h2>
-<p>We define the precision matrix <span class="math inline">\(\mathbf{Q}\)</span> as:</p>
+<p>Similarly to the GMRF approximation to a Matérn process in, we define the precision matrix <span class="math inline">\(\mathbf{Q}\)</span> as:</p>
 <p><span class="math display">\[
 \mathbf{Q} = (\mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2})^{(\nu + 1)}, \quad \nu \in \{0, 1, 2\}
 \]</span></p>
@@ -365,7 +396,7 @@ c(\mathbf{u}) = |\mathbf{Q}|^{1/2} \exp\left(-\frac{1}{2}\mathbf{z}^T(\mathbf{Q}
 0 &amp; -\rho &amp; 1+\rho^2 &amp; \cdots &amp; 0 \\
 \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 1
-\end{bmatrix}
+\end{bmatrix}.
 \]</span></p>
 <p>The matrix, <span class="math inline">\(\mathbf Q\)</span>, is then scaled so that its inverse, <span class="math inline">\(\mathbf \Sigma = \mathbf Q^{-1}\)</span> is a correlation matrix, i.e.&nbsp;<span class="math inline">\(\mathbf \Sigma_{ii} = 1\)</span>.</p>
 </section>
@@ -419,7 +450,7 @@ c(\mathbf{u}) = |\mathbf{Q}|^{1/2} \exp\left(-\frac{1}{2}\mathbf{z}^T(\mathbf{Q}
 </section>
 <section id="circulant-and-folded-circulant-approximations" class="level2">
 <h2 class="anchored" data-anchor-id="circulant-and-folded-circulant-approximations">Circulant and Folded Circulant Approximations</h2>
-<p>While the eigendecomposition method provides an exact solution, it can be computationally expensive for very large spatial fields. To address this, we introduce circulant and folded circulant approximations that offer potential computational advantages.</p>
+<p>While the eigendecomposition method provides an exact solution, it can be computationally expensive for very large spatial fields. To address this, we introduce circulant and folded circulant approximations that offer computational efficiency and speed.</p>
 <section id="circulant-matrices" class="level3">
 <h3 class="anchored" data-anchor-id="circulant-matrices">Circulant Matrices</h3>
 <p>A circulant matrix <span class="math inline">\(C\)</span> is a special kind of matrix where each row is a cyclic shift of the row above it. It can be fully specified by its first row or column, called the base <span class="math inline">\(c\)</span>:</p>
@@ -445,7 +476,7 @@ Cv = \text{DFT}(\text{DFT}(c) \odot \text{IDFT}(v))
 <p><span class="math display">\[
 \frac1n \text{IDFT}(\text{DFT}(c)^{-1}).
 \]</span></p>
-<p>These properties allow for much faster computations than for general matrices.</p>
+<p>These properties allow for much faster computations than for general matrices. For more reading on applications of circulant matrices to GMRFs see <span class="citation" data-cites="rue2005">(<a href="#ref-rue2005" role="doc-biblioref">Rue and Held 2005</a>)</span>.</p>
 </section>
 <section id="block-circulant-matrices" class="level3">
 <h3 class="anchored" data-anchor-id="block-circulant-matrices">Block Circulant Matrices</h3>
@@ -497,7 +528,7 @@ C_1 &amp; C_2 &amp; C_3 &amp; \cdots &amp; C_0
 </section>
 <section id="folded-circulant-approximation" class="level4">
 <h4 class="anchored" data-anchor-id="folded-circulant-approximation">Folded Circulant Approximation</h4>
-<p>The folded circulant approximation, <span class="math inline">\(\mathbf{Q}_\rho^{(fold)}\)</span>, is based on a reflected version of the data. We double the data by reflecting it, giving us the data <span class="math inline">\(x_1,  \dots, x_n, x_n, \dots, x_1\)</span>. We then model this doubled data with a <span class="math inline">\(2n \times 2n\)</span> circulant matrix. If written out as an <span class="math inline">\(n \times n\)</span> matrix, it takes the form:</p>
+<p>The folded circulant approximation, <span class="math inline">\(\mathbf{Q}_\rho^{(fold)}\)</span>, is based on a reflected version of the data <span class="citation" data-cites="kent2022">(<a href="#ref-kent2022" role="doc-biblioref">Kent and Mardia 2022</a>)</span>. We double the data by reflecting it, giving us the data <span class="math inline">\(x_1,  \dots, x_n, x_n, \dots, x_1\)</span>. We then model this doubled data with a <span class="math inline">\(2n \times 2n\)</span> circulant matrix. If written out as an <span class="math inline">\(n \times n\)</span> matrix, it takes the form:</p>
 <p><span class="math display">\[
 \mathbf{Q}_\rho^{(fold)} = \frac{1}{1-\rho^2}
 \begin{bmatrix}
@@ -705,23 +736,23 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
 <div class="cell-output-display">
-<div id="nuairmdrpq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#nuairmdrpq table {
+<div id="ppkarvrgdo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ppkarvrgdo table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#nuairmdrpq thead, #nuairmdrpq tbody, #nuairmdrpq tfoot, #nuairmdrpq tr, #nuairmdrpq td, #nuairmdrpq th {
+#ppkarvrgdo thead, #ppkarvrgdo tbody, #ppkarvrgdo tfoot, #ppkarvrgdo tr, #ppkarvrgdo td, #ppkarvrgdo th {
   border-style: none;
 }
 
-#nuairmdrpq p {
+#ppkarvrgdo p {
   margin: 0;
   padding: 0;
 }
 
-#nuairmdrpq .gt_table {
+#ppkarvrgdo .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -747,12 +778,12 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   border-left-color: #D3D3D3;
 }
 
-#nuairmdrpq .gt_caption {
+#ppkarvrgdo .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#nuairmdrpq .gt_title {
+#ppkarvrgdo .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -764,7 +795,7 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   border-bottom-width: 0;
 }
 
-#nuairmdrpq .gt_subtitle {
+#ppkarvrgdo .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -776,7 +807,7 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   border-top-width: 0;
 }
 
-#nuairmdrpq .gt_heading {
+#ppkarvrgdo .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -788,13 +819,13 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   border-right-color: #D3D3D3;
 }
 
-#nuairmdrpq .gt_bottom_border {
+#ppkarvrgdo .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#nuairmdrpq .gt_col_headings {
+#ppkarvrgdo .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -809,7 +840,7 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   border-right-color: #D3D3D3;
 }
 
-#nuairmdrpq .gt_col_heading {
+#ppkarvrgdo .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -829,7 +860,7 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   overflow-x: hidden;
 }
 
-#nuairmdrpq .gt_column_spanner_outer {
+#ppkarvrgdo .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -841,15 +872,15 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   padding-right: 4px;
 }
 
-#nuairmdrpq .gt_column_spanner_outer:first-child {
+#ppkarvrgdo .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#nuairmdrpq .gt_column_spanner_outer:last-child {
+#ppkarvrgdo .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#nuairmdrpq .gt_column_spanner {
+#ppkarvrgdo .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -861,11 +892,11 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   width: 100%;
 }
 
-#nuairmdrpq .gt_spanner_row {
+#ppkarvrgdo .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#nuairmdrpq .gt_group_heading {
+#ppkarvrgdo .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -891,7 +922,7 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   text-align: left;
 }
 
-#nuairmdrpq .gt_empty_group_heading {
+#ppkarvrgdo .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -906,15 +937,15 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   vertical-align: middle;
 }
 
-#nuairmdrpq .gt_from_md > :first-child {
+#ppkarvrgdo .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#nuairmdrpq .gt_from_md > :last-child {
+#ppkarvrgdo .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#nuairmdrpq .gt_row {
+#ppkarvrgdo .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -933,7 +964,7 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   overflow-x: hidden;
 }
 
-#nuairmdrpq .gt_stub {
+#ppkarvrgdo .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -946,7 +977,7 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   padding-right: 5px;
 }
 
-#nuairmdrpq .gt_stub_row_group {
+#ppkarvrgdo .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -960,15 +991,15 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   vertical-align: top;
 }
 
-#nuairmdrpq .gt_row_group_first td {
+#ppkarvrgdo .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#nuairmdrpq .gt_row_group_first th {
+#ppkarvrgdo .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#nuairmdrpq .gt_summary_row {
+#ppkarvrgdo .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -978,16 +1009,16 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   padding-right: 5px;
 }
 
-#nuairmdrpq .gt_first_summary_row {
+#ppkarvrgdo .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#nuairmdrpq .gt_first_summary_row.thick {
+#ppkarvrgdo .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#nuairmdrpq .gt_last_summary_row {
+#ppkarvrgdo .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -997,7 +1028,7 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   border-bottom-color: #D3D3D3;
 }
 
-#nuairmdrpq .gt_grand_summary_row {
+#ppkarvrgdo .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1007,7 +1038,7 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   padding-right: 5px;
 }
 
-#nuairmdrpq .gt_first_grand_summary_row {
+#ppkarvrgdo .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1017,7 +1048,7 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   border-top-color: #D3D3D3;
 }
 
-#nuairmdrpq .gt_last_grand_summary_row_top {
+#ppkarvrgdo .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1027,11 +1058,11 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   border-bottom-color: #D3D3D3;
 }
 
-#nuairmdrpq .gt_striped {
+#ppkarvrgdo .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#nuairmdrpq .gt_table_body {
+#ppkarvrgdo .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1040,7 +1071,7 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   border-bottom-color: #D3D3D3;
 }
 
-#nuairmdrpq .gt_footnotes {
+#ppkarvrgdo .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1054,7 +1085,7 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   border-right-color: #D3D3D3;
 }
 
-#nuairmdrpq .gt_footnote {
+#ppkarvrgdo .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1063,7 +1094,7 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   padding-right: 5px;
 }
 
-#nuairmdrpq .gt_sourcenotes {
+#ppkarvrgdo .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1077,7 +1108,7 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   border-right-color: #D3D3D3;
 }
 
-#nuairmdrpq .gt_sourcenote {
+#ppkarvrgdo .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1085,72 +1116,72 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
   padding-right: 5px;
 }
 
-#nuairmdrpq .gt_left {
+#ppkarvrgdo .gt_left {
   text-align: left;
 }
 
-#nuairmdrpq .gt_center {
+#ppkarvrgdo .gt_center {
   text-align: center;
 }
 
-#nuairmdrpq .gt_right {
+#ppkarvrgdo .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#nuairmdrpq .gt_font_normal {
+#ppkarvrgdo .gt_font_normal {
   font-weight: normal;
 }
 
-#nuairmdrpq .gt_font_bold {
+#ppkarvrgdo .gt_font_bold {
   font-weight: bold;
 }
 
-#nuairmdrpq .gt_font_italic {
+#ppkarvrgdo .gt_font_italic {
   font-style: italic;
 }
 
-#nuairmdrpq .gt_super {
+#ppkarvrgdo .gt_super {
   font-size: 65%;
 }
 
-#nuairmdrpq .gt_footnote_marks {
+#ppkarvrgdo .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#nuairmdrpq .gt_asterisk {
+#ppkarvrgdo .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#nuairmdrpq .gt_indent_1 {
+#ppkarvrgdo .gt_indent_1 {
   text-indent: 5px;
 }
 
-#nuairmdrpq .gt_indent_2 {
+#ppkarvrgdo .gt_indent_2 {
   text-indent: 10px;
 }
 
-#nuairmdrpq .gt_indent_3 {
+#ppkarvrgdo .gt_indent_3 {
   text-indent: 15px;
 }
 
-#nuairmdrpq .gt_indent_4 {
+#ppkarvrgdo .gt_indent_4 {
   text-indent: 20px;
 }
 
-#nuairmdrpq .gt_indent_5 {
+#ppkarvrgdo .gt_indent_5 {
   text-indent: 25px;
 }
 
-#nuairmdrpq .katex-display {
+#ppkarvrgdo .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#nuairmdrpq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ppkarvrgdo div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1390,6 +1421,14 @@ Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2
 </ol></li>
 <li>Compute log-density: <span class="math inline">\(\log c(u) = -\frac{1}{2}(d\log(2\pi) + \log|\tilde{Q}| + q - z^Tz)\)</span></li>
 </ol>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-kent2022" class="csl-entry" role="listitem">
+Kent, John T., and Kanti V. Mardia. 2022. <em>Spatial Analysis</em>. John Wiley &amp; Sons.
+</div>
+<div id="ref-rue2005" class="csl-entry" role="listitem">
+Rue, Havard, and Leonhard Held. 2005. <em>Gaussian Markov Random Fields: Theory and Applications</em>. CRC Press.
+</div>
+</div>
 </section>
 </section>
 </section>

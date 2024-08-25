@@ -16,6 +16,7 @@ manuscript:
       href: https://github.com/bgautijonsson/stdmatern
     
 
+
 format:
   html: 
     toc: true
@@ -23,7 +24,7 @@ format:
       hypothesis: true
   docx: default
   jats: default
-  acs-pdf: default
+  pdf: default
  
 execute:
   freeze: true

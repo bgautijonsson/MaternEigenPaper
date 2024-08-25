@@ -8,6 +8,7 @@ author:
 date: 2024/08/22
 number-sections: false
 code-block-border-left: true
+bibliography: references.bib
 ---
 
 ```{r setup}
@@ -22,15 +23,13 @@ library(gt)
 
 Consider a spatial field on a regular $n_1 \times n_2$ grid. Our objective is to compute the Gaussian copula density efficiently for this field. This computation involves:
 
-1. Specifying an $n_1 n_2 \times n_1 n_2$ precision matrix $\mathbf{Q}$ that represents the spatial dependence structure.
-2. Ensuring the implied covariance matrix $\mathbf{\Sigma} = \mathbf{Q}^{-1}$ has unit diagonal elements.
-3. Computing the log determinant, $\log |\mathbf Q|$, and the quadratic form $z^T \mathbf Q z$ where $z_i = \Phi^{-1}(f_i(y_i))$
-
-
+1.  Specifying an $n_1 n_2 \times n_1 n_2$ precision matrix $\mathbf{Q}$ that represents the spatial dependence structure.
+2.  Ensuring the implied covariance matrix $\mathbf{\Sigma} = \mathbf{Q}^{-1}$ has unit diagonal elements.
+3.  Computing the log determinant, $\log |\mathbf Q|$, and the quadratic form $z^T \mathbf Q z$ where $z_i = \Phi^{-1}(f_i(y_i))$
 
 ## Review
 
-Gaussian Markov Random Fields (GMRFs) and copulas are two powerful statistical tools, each offering unique strengths in modeling complex data structures. GMRFs excel in capturing spatial and temporal dependencies, particularly in fields such as environmental science, epidemiology, and image analysis. Their ability to represent local dependencies through sparse precision matrices makes them computationally attractive for high-dimensional problems. Copulas, on the other hand, provide a flexible framework for modeling multivariate dependencies, allowing separate specification of marginal distributions and their joint behavior.
+Gaussian Markov Random Fields (GMRFs) and copulas are two powerful statistical tools, each offering unique strengths in modeling complex data structures. GMRFs excel in capturing spatial and temporal dependencies, particularly in fields such as environmental science, epidemiology, and image analysis [@rue2005; @knorr-held2000; @rue2009]. Their ability to represent local dependencies through sparse precision matrices makes them computationally attractive for high-dimensional problems. Copulas, on the other hand, provide a flexible framework for modeling multivariate dependencies, allowing separate specification of marginal distributions and their joint behavior [@sklar1959; @joe1997; @nelsen2006].
 
 The Gaussian copula, in particular, has gained popularity due to its interpretability and connection to the multivariate normal distribution. However, combining GMRFs with copulas has historically been computationally challenging, limiting their joint application to smaller datasets or simpler models.
 
@@ -48,7 +47,7 @@ $$
 
 where $\Phi_\mathbf{Q}$ is the joint cumulative distribution function of a multivariate normal distribution with mean vector $\mathbf{0}$ and precision matrix $\mathbf{Q}$, and $\Phi^{-1}$ is the inverse of the standard normal cumulative distribution function.
 
-A critical requirement for the precision matrix $\mathbf{Q}$ governing the GMRF copula $C$ is that $\mathbf{\Sigma} = \mathbf{Q}^{-1}$ should have a unit diagonal, i.e. the marginal variance is equal to one everywhere.. This ensures it operates on the same scale as the transformed data, $\Phi^{-1}(u_i)$. However, this can be challenging as GMRFs are typically defined in terms of precision matrices that often imply non-unit marginal variances.
+A critical requirement for the precision matrix $\mathbf{Q}$ governing the GMRF copula $C$ is that $\mathbf{\Sigma} = \mathbf{Q}^{-1}$ should have a unit diagonal, i.e. the marginal variance is equal to one everywhere. This ensures it operates on the same scale as the transformed data, $\Phi^{-1}(u_i)$. However, this can be challenging as GMRFs are typically defined in terms of precision matrices that often imply non-unit marginal variances.
 
 This paper presents a novel algorithm that bridges the gap between GMRFs and copulas, allowing for fast and efficient computation of Gaussian copula densities using GMRF precision structures. Our method focuses on creating a Matérn-like precision matrix $\mathbf{Q}$ with unit marginal variance and efficiently computing the multivariate Gaussian copula density of $\mathbf{Z} = \Phi^{-1}(\mathbf{u})$, where $u_i \sim \text{Uniform}(0, 1)$, $i = 1, \dots, n$.
 
@@ -58,7 +57,7 @@ $$
 \mathbf{Q} = \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2},
 $$
 
-where $\mathbf{Q}_\rho$ is the precision matrix of a standardized one-dimensional AR(1) process with correlation $\rho$ and $\otimes$ denotes the Kronecker product. By employing efficient eigendecomposition techniques, our method avoids explicit formation and inversion of the large precision matrix $\mathbf{Q}$, making it particularly suitable for high-dimensional spatial data. In addition to the exact method, we show how the precision matrix can be approximated by a folded circulant matrix wich gives a large speed-up while preserving suitable boundary conditions.
+where $\mathbf{Q}_\rho$ is the precision matrix of a standardized one-dimensional AR(1) process with correlation $\rho$ and $\otimes$ denotes the Kronecker product. By employing efficient eigendecomposition techniques, our method avoids explicit formation and inversion of the large precision matrix $\mathbf{Q}$, making it particularly suitable for high-dimensional spatial data. In addition to the exact method, we show how the precision matrix can be approximated by a folded circulant matrix wich gives a large speed-up while preserving suitable boundary conditions [@kent2022; @mondal2018; @besag2005].
 
 # Methods
 
@@ -82,7 +81,7 @@ Our goal is to efficiently compute this log-density for large spatial fields.
 
 ## Precision Matrix Structure
 
-We define the precision matrix $\mathbf{Q}$ as:
+Similarly to the GMRF approximation to a Matérn process in [@lindgren2011], we define the precision matrix $\mathbf{Q}$ as:
 
 $$
 \mathbf{Q} = (\mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2})^{(\nu + 1)}, \quad \nu \in \{0, 1, 2\}
@@ -98,7 +97,7 @@ $$
 0 & -\rho & 1+\rho^2 & \cdots & 0 \\
 \vdots & \vdots & \vdots & \ddots & \vdots \\
 0 & 0 & 0 & \cdots & 1
-\end{bmatrix}
+\end{bmatrix}.
 $$
 
 The matrix, $\mathbf Q$, is then scaled so that its inverse, $\mathbf \Sigma = \mathbf Q^{-1}$ is a correlation matrix, i.e. $\mathbf \Sigma_{ii} = 1$.
@@ -107,13 +106,13 @@ The matrix, $\mathbf Q$, is then scaled so that its inverse, $\mathbf \Sigma = \
 
 ### Step 1: Eigendecomposition of $\mathbf{Q}_{\rho}$
 
-We first compute the eigendecomposition of both $\mathbf{Q}_{\rho}$$:
+We first compute the eigendecomposition of both $\mathbf{Q}_{\rho}$\$:
 
 $$
 \mathbf{Q}_{\rho} = \mathbf{V_{\rho}}\mathbf{\Lambda_\rho}\mathbf{V_\rho}^T
 $$
 
-where $\mathbf{V_\rho}$ is the matrix of eigenvectors and $\mathbf{\Lambda_\rho}$ is the diagonal matrix of eigenvalues. Then, because of how $Q$ is defined, its eigendecomposition is:
+where $\mathbf{V_\rho}$ is the matrix of eigenvectors and $\mathbf{\Lambda_\rho}$ is the diagonal matrix of eigenvalues. Then, because of how $Q$ is defined, its eigendecomposition is (see for example [@matrixa]):
 
 $$
 \mathbf{Q} = (\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})(\mathbf{\Lambda_{\rho_1}} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda_{\rho_2}})^{(\nu + 1)}(\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})^T.
@@ -137,7 +136,6 @@ $$
 
 This means that the $i$'th marginal variance, $\sigma_i^2$, is a weighted sum of the reciprocals of the eigenvalues of $\mathbf Q$ where the weights are the squares of the $i$'th value in each eigenvector. This means that we can calculate the marginal standard deviations by iterating over the eigenvalues and -vectors of $Q_{\rho_1}$ and $Q_{\rho_2}$ and cumulating their values according to the formula above, then taking the element-wise square roots.
 
-
 ### Step 3: Scaling the Eigendecomposition
 
 To scale the eigendecomposition of $\mathbf{Q}$ using the marginal standard deviations, we define a diagonal matrix $\mathbf{D}$, where $D_{ii} = \sigma_i$ and scale the precision matrix as:
@@ -156,15 +154,15 @@ In practice, we don't scale the whole eigendecomposition. Instead, we rescale ea
 
 Using this scaled eigendecomposition, we efficiently compute:
 
-1. Log-determinant: $\log|\mathbf{\widetilde Q}| = \sum_{i,j} \log(\widetilde\lambda_{ij})$, where $\widetilde\lambda_{ij}$ is $\left( \left\{\lambda_{\rho_1}\right\}_i + \left\{\lambda_{\rho_2}\right\}_j \right)^{\nu+1}$ after rescaling with marginal standard deviations.
+1.  Log-determinant: $\log|\mathbf{\widetilde Q}| = \sum_{i,j} \log(\widetilde\lambda_{ij})$, where $\widetilde\lambda_{ij}$ is $\left( \left\{\lambda_{\rho_1}\right\}_i + \left\{\lambda_{\rho_2}\right\}_j \right)^{\nu+1}$ after rescaling with marginal standard deviations.
 
-2. Quadratic form: $\mathbf{z}^T\mathbf{\widetilde Q}\mathbf{z} = \sum_{i,j} (\widetilde\lambda_{ij}) y_{ij}^2$, where $y_{ij} = \left(\left\{\mathbf{v}_{\rho_1}\right\}_i \otimes \left\{\mathbf{v}_{\rho_2}\right\}_j\right)^T\mathbf{z}$.
+2.  Quadratic form: $\mathbf{z}^T\mathbf{\widetilde Q}\mathbf{z} = \sum_{i,j} (\widetilde\lambda_{ij}) y_{ij}^2$, where $y_{ij} = \left(\left\{\mathbf{v}_{\rho_1}\right\}_i \otimes \left\{\mathbf{v}_{\rho_2}\right\}_j\right)^T\mathbf{z}$.
 
 This approach allows us to calculate the density of the spatial copula by calculating and iterating over the spectral decomposition of the smaller matrices, avoiding the formation of $\mathbf Q$ alltogether.
 
 ## Circulant and Folded Circulant Approximations
 
-While the eigendecomposition method provides an exact solution, it can be computationally expensive for very large spatial fields. To address this, we introduce circulant and folded circulant approximations that offer potential computational advantages.
+While the eigendecomposition method provides an exact solution, it can be computationally expensive for very large spatial fields. To address this, we introduce circulant and folded circulant approximations that offer computational efficiency and speed.
 
 ### Circulant Matrices
 
@@ -182,24 +180,21 @@ $$
 
 The base vector $c$ completely determines the circulant matrix and plays a crucial role in efficient computations. In particular:
 
-1. The eigenvalues of $C$ are given by the Discrete Fourier Transform (DFT) of $c$:
-$$
-\lambda = \text{DFT}(c)
-$$
+1.  The eigenvalues of $C$ are given by the Discrete Fourier Transform (DFT) of $c$: $$
+    \lambda = \text{DFT}(c)
+    $$
 
-2. Matrix-vector multiplication can be performed using the FFT:
-$$
-Cv = \text{DFT}(\text{DFT}(c) \odot \text{IDFT}(v))
-$$
+2.  Matrix-vector multiplication can be performed using the FFT: $$
+    Cv = \text{DFT}(\text{DFT}(c) \odot \text{IDFT}(v))
+    $$
 
-3. When $C$ is non singular, then the inverse is circulant and thus determined by its base:
+3.  When $C$ is non singular, then the inverse is circulant and thus determined by its base:
 
 $$
 \frac1n \text{IDFT}(\text{DFT}(c)^{-1}).
 $$
 
-These properties allow for much faster computations than for general matrices.
-
+These properties allow for much faster computations than for general matrices. For more reading on applications of circulant matrices to GMRFs see [@rue2005; @gray2006].
 
 ### Block Circulant Matrices
 
@@ -219,11 +214,11 @@ where each $C_i$ is itself a circulant $n \times n$ matrix.
 
 For a BCCB matrix, we define a base matrix $\mathbf c$, which is an $n \times N$ matrix where each column is the base vector of the corresponding circulant block. This base matrix $\mathbf c$ completely determines the BCCB matrix and is central to efficient computations:
 
-1. The eigenvalues of $C$ are given by the 2D DFT of $\mathbf c$.
+1.  The eigenvalues of $C$ are given by the 2D DFT of $\mathbf c$.
 
-2. Matrix-vector multiplication can be performed using the 2D FFT.
+2.  Matrix-vector multiplication can be performed using the 2D FFT.
 
-3. When $C$ is non singular, then the inverse is also a BCCB matrix and thus determined by its base matrix.
+3.  When $C$ is non singular, then the inverse is also a BCCB matrix and thus determined by its base matrix.
 
 ### Approximations for $Q_{\rho}$
 
@@ -259,7 +254,7 @@ This approximation treats the first and last observations as neighbors, effectiv
 
 #### Folded Circulant Approximation
 
-The folded circulant approximation, $\mathbf{Q}_\rho^{(fold)}$, is based on a reflected version of the data. We double the data by reflecting it, giving us the data $x_1,  \dots, x_n, x_n, \dots, x_1$. We then model this doubled data with a $2n \times 2n$ circulant matrix. If written out as an $n \times n$ matrix, it takes the form:
+The folded circulant approximation, $\mathbf{Q}_\rho^{(fold)}$, is based on a reflected version of the data [@kent2022; @mondal2018; @besag2005]. We double the data by reflecting it, giving us the data $x_1,  \dots, x_n, x_n, \dots, x_1$. We then model this doubled data with a $2n \times 2n$ circulant matrix. If written out as an $n \times n$ matrix, it takes the form:
 
 $$
 \mathbf{Q}_\rho^{(fold)} = \frac{1}{1-\rho^2}
@@ -397,10 +392,10 @@ where ν is the smoothness parameter.
 
 An important property of Block Circulant with Circulant Blocks (BCCB) matrices is that the inverse of a BCCB matrix is also a BCCB matrix, and the marginal variance is the first element in its first circulant block. We use this to efficiently compute the marginal variance and rescale the eigenvalues:
 
-a. Compute the element-wise inverse of $\boldsymbol{\Lambda}$: $\mathbf{\Lambda^{inv}} = 1 / \boldsymbol{\Lambda}$
-b. Compute the base of $\mathbf Q^{-1}$ using inverse 2D FFT: $\mathbf{c_{inv}} = \text{IFFT2}(\mathbf{{\Lambda^{inv}}})$
-c. The marginal variance is given by the first element of $\mathbf{c^{inv}}$: $\sigma^2 = \mathbf{c^{inv}}_{(0,0)}$
-d. Rescale the eigenvalues: $\boldsymbol{\widetilde \Lambda} = \sigma^2 \boldsymbol{\Lambda}$
+a.  Compute the element-wise inverse of $\boldsymbol{\Lambda}$: $\mathbf{\Lambda^{inv}} = 1 / \boldsymbol{\Lambda}$
+b.  Compute the base of $\mathbf Q^{-1}$ using inverse 2D FFT: $\mathbf{c_{inv}} = \text{IFFT2}(\mathbf{{\Lambda^{inv}}})$
+c.  The marginal variance is given by the first element of $\mathbf{c^{inv}}$: $\sigma^2 = \mathbf{c^{inv}}_{(0,0)}$
+d.  Rescale the eigenvalues: $\boldsymbol{\widetilde \Lambda} = \sigma^2 \boldsymbol{\Lambda}$
 
 This process ensures that the resulting precision matrix will have unit marginal variances, as required for the Gaussian copula.
 
@@ -416,10 +411,10 @@ $$
 
 To compute the quadratic form $\mathbf{z}^T\mathbf{Q}\mathbf{z}$, we use the following steps:
 
-a. Compute the 2D FFT of z: $\mathbf{\hat{z}} = \text{FFT2}(\mathbf{z})$
-b. Multiply element-wise with the scaled eigenvalues: $\mathbf{\hat{y}} = \boldsymbol{\widetilde \Lambda} \odot \mathbf{\hat{z}}$
-c. Compute the inverse 2D FFT: $\mathbf{y} = \text{IFFT2}(\mathbf{\hat{y}})$
-d. Compute the dot product: $\mathbf{z}^T\mathbf{Q}\mathbf{z} = \mathbf{z}^T\mathbf{y}$
+a.  Compute the 2D FFT of z: $\mathbf{\hat{z}} = \text{FFT2}(\mathbf{z})$
+b.  Multiply element-wise with the scaled eigenvalues: $\mathbf{\hat{y}} = \boldsymbol{\widetilde \Lambda} \odot \mathbf{\hat{z}}$
+c.  Compute the inverse 2D FFT: $\mathbf{y} = \text{IFFT2}(\mathbf{\hat{y}})$
+d.  Compute the dot product: $\mathbf{z}^T\mathbf{Q}\mathbf{z} = \mathbf{z}^T\mathbf{y}$
 
 ### 6. Compute the Log-Density
 
@@ -449,8 +444,6 @@ x_{11} & \cdots & x_{1n_2} & x_{1n_2} & \cdots & x_{11}
 $$
 
 This reflection creates a $2n_1 \times 2n_2$ matrix. The matrix is then stacked in lexicographic order before entering into the quadratic forms.
-
-
 
 # Results
 
@@ -487,8 +480,6 @@ gt() |>
   )
 ```
 
-
-
 # Appendix {.appendix}
 
 ## Cholesky Methods
@@ -523,19 +514,18 @@ x^T Q^3 x &=  x^T L L^T L L^T L L^T x = ||L^TLL^T x||_2^2.
 \end{aligned}
 $$
 
-
 #### Algorithm
 
-1. Construct $Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2$
-2. Compute Cholesky decomposition $Q = LL^T$
-3. Compute log-determinant: $\log|Q^{\nu+1}| = 2(\nu+1)\sum_{i}\log(L_{ii})$
-4. For each observation $x$:
-    i) Initialize $y = x$
+1.  Construct $Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2$
+2.  Compute Cholesky decomposition $Q = LL^T$
+3.  Compute log-determinant: $\log|Q^{\nu+1}| = 2(\nu+1)\sum_{i}\log(L_{ii})$
+4.  For each observation $x$:
+    i)  Initialize $y = x$
     ii) For $j$ from 0 to $\nu$:
-        - If $j$ is even: $y = L^T y$
-        - If $j$ is odd: $y = L y$
+        -   If $j$ is even: $y = L^T y$
+        -   If $j$ is odd: $y = L y$
     iii) Compute quadratic form $q = y^Ty$
-5. Compute log-density: $\log p(x) = -\frac{1}{2}(d\log(2\pi) + \log|Q^{\nu+1}| + q)$
+5.  Compute log-density: $\log p(x) = -\frac{1}{2}(d\log(2\pi) + \log|Q^{\nu+1}| + q)$
 
 ### Scaled Precision Matrix
 
@@ -549,43 +539,41 @@ $$
 
 where $\otimes$ denotes the Kronecker product, $Q_1$ and $Q_2$ are 1D precision matrices for the x and y dimensions respectively (typically AR(1)-like structures), and $I_{d_x}$ and $I_{d_y}$ are identity matrices of appropriate sizes. We will then have to work with the matrix $Q^{\nu + 1}$.
 
-
-To ensure unit marginal variances, we need to scale this precision matrix. Let $D$ be a diagonal matrix where $D_{ii} = \sqrt{\Sigma_{ii}}$, and $\Sigma = (Q^{\nu+1})^{-1}$. The scaled precision matrix is then:
-$$
+To ensure unit marginal variances, we need to scale this precision matrix. Let $D$ be a diagonal matrix where $D_{ii} = \sqrt{\Sigma_{ii}}$, and $\Sigma = (Q^{\nu+1})^{-1}$. The scaled precision matrix is then: $$
 \tilde{Q} = DQ^{\nu+1}D
 $$
 
 #### Efficient Computation of Scaling Matrix D
 
-1. Compute the Cholesky decomposition of the original $Q = LL^T$
-2. Compute $R = L^{-1}$, so that $S = Q^{-1} = R^TR$. 
-3. We then calculate the entries in $D$ using the following steps:
-    i. For $\nu = 0$, $D_{ii} = \sqrt{\Sigma_{ii}} = \sqrt{\sum_j (R_{ji})^2}$, the column-wise norm of $R$.
+1.  Compute the Cholesky decomposition of the original $Q = LL^T$
+2.  Compute $R = L^{-1}$, so that $S = Q^{-1} = R^TR$.
+3.  We then calculate the entries in $D$ using the following steps:
+    i.  For $\nu = 0$, $D_{ii} = \sqrt{\Sigma_{ii}} = \sqrt{\sum_j (R_{ji})^2}$, the column-wise norm of $R$.
     ii. For $\nu = 1$, we use the column-wise norm of $R^TR$
     iii. For $\nu = 2$, we use the column-wise norm of $RR^TR$
 
 #### Log determinant
 
-1. First, note that $\log|\tilde{Q}| = \log|DQ^{\nu+1}D| = 2\log|D| + \log|Q^{\nu+1}|$
-2. We can compute $\log|D|$ directly from the diagonal elements of D, i.e. $\log|D| = \sum_i \log(D_{ii})$
-3. For $\log|Q^{\nu+1}|$, we can use the properties of the Cholesky decomposition: $\log|Q^{\nu+1}| = (\nu+1)\log|Q| = (\nu+1)\log|LL^T| = 2(\nu+1)\sum_i \log(L_{ii})$
-4. Combining these, we get $\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})$
+1.  First, note that $\log|\tilde{Q}| = \log|DQ^{\nu+1}D| = 2\log|D| + \log|Q^{\nu+1}|$
+2.  We can compute $\log|D|$ directly from the diagonal elements of D, i.e. $\log|D| = \sum_i \log(D_{ii})$
+3.  For $\log|Q^{\nu+1}|$, we can use the properties of the Cholesky decomposition: $\log|Q^{\nu+1}| = (\nu+1)\log|Q| = (\nu+1)\log|LL^T| = 2(\nu+1)\sum_i \log(L_{ii})$
+4.  Combining these, we get $\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})$
 
 #### Quadratic Form
 
-1. First, note that $z^T\tilde{Q}z = z^TDQ^{\nu+1}Dz = (Dz)^TQ^{\nu+1}(Dz)$
-2. Let $y = Dz$. We can compute this element-wise as $y_i = D_{ii}z_i$
-3. Now we compute $y^TQ^{\nu+1}y$ as in the unscaled case.
+1.  First, note that $z^T\tilde{Q}z = z^TDQ^{\nu+1}Dz = (Dz)^TQ^{\nu+1}(Dz)$
+2.  Let $y = Dz$. We can compute this element-wise as $y_i = D_{ii}z_i$
+3.  Now we compute $y^TQ^{\nu+1}y$ as in the unscaled case.
 
 #### Algorithm
 
 Putting it all together, here's the algorithm for computing the log-density of the Gaussian copula using the scaled precision matrix:
 
-1. Construct $Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2$
-2. Compute Cholesky decomposition $Q = LL^T$
-3. Compute $R = L^{-1}$ and use it to compute D as described earlier
-4. Compute log-determinant: $\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})$
-5. For each observation $z = \Phi^{-1}(u)$:
-    i) Compute $y = Dz$
+1.  Construct $Q = Q_1 \otimes I_{d_y} + I_{d_x} \otimes Q_2$
+2.  Compute Cholesky decomposition $Q = LL^T$
+3.  Compute $R = L^{-1}$ and use it to compute D as described earlier
+4.  Compute log-determinant: $\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})$
+5.  For each observation $z = \Phi^{-1}(u)$:
+    i)  Compute $y = Dz$
     ii) Compute $y^TQ^{\nu+1}y$ as in the unscaled case.
-6. Compute log-density: $\log c(u) = -\frac{1}{2}(d\log(2\pi) + \log|\tilde{Q}| + q - z^Tz)$
+6.  Compute log-density: $\log c(u) = -\frac{1}{2}(d\log(2\pi) + \log|\tilde{Q}| + q - z^Tz)$

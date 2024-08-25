@@ -4898,7 +4898,7 @@ Folded Circulant Approximations</article-title>
   </body>
   <back>
 </back>
-  <sub-article article-type="notebook" id="nb-6-nb-article">
+  <sub-article article-type="notebook" id="nb-3-nb-article">
     <front-stub>
       <title-group>
         <article-title>Efficient Gaussian Copula Density Computation for
@@ -9843,24 +9843,6 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
           </sec>
         </sec>
       </sec>
-    </body>
-    <back>
-</back>
-  </sub-article>
-  <sub-article article-type="notebook" id="nb-3-nb-1">
-    <front-stub>
-</front-stub>
-    <body>
-      <p>This repository contains the a work-in-progress manuscrips, which
-explores computational methods for Gaussian copulas using the GMRF
-approximation to the Matérn covariance function.</p>
-      <p>The paper can be found here: https://bggj.is/materneigenpaper/</p>
-      <p>An R package that implements these methods using
-<monospace>{Rcpp}</monospace> can be found here:
-https://github.com/bgautijonsson/stdmatern</p>
-      <p>A repo that contains case studies using Stan to model processes with
-these methods can be found here:
-https://github.com/bgautijonsson/copulas</p>
     </body>
     <back>
 </back>
