@@ -18,13 +18,13 @@ manuscript:
 
 
 format:
-  jasa-html: 
+  html: 
     toc: true
     comments:
       hypothesis: true
   docx: default
   jats: default
-  jasa-pdf: 
+  pdf: 
     keep-tex: true
  
 execute:

@@ -727,12 +727,12 @@ analyzing increasingly large and complex spatial datasets.
           <title>Step 1: Eigendecomposition of
       <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_{\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula></title>
           <p>We first compute the eigendecomposition of both
-      <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_{\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>$:</p>
+      <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_{\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>:</p>
           <p>
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \mathbf{Q}_{\rho} = \mathbf{V_{\rho}}\mathbf{\Lambda_\rho}\mathbf{V_\rho}^T
+      \mathbf{Q}_{\rho} = \mathbf{V_{\rho}}\mathbf{A_\rho}\mathbf{V_\rho}^T
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
@@ -746,7 +746,7 @@ analyzing increasingly large and complex spatial datasets.
                       <mml:mi>𝛒</mml:mi>
                     </mml:msub>
                     <mml:msub>
-                      <mml:mi>𝚲</mml:mi>
+                      <mml:mi>𝐀</mml:mi>
                       <mml:mi>𝛒</mml:mi>
                     </mml:msub>
                     <mml:msup>
@@ -762,7 +762,7 @@ analyzing increasingly large and complex spatial datasets.
             </disp-formula>
           </p>
           <p>where <inline-formula><alternatives><tex-math><![CDATA[\mathbf{V_\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐕</mml:mi><mml:mi>𝛒</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
-      is the matrix of eigenvectors and <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\Lambda_\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝚲</mml:mi><mml:mi>𝛒</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      is the matrix of eigenvectors and <inline-formula><alternatives><tex-math><![CDATA[\mathbf{A_\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐀</mml:mi><mml:mi>𝛒</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
       is the diagonal matrix of eigenvalues. Then, because of how
       <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
       is defined, its eigendecomposition is (see for example
@@ -773,7 +773,7 @@ analyzing increasingly large and complex spatial datasets.
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \mathbf{Q} = (\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})(\mathbf{\Lambda_{\rho_1}} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda_{\rho_2}})^{(\nu + 1)}(\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})^T.
+      \mathbf{Q} = (\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})(\mathbf{A_{\rho_1}} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{A_{\rho_2}})^{(\nu + 1)}(\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})^T.
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
@@ -802,7 +802,7 @@ analyzing increasingly large and complex spatial datasets.
                       <mml:mrow>
                         <mml:mo stretchy="true" form="prefix">(</mml:mo>
                         <mml:msub>
-                          <mml:mi>𝚲</mml:mi>
+                          <mml:mi>𝐀</mml:mi>
                           <mml:msub>
                             <mml:mi>𝛒</mml:mi>
                             <mml:mn>𝟏</mml:mn>
@@ -814,7 +814,7 @@ analyzing increasingly large and complex spatial datasets.
                         <mml:mi>𝐈</mml:mi>
                         <mml:mo>⊗</mml:mo>
                         <mml:msub>
-                          <mml:mi>𝚲</mml:mi>
+                          <mml:mi>𝐀</mml:mi>
                           <mml:msub>
                             <mml:mi>𝛒</mml:mi>
                             <mml:mn>𝟐</mml:mn>
@@ -1069,8 +1069,8 @@ analyzing increasingly large and complex spatial datasets.
                 <tex-math><![CDATA[
       \begin{aligned}
       \mathbf{\widetilde  Q} &= \mathbf{D}\mathbf{Q}^{\nu+1}\mathbf{D} \\
-      &= \mathbf{D}\mathbf{V}\mathbf{\Lambda}^{\nu+1}\mathbf{V}^T\mathbf{D} \\
-      &= \mathbf{\widetilde V}\mathbf{\widetilde\Lambda}\mathbf{\widetilde V}^T.
+      &= \mathbf{D}\mathbf{V}\mathbf{A}^{\nu+1}\mathbf{V}^T\mathbf{D} \\
+      &= \mathbf{\widetilde V}\mathbf{\widetilde A}\mathbf{\widetilde V}^T.
       \end{aligned}
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
@@ -1103,7 +1103,7 @@ analyzing increasingly large and complex spatial datasets.
                         <mml:mi>𝐃</mml:mi>
                         <mml:mi>𝐕</mml:mi>
                         <mml:msup>
-                          <mml:mi>𝚲</mml:mi>
+                          <mml:mi>𝐀</mml:mi>
                           <mml:mrow>
                             <mml:mi>ν</mml:mi>
                             <mml:mo>+</mml:mo>
@@ -1126,7 +1126,7 @@ analyzing increasingly large and complex spatial datasets.
                           <mml:mo accent="true">̃</mml:mo>
                         </mml:mover>
                         <mml:mover>
-                          <mml:mi>𝚲</mml:mi>
+                          <mml:mi>𝐀</mml:mi>
                           <mml:mo accent="true">̃</mml:mo>
                         </mml:mover>
                         <mml:msup>
@@ -3793,11 +3793,11 @@ analyzing increasingly large and complex spatial datasets.
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \boldsymbol{\Lambda} = \text{FFT2}(\mathbf{c})^{\nu+1}
+      \boldsymbol{A} = \text{FFT2}(\mathbf{c})^{\nu+1}
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
-                    <mml:mi>𝚲</mml:mi>
+                    <mml:mi>𝐀</mml:mi>
                     <mml:mo>=</mml:mo>
                     <mml:mtext mathvariant="normal">FFT2</mml:mtext>
                     <mml:msup>
@@ -3830,12 +3830,12 @@ analyzing increasingly large and complex spatial datasets.
           <list list-type="alpha-lower">
             <list-item>
               <p>Compute the element-wise inverse of
-          <inline-formula><alternatives><tex-math><![CDATA[\boldsymbol{\Lambda}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝚲</mml:mi></mml:math></alternatives></inline-formula>:
-          <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\Lambda^{inv}} = 1 / \boldsymbol{\Lambda}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>𝚲</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msup><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mi>/</mml:mi><mml:mi>𝚲</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+          <inline-formula><alternatives><tex-math><![CDATA[\boldsymbol{A}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐀</mml:mi></mml:math></alternatives></inline-formula>:
+          <inline-formula><alternatives><tex-math><![CDATA[\mathbf{A^{inv}} = 1 / \boldsymbol{A}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>𝐀</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msup><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mi>/</mml:mi><mml:mi>𝐀</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
             </list-item>
             <list-item>
               <p>Compute the base of <inline-formula><alternatives><tex-math><![CDATA[\mathbf Q^{-1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>𝐐</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:math></alternatives></inline-formula>
-          using inverse 2D FFT: <inline-formula><alternatives><tex-math><![CDATA[\mathbf{c_{inv}} = \text{IFFT2}(\mathbf{{\Lambda^{inv}}})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝐜</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:mtext mathvariant="normal">IFFT2</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msup><mml:mi>𝚲</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msup><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
+          using inverse 2D FFT: <inline-formula><alternatives><tex-math><![CDATA[\mathbf{c_{inv}} = \text{IFFT2}(\mathbf{{A^{inv}}})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝐜</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:mtext mathvariant="normal">IFFT2</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msup><mml:mi>𝐀</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msup><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
             </list-item>
             <list-item>
               <p>The marginal variance is given by the first element of
@@ -3843,7 +3843,7 @@ analyzing increasingly large and complex spatial datasets.
           <inline-formula><alternatives><tex-math><![CDATA[\sigma^2 = \mathbf{c^{inv}}_{(0,0)}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>σ</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mo>=</mml:mo><mml:msub><mml:msup><mml:mi>𝐜</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mn>0</mml:mn><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:msub></mml:mrow></mml:math></alternatives></inline-formula></p>
             </list-item>
             <list-item>
-              <p>Rescale the eigenvalues: <inline-formula><alternatives><tex-math><![CDATA[\boldsymbol{\widetilde \Lambda} = \sigma^2 \boldsymbol{\Lambda}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mover><mml:mi>𝚲</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:msup><mml:mi>σ</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mi>𝚲</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+              <p>Rescale the eigenvalues: <inline-formula><alternatives><tex-math><![CDATA[\boldsymbol{\widetilde A} = \sigma^2 \boldsymbol{A}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mover><mml:mi>𝐀</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:msup><mml:mi>σ</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mi>𝐀</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
             </list-item>
           </list>
           <p>This process ensures that the resulting precision matrix will
@@ -3860,7 +3860,7 @@ analyzing increasingly large and complex spatial datasets.
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-      \log|\mathbf{Q}| = \sum_{i,j} \log(\widetilde \Lambda_{ij})
+      \log|\mathbf{Q}| = \sum_{i,j} \log(\widetilde A_{ij})
       ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
@@ -3884,7 +3884,7 @@ analyzing increasingly large and complex spatial datasets.
                       <mml:mo stretchy="true" form="prefix">(</mml:mo>
                       <mml:msub>
                         <mml:mover>
-                          <mml:mi>Λ</mml:mi>
+                          <mml:mi>A</mml:mi>
                           <mml:mo accent="true">̃</mml:mo>
                         </mml:mover>
                         <mml:mrow>
@@ -3910,7 +3910,7 @@ analyzing increasingly large and complex spatial datasets.
             </list-item>
             <list-item>
               <p>Multiply element-wise with the scaled eigenvalues:
-          <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\hat{y}} = \boldsymbol{\widetilde \Lambda} \odot \mathbf{\hat{z}}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mover><mml:mi>𝐲</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:mover><mml:mi>𝚲</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo>⊙</mml:mo><mml:mover><mml:mi>𝐳</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover></mml:mrow></mml:math></alternatives></inline-formula></p>
+          <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\hat{y}} = \boldsymbol{\widetilde A} \odot \mathbf{\hat{z}}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mover><mml:mi>𝐲</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:mover><mml:mi>𝐀</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo>⊙</mml:mo><mml:mover><mml:mi>𝐳</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover></mml:mrow></mml:math></alternatives></inline-formula></p>
             </list-item>
             <list-item>
               <p>Compute the inverse 2D FFT: <inline-formula><alternatives><tex-math><![CDATA[\mathbf{y} = \text{IFFT2}(\mathbf{\hat{y}})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>𝐲</mml:mi><mml:mo>=</mml:mo><mml:mtext mathvariant="normal">IFFT2</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mover><mml:mi>𝐲</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
@@ -4409,6 +4409,9 @@ analyzing increasingly large and complex spatial datasets.
           </table>
         </table-wrap>
       </sec>
+    </sec>
+    <sec id="references">
+      <title>References</title>
     </sec>
     <sec id="appendix">
       <title>Appendix</title>
@@ -5934,12 +5937,12 @@ library(gt)</code>
             <title>Step 1: Eigendecomposition of
       <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_{\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula></title>
             <p>We first compute the eigendecomposition of both
-      <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_{\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>$:</p>
+      <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_{\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>:</p>
             <p>
               <disp-formula>
                 <alternatives>
                   <tex-math><![CDATA[
-      \mathbf{Q}_{\rho} = \mathbf{V_{\rho}}\mathbf{\Lambda_\rho}\mathbf{V_\rho}^T
+      \mathbf{Q}_{\rho} = \mathbf{V_{\rho}}\mathbf{A_\rho}\mathbf{V_\rho}^T
       ]]></tex-math>
                   <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                     <mml:mrow>
@@ -5953,7 +5956,7 @@ library(gt)</code>
                         <mml:mi>𝛒</mml:mi>
                       </mml:msub>
                       <mml:msub>
-                        <mml:mi>𝚲</mml:mi>
+                        <mml:mi>𝐀</mml:mi>
                         <mml:mi>𝛒</mml:mi>
                       </mml:msub>
                       <mml:msup>
@@ -5969,7 +5972,7 @@ library(gt)</code>
               </disp-formula>
             </p>
             <p>where <inline-formula><alternatives><tex-math><![CDATA[\mathbf{V_\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐕</mml:mi><mml:mi>𝛒</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
-      is the matrix of eigenvectors and <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\Lambda_\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝚲</mml:mi><mml:mi>𝛒</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
+      is the matrix of eigenvectors and <inline-formula><alternatives><tex-math><![CDATA[\mathbf{A_\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐀</mml:mi><mml:mi>𝛒</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
       is the diagonal matrix of eigenvalues. Then, because of how
       <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
       is defined, its eigendecomposition is (see for example
@@ -5980,7 +5983,7 @@ library(gt)</code>
               <disp-formula>
                 <alternatives>
                   <tex-math><![CDATA[
-      \mathbf{Q} = (\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})(\mathbf{\Lambda_{\rho_1}} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda_{\rho_2}})^{(\nu + 1)}(\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})^T.
+      \mathbf{Q} = (\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})(\mathbf{A_{\rho_1}} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{A_{\rho_2}})^{(\nu + 1)}(\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})^T.
       ]]></tex-math>
                   <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                     <mml:mrow>
@@ -6009,7 +6012,7 @@ library(gt)</code>
                         <mml:mrow>
                           <mml:mo stretchy="true" form="prefix">(</mml:mo>
                           <mml:msub>
-                            <mml:mi>𝚲</mml:mi>
+                            <mml:mi>𝐀</mml:mi>
                             <mml:msub>
                               <mml:mi>𝛒</mml:mi>
                               <mml:mn>𝟏</mml:mn>
@@ -6021,7 +6024,7 @@ library(gt)</code>
                           <mml:mi>𝐈</mml:mi>
                           <mml:mo>⊗</mml:mo>
                           <mml:msub>
-                            <mml:mi>𝚲</mml:mi>
+                            <mml:mi>𝐀</mml:mi>
                             <mml:msub>
                               <mml:mi>𝛒</mml:mi>
                               <mml:mn>𝟐</mml:mn>
@@ -6276,8 +6279,8 @@ library(gt)</code>
                   <tex-math><![CDATA[
       \begin{aligned}
       \mathbf{\widetilde  Q} &= \mathbf{D}\mathbf{Q}^{\nu+1}\mathbf{D} \\
-      &= \mathbf{D}\mathbf{V}\mathbf{\Lambda}^{\nu+1}\mathbf{V}^T\mathbf{D} \\
-      &= \mathbf{\widetilde V}\mathbf{\widetilde\Lambda}\mathbf{\widetilde V}^T.
+      &= \mathbf{D}\mathbf{V}\mathbf{A}^{\nu+1}\mathbf{V}^T\mathbf{D} \\
+      &= \mathbf{\widetilde V}\mathbf{\widetilde A}\mathbf{\widetilde V}^T.
       \end{aligned}
       ]]></tex-math>
                   <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
@@ -6310,7 +6313,7 @@ library(gt)</code>
                           <mml:mi>𝐃</mml:mi>
                           <mml:mi>𝐕</mml:mi>
                           <mml:msup>
-                            <mml:mi>𝚲</mml:mi>
+                            <mml:mi>𝐀</mml:mi>
                             <mml:mrow>
                               <mml:mi>ν</mml:mi>
                               <mml:mo>+</mml:mo>
@@ -6333,7 +6336,7 @@ library(gt)</code>
                             <mml:mo accent="true">̃</mml:mo>
                           </mml:mover>
                           <mml:mover>
-                            <mml:mi>𝚲</mml:mi>
+                            <mml:mi>𝐀</mml:mi>
                             <mml:mo accent="true">̃</mml:mo>
                           </mml:mover>
                           <mml:msup>
@@ -9000,11 +9003,11 @@ library(gt)</code>
               <disp-formula>
                 <alternatives>
                   <tex-math><![CDATA[
-      \boldsymbol{\Lambda} = \text{FFT2}(\mathbf{c})^{\nu+1}
+      \boldsymbol{A} = \text{FFT2}(\mathbf{c})^{\nu+1}
       ]]></tex-math>
                   <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                     <mml:mrow>
-                      <mml:mi>𝚲</mml:mi>
+                      <mml:mi>𝐀</mml:mi>
                       <mml:mo>=</mml:mo>
                       <mml:mtext mathvariant="normal">FFT2</mml:mtext>
                       <mml:msup>
@@ -9037,12 +9040,12 @@ library(gt)</code>
             <list list-type="alpha-lower">
               <list-item>
                 <p>Compute the element-wise inverse of
-          <inline-formula><alternatives><tex-math><![CDATA[\boldsymbol{\Lambda}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝚲</mml:mi></mml:math></alternatives></inline-formula>:
-          <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\Lambda^{inv}} = 1 / \boldsymbol{\Lambda}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>𝚲</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msup><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mi>/</mml:mi><mml:mi>𝚲</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+          <inline-formula><alternatives><tex-math><![CDATA[\boldsymbol{A}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐀</mml:mi></mml:math></alternatives></inline-formula>:
+          <inline-formula><alternatives><tex-math><![CDATA[\mathbf{A^{inv}} = 1 / \boldsymbol{A}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>𝐀</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msup><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mi>/</mml:mi><mml:mi>𝐀</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
               </list-item>
               <list-item>
                 <p>Compute the base of <inline-formula><alternatives><tex-math><![CDATA[\mathbf Q^{-1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msup><mml:mi>𝐐</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:math></alternatives></inline-formula>
-          using inverse 2D FFT: <inline-formula><alternatives><tex-math><![CDATA[\mathbf{c_{inv}} = \text{IFFT2}(\mathbf{{\Lambda^{inv}}})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝐜</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:mtext mathvariant="normal">IFFT2</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msup><mml:mi>𝚲</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msup><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
+          using inverse 2D FFT: <inline-formula><alternatives><tex-math><![CDATA[\mathbf{c_{inv}} = \text{IFFT2}(\mathbf{{A^{inv}}})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝐜</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:mtext mathvariant="normal">IFFT2</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msup><mml:mi>𝐀</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msup><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
               </list-item>
               <list-item>
                 <p>The marginal variance is given by the first element of
@@ -9050,7 +9053,7 @@ library(gt)</code>
           <inline-formula><alternatives><tex-math><![CDATA[\sigma^2 = \mathbf{c^{inv}}_{(0,0)}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>σ</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mo>=</mml:mo><mml:msub><mml:msup><mml:mi>𝐜</mml:mi><mml:mrow><mml:mi>𝐢</mml:mi><mml:mi>𝐧</mml:mi><mml:mi>𝐯</mml:mi></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mn>0</mml:mn><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:msub></mml:mrow></mml:math></alternatives></inline-formula></p>
               </list-item>
               <list-item>
-                <p>Rescale the eigenvalues: <inline-formula><alternatives><tex-math><![CDATA[\boldsymbol{\widetilde \Lambda} = \sigma^2 \boldsymbol{\Lambda}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mover><mml:mi>𝚲</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:msup><mml:mi>σ</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mi>𝚲</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
+                <p>Rescale the eigenvalues: <inline-formula><alternatives><tex-math><![CDATA[\boldsymbol{\widetilde A} = \sigma^2 \boldsymbol{A}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mover><mml:mi>𝐀</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:msup><mml:mi>σ</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mi>𝐀</mml:mi></mml:mrow></mml:math></alternatives></inline-formula></p>
               </list-item>
             </list>
             <p>This process ensures that the resulting precision matrix will
@@ -9067,7 +9070,7 @@ library(gt)</code>
               <disp-formula>
                 <alternatives>
                   <tex-math><![CDATA[
-      \log|\mathbf{Q}| = \sum_{i,j} \log(\widetilde \Lambda_{ij})
+      \log|\mathbf{Q}| = \sum_{i,j} \log(\widetilde A_{ij})
       ]]></tex-math>
                   <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                     <mml:mrow>
@@ -9091,7 +9094,7 @@ library(gt)</code>
                         <mml:mo stretchy="true" form="prefix">(</mml:mo>
                         <mml:msub>
                           <mml:mover>
-                            <mml:mi>Λ</mml:mi>
+                            <mml:mi>A</mml:mi>
                             <mml:mo accent="true">̃</mml:mo>
                           </mml:mover>
                           <mml:mrow>
@@ -9117,7 +9120,7 @@ library(gt)</code>
               </list-item>
               <list-item>
                 <p>Multiply element-wise with the scaled eigenvalues:
-          <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\hat{y}} = \boldsymbol{\widetilde \Lambda} \odot \mathbf{\hat{z}}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mover><mml:mi>𝐲</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:mover><mml:mi>𝚲</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo>⊙</mml:mo><mml:mover><mml:mi>𝐳</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover></mml:mrow></mml:math></alternatives></inline-formula></p>
+          <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\hat{y}} = \boldsymbol{\widetilde A} \odot \mathbf{\hat{z}}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mover><mml:mi>𝐲</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover><mml:mo>=</mml:mo><mml:mover><mml:mi>𝐀</mml:mi><mml:mo accent="true">̃</mml:mo></mml:mover><mml:mo>⊙</mml:mo><mml:mover><mml:mi>𝐳</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover></mml:mrow></mml:math></alternatives></inline-formula></p>
               </list-item>
               <list-item>
                 <p>Compute the inverse 2D FFT: <inline-formula><alternatives><tex-math><![CDATA[\mathbf{y} = \text{IFFT2}(\mathbf{\hat{y}})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>𝐲</mml:mi><mml:mo>=</mml:mo><mml:mtext mathvariant="normal">IFFT2</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mover><mml:mi>𝐲</mml:mi><mml:mo accent="true">̂</mml:mo></mml:mover><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula></p>
@@ -9653,6 +9656,9 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
             </table-wrap>
           </sec>
         </sec>
+      </sec>
+      <sec id="references-nb-article">
+        <title>References</title>
       </sec>
       <sec id="appendix-nb-article">
         <title>Appendix</title>

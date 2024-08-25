@@ -106,16 +106,16 @@ The matrix, $\mathbf Q$, is then scaled so that its inverse, $\mathbf \Sigma = \
 
 ### Step 1: Eigendecomposition of $\mathbf{Q}_{\rho}$
 
-We first compute the eigendecomposition of both $\mathbf{Q}_{\rho}$\$:
+We first compute the eigendecomposition of both $\mathbf{Q}_{\rho}$:
 
 $$
-\mathbf{Q}_{\rho} = \mathbf{V_{\rho}}\mathbf{\Lambda_\rho}\mathbf{V_\rho}^T
+\mathbf{Q}_{\rho} = \mathbf{V_{\rho}}\mathbf{A_\rho}\mathbf{V_\rho}^T
 $$
 
-where $\mathbf{V_\rho}$ is the matrix of eigenvectors and $\mathbf{\Lambda_\rho}$ is the diagonal matrix of eigenvalues. Then, because of how $Q$ is defined, its eigendecomposition is (see for example [@matrixa]):
+where $\mathbf{V_\rho}$ is the matrix of eigenvectors and $\mathbf{A_\rho}$ is the diagonal matrix of eigenvalues. Then, because of how $Q$ is defined, its eigendecomposition is (see for example [@matrixa]):
 
 $$
-\mathbf{Q} = (\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})(\mathbf{\Lambda_{\rho_1}} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda_{\rho_2}})^{(\nu + 1)}(\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})^T.
+\mathbf{Q} = (\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})(\mathbf{A_{\rho_1}} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{A_{\rho_2}})^{(\nu + 1)}(\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})^T.
 $$
 
 We don't work with the full eigendecomposition, but rather utilize the fact that the eigenvalues of $\mathbf Q$ are $\left\{\lambda_{\rho_1}\right\}_i + \left\{\lambda_{\rho_2}\right\}_j$ and their corresponding eigenvectors are $\left\{\mathbf{v}_{\rho_1}\right\}_i \otimes \left\{\mathbf{v}_{\rho_2}\right\}_j$ to iterate over each value and vector pair to compute the density without forming the larger matrix.
@@ -143,8 +143,8 @@ To scale the eigendecomposition of $\mathbf{Q}$ using the marginal standard devi
 $$
 \begin{aligned}
 \mathbf{\widetilde  Q} &= \mathbf{D}\mathbf{Q}^{\nu+1}\mathbf{D} \\
-&= \mathbf{D}\mathbf{V}\mathbf{\Lambda}^{\nu+1}\mathbf{V}^T\mathbf{D} \\
-&= \mathbf{\widetilde V}\mathbf{\widetilde\Lambda}\mathbf{\widetilde V}^T.
+&= \mathbf{D}\mathbf{V}\mathbf{A}^{\nu+1}\mathbf{V}^T\mathbf{D} \\
+&= \mathbf{\widetilde V}\mathbf{\widetilde A}\mathbf{\widetilde V}^T.
 \end{aligned}
 $$
 
@@ -383,7 +383,7 @@ This base matrix encapsulates the structure of our Matérn-like precision matrix
 We compute the initial eigenvalues of $\mathbf Q$ using the 2D Fast Fourier Transform (FFT) of $\mathbf c$:
 
 $$
-\boldsymbol{\Lambda} = \text{FFT2}(\mathbf{c})^{\nu+1}
+\boldsymbol{A} = \text{FFT2}(\mathbf{c})^{\nu+1}
 $$
 
 where ν is the smoothness parameter.
@@ -392,10 +392,10 @@ where ν is the smoothness parameter.
 
 An important property of Block Circulant with Circulant Blocks (BCCB) matrices is that the inverse of a BCCB matrix is also a BCCB matrix, and the marginal variance is the first element in its first circulant block. We use this to efficiently compute the marginal variance and rescale the eigenvalues:
 
-a.  Compute the element-wise inverse of $\boldsymbol{\Lambda}$: $\mathbf{\Lambda^{inv}} = 1 / \boldsymbol{\Lambda}$
-b.  Compute the base of $\mathbf Q^{-1}$ using inverse 2D FFT: $\mathbf{c_{inv}} = \text{IFFT2}(\mathbf{{\Lambda^{inv}}})$
+a.  Compute the element-wise inverse of $\boldsymbol{A}$: $\mathbf{A^{inv}} = 1 / \boldsymbol{A}$
+b.  Compute the base of $\mathbf Q^{-1}$ using inverse 2D FFT: $\mathbf{c_{inv}} = \text{IFFT2}(\mathbf{{A^{inv}}})$
 c.  The marginal variance is given by the first element of $\mathbf{c^{inv}}$: $\sigma^2 = \mathbf{c^{inv}}_{(0,0)}$
-d.  Rescale the eigenvalues: $\boldsymbol{\widetilde \Lambda} = \sigma^2 \boldsymbol{\Lambda}$
+d.  Rescale the eigenvalues: $\boldsymbol{\widetilde A} = \sigma^2 \boldsymbol{A}$
 
 This process ensures that the resulting precision matrix will have unit marginal variances, as required for the Gaussian copula.
 
@@ -404,7 +404,7 @@ This process ensures that the resulting precision matrix will have unit marginal
 The log-determinant of the scaled $\mathbf{\widetilde Q}$ can be efficiently calculated as the sum of the logarithms of the scaled eigenvalues:
 
 $$
-\log|\mathbf{Q}| = \sum_{i,j} \log(\widetilde \Lambda_{ij})
+\log|\mathbf{Q}| = \sum_{i,j} \log(\widetilde A_{ij})
 $$
 
 ### 5. Compute Quadratic Form
@@ -412,7 +412,7 @@ $$
 To compute the quadratic form $\mathbf{z}^T\mathbf{Q}\mathbf{z}$, we use the following steps:
 
 a.  Compute the 2D FFT of z: $\mathbf{\hat{z}} = \text{FFT2}(\mathbf{z})$
-b.  Multiply element-wise with the scaled eigenvalues: $\mathbf{\hat{y}} = \boldsymbol{\widetilde \Lambda} \odot \mathbf{\hat{z}}$
+b.  Multiply element-wise with the scaled eigenvalues: $\mathbf{\hat{y}} = \boldsymbol{\widetilde A} \odot \mathbf{\hat{z}}$
 c.  Compute the inverse 2D FFT: $\mathbf{y} = \text{IFFT2}(\mathbf{\hat{y}})$
 d.  Compute the dot product: $\mathbf{z}^T\mathbf{Q}\mathbf{z} = \mathbf{z}^T\mathbf{y}$
 
@@ -479,6 +479,11 @@ gt() |>
     md("Benchmarking how long it takes to evaluate the density of a Mátern($\\nu$)-like field with correlation parameter $\\rho$ scaled to have unit marginal variance")
   )
 ```
+
+# References
+
+::: {#refs}
+:::
 
 # Appendix {.appendix}
 
@@ -577,3 +582,4 @@ Putting it all together, here's the algorithm for computing the log-density of t
     i)  Compute $y = Dz$
     ii) Compute $y^TQ^{\nu+1}y$ as in the unscaled case.
 6.  Compute log-density: $\log c(u) = -\frac{1}{2}(d\log(2\pi) + \log|\tilde{Q}| + q - z^Tz)$
+
