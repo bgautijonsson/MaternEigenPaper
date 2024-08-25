@@ -10,7 +10,7 @@ manuscript:
       href: https://github.com/bgautijonsson/materneigenpaper
     - text: Stan Code
       icon: code
-      href: https://github.com/bgautijonsson/copulas
+      href: https://github.com/bgautijonsson/stancon24
     - text: R Package
       icon: code
       href: https://github.com/bgautijonsson/stdmatern
