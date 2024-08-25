@@ -4,9 +4,7 @@
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 %
 \documentclass[
-  letterpaper,
-  DIV=11,
-  numbers=noendperiod]{scrartcl}
+  12pt]{article}
 
 \usepackage{amsmath,amssymb}
 \usepackage{iftex}
@@ -92,6 +90,11 @@
 \def\fps@figure{htbp}
 \makeatother
 
+\addtolength{\oddsidemargin}{-.5in}%
+\addtolength{\evensidemargin}{-1in}%
+\addtolength{\textwidth}{1in}%
+\addtolength{\textheight}{1.7in}%
+\addtolength{\topmargin}{-1in}%
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{longtable}
@@ -99,7 +102,6 @@
 \usepackage{array}
 \usepackage{anyfontsize}
 \usepackage{multirow}
-\KOMAoption{captions}{tableheading}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -150,12 +152,14 @@
 \makeatletter
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, interior hidden, sharp corners, breakable, enhanced, frame hidden, borderline west={3pt}{0pt}{shadecolor}]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, frame hidden, sharp corners, breakable, enhanced, boxrule=0pt, interior hidden]}{\end{tcolorbox}}\fi
 \makeatother
 
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
+\usepackage[]{natbib}
+\bibliographystyle{agsm}
 \usepackage{bookmark}
 
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -171,23 +175,60 @@
   pdfcreator={LaTeX via pandoc}}
 
 
-\title{Efficient Gaussian Copula Density Computation for Large-Scale
-Spatial Data: A Matérn-like GMRF Approach with Circulant and Folded
-Circulant Approximations}
-\author{Brynjólfur Gauti Guðrúnar Jónsson}
-\date{2024-08-15}
 
 \begin{document}
+
+
+\def\spacingset#1{\renewcommand{\baselinestretch}%
+{#1}\small\normalsize} \spacingset{1}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\date{August 22, 2024}
+\title{\bf Efficient Gaussian Copula Density Computation for Large-Scale
+Spatial Data: A Matérn-like GMRF Approach with Circulant and Folded
+Circulant Approximations}
+\author{
+Brynjólfur Gauti Guðrúnar Jónsson\\
+University of Iceland\\
+}
 \maketitle
+
+\bigskip
+\bigskip
+\begin{abstract}
+This paper addresses the computational challenges in evaluating Gaussian
+copula densities for large-scale spatial data, focusing on Matérn-like
+Gaussian Markov Random Fields (GMRFs). We present a novel approach that
+bridges the gap between GMRFs and copulas, allowing for efficient
+computation of Gaussian copula densities using GMRF precision
+structures. Our method leverages the special structure of the precision
+matrix, employing eigendecomposition techniques to avoid explicit
+formation and inversion of large matrices. We introduce circulant and
+folded circulant approximations that offer significant computational
+advantages while preserving suitable boundary conditions. The results
+reveal substantial speed-ups compared to traditional methods,
+particularly for large spatial fields. However, these improvements come
+at the cost of increased complexity in implementation and the need for
+careful consideration of approximation accuracy. This work underscores
+the ongoing challenges in balancing computational efficiency with model
+fidelity in spatial statistics, highlighting the trade-offs inherent in
+analyzing increasingly large and complex spatial datasets.
+\end{abstract}
+
+
+\newpage
+\spacingset{1.9} % DON'T change the spacing!
 
 
 \textsubscript{Source:
 \href{https://bgautijonsson.github.io/MaternEigenPaper/index.qmd.html}{Article
 Notebook}}
 
-\section{Introduction}\label{introduction}
+Introduction
 
-\subsection{Problem Formulation}\label{problem-formulation}
+\section{Problem Formulation}\label{problem-formulation}
 
 Consider a spatial field on a regular \(n_1 \times n_2\) grid. Our
 objective is to compute the Gaussian copula density efficiently for this
@@ -207,18 +248,20 @@ field. This computation involves:
   form \(z^T \mathbf Q z\) where \(z_i = \Phi^{-1}(f_i(y_i))\)
 \end{enumerate}
 
-\subsection{Review}\label{review}
+\section{Review}\label{review}
 
 Gaussian Markov Random Fields (GMRFs) and copulas are two powerful
 statistical tools, each offering unique strengths in modeling complex
 data structures. GMRFs excel in capturing spatial and temporal
 dependencies, particularly in fields such as environmental science,
-epidemiology, and image analysis. Their ability to represent local
-dependencies through sparse precision matrices makes them
-computationally attractive for high-dimensional problems. Copulas, on
-the other hand, provide a flexible framework for modeling multivariate
-dependencies, allowing separate specification of marginal distributions
-and their joint behavior.
+epidemiology, and image analysis
+\citep{rue2005, knorr-heldBayesianModellingInseparable2000, rue2009}.
+Their ability to represent local dependencies through sparse precision
+matrices makes them computationally attractive for high-dimensional
+problems. Copulas, on the other hand, provide a flexible framework for
+modeling multivariate dependencies, allowing separate specification of
+marginal distributions and their joint behavior
+\citep{sklar1959, joe1997, nelsen2006}.
 
 The Gaussian copula, in particular, has gained popularity due to its
 interpretability and connection to the multivariate normal distribution.
@@ -250,7 +293,7 @@ the standard normal cumulative distribution function.
 A critical requirement for the precision matrix \(\mathbf{Q}\) governing
 the GMRF copula \(C\) is that \(\mathbf{\Sigma} = \mathbf{Q}^{-1}\)
 should have a unit diagonal, i.e.~the marginal variance is equal to one
-everywhere.. This ensures it operates on the same scale as the
+everywhere. This ensures it operates on the same scale as the
 transformed data, \(\Phi^{-1}(u_i)\). However, this can be challenging
 as GMRFs are typically defined in terms of precision matrices that often
 imply non-unit marginal variances.
@@ -278,11 +321,11 @@ large precision matrix \(\mathbf{Q}\), making it particularly suitable
 for high-dimensional spatial data. In addition to the exact method, we
 show how the precision matrix can be approximated by a folded circulant
 matrix wich gives a large speed-up while preserving suitable boundary
-conditions.
+conditions \citep{kent2022, mondal2018, besag2005}.
 
-\section{Methods}\label{methods}
+Methods
 
-\subsection{Gaussian Copula Density
+\section{Gaussian Copula Density
 Computation}\label{gaussian-copula-density-computation}
 
 The Gaussian copula density for a random vector
@@ -306,10 +349,10 @@ The log-density can be expressed as:
 Our goal is to efficiently compute this log-density for large spatial
 fields.
 
-\subsection{Precision Matrix
-Structure}\label{precision-matrix-structure}
+\section{Precision Matrix Structure}\label{precision-matrix-structure}
 
-We define the precision matrix \(\mathbf{Q}\) as:
+Similarly to the GMRF approximation to a Matérn process in
+\citep{lindgren2011}, we define the precision matrix \(\mathbf{Q}\) as:
 
 \[
 \mathbf{Q} = (\mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2})^{(\nu + 1)}, \quad \nu \in \{0, 1, 2\}
@@ -326,16 +369,16 @@ AR(1) process with correlation \(\rho\):
 0 & -\rho & 1+\rho^2 & \cdots & 0 \\
 \vdots & \vdots & \vdots & \ddots & \vdots \\
 0 & 0 & 0 & \cdots & 1
-\end{bmatrix}
+\end{bmatrix}.
 \]
 
 The matrix, \(\mathbf Q\), is then scaled so that its inverse,
 \(\mathbf \Sigma = \mathbf Q^{-1}\) is a correlation matrix,
 i.e.~\(\mathbf \Sigma_{ii} = 1\).
 
-\subsection{Computation Process}\label{computation-process}
+\section{Computation Process}\label{computation-process}
 
-\subsubsection{\texorpdfstring{Step 1: Eigendecomposition of
+\subsection{\texorpdfstring{Step 1: Eigendecomposition of
 \(\mathbf{Q}_{\rho}\)}{Step 1: Eigendecomposition of \textbackslash mathbf\{Q\}\_\{\textbackslash rho\}}}\label{step-1-eigendecomposition-of-mathbfq_rho}
 
 We first compute the eigendecomposition of both \(\mathbf{Q}_{\rho}\)\$:
@@ -346,7 +389,8 @@ We first compute the eigendecomposition of both \(\mathbf{Q}_{\rho}\)\$:
 
 where \(\mathbf{V_\rho}\) is the matrix of eigenvectors and
 \(\mathbf{\Lambda_\rho}\) is the diagonal matrix of eigenvalues. Then,
-because of how \(Q\) is defined, its eigendecomposition is:
+because of how \(Q\) is defined, its eigendecomposition is (see for
+example \citep{matrixa}):
 
 \[
 \mathbf{Q} = (\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})(\mathbf{\Lambda_{\rho_1}} \otimes \mathbf{I} + \mathbf{I} \otimes \mathbf{\Lambda_{\rho_2}})^{(\nu + 1)}(\mathbf{V_{\rho_1}} \otimes \mathbf{V_{\rho_2}})^T.
@@ -360,7 +404,7 @@ and their corresponding eigenvectors are
 to iterate over each value and vector pair to compute the density
 without forming the larger matrix.
 
-\subsubsection{Step 2: Computation of Marginal Standard
+\subsection{Step 2: Computation of Marginal Standard
 Deviations}\label{step-2-computation-of-marginal-standard-deviations}
 
 In order to scale \(\mathbf Q\) so that its inverse is a correlation
@@ -386,7 +430,7 @@ deviations by iterating over the eigenvalues and -vectors of
 \(Q_{\rho_1}\) and \(Q_{\rho_2}\) and cumulating their values according
 to the formula above, then taking the element-wise square roots.
 
-\subsubsection{Step 3: Scaling the
+\subsection{Step 3: Scaling the
 Eigendecomposition}\label{step-3-scaling-the-eigendecomposition}
 
 To scale the eigendecomposition of \(\mathbf{Q}\) using the marginal
@@ -406,7 +450,7 @@ rescale each value/vector pair individually as we iterate over the
 eigenvectors and values of \(Q_{\rho_1}\) and \(Q_{\rho_2}\) to create
 the corresponding values and vectors for the larger matrix.
 
-\subsubsection{Step 4: Efficient Computation of
+\subsection{Step 4: Efficient Computation of
 Log-Density}\label{step-4-efficient-computation-of-log-density}
 
 Using this scaled eigendecomposition, we efficiently compute:
@@ -430,15 +474,15 @@ This approach allows us to calculate the density of the spatial copula
 by calculating and iterating over the spectral decomposition of the
 smaller matrices, avoiding the formation of \(\mathbf Q\) alltogether.
 
-\subsection{Circulant and Folded Circulant
+\section{Circulant and Folded Circulant
 Approximations}\label{circulant-and-folded-circulant-approximations}
 
 While the eigendecomposition method provides an exact solution, it can
 be computationally expensive for very large spatial fields. To address
 this, we introduce circulant and folded circulant approximations that
-offer potential computational advantages.
+offer computational efficiency and speed.
 
-\subsubsection{Circulant Matrices}\label{circulant-matrices}
+\subsection{Circulant Matrices}\label{circulant-matrices}
 
 A circulant matrix \(C\) is a special kind of matrix where each row is a
 cyclic shift of the row above it. It can be fully specified by its first
@@ -478,9 +522,10 @@ plays a crucial role in efficient computations. In particular:
 \]
 
 These properties allow for much faster computations than for general
-matrices.
+matrices. For more reading on applications of circulant matrices to
+GMRFs see \citep{rue2005, gray2006}.
 
-\subsubsection{Block Circulant Matrices}\label{block-circulant-matrices}
+\subsection{Block Circulant Matrices}\label{block-circulant-matrices}
 
 For two-dimensional spatial fields, we use block circulant matrices with
 circulant blocks (BCCB). An \(Nn \times Nn\) matrix C is block circulant
@@ -514,7 +559,7 @@ determines the BCCB matrix and is central to efficient computations:
   thus determined by its base matrix.
 \end{enumerate}
 
-\subsubsection{\texorpdfstring{Approximations for
+\subsection{\texorpdfstring{Approximations for
 \(Q_{\rho}\)}{Approximations for Q\_\{\textbackslash rho\}}}\label{approximations-for-q_rho}
 
 Let \(Q_{\rho}\) be the precision matrix of a one-dimensional AR(1)
@@ -531,7 +576,7 @@ process with correlation \(\rho\). The exact form of \(Q_{\rho}\) is:
 \end{bmatrix}
 \]
 
-\paragraph{Circulant Approximation}\label{circulant-approximation}
+\subsubsection{Circulant Approximation}\label{circulant-approximation}
 
 The circulant approximation to \(Q_\rho\), denoted as
 \(\mathbf{Q}_\rho^{(circ)}\), is:
@@ -550,11 +595,12 @@ The circulant approximation to \(Q_\rho\), denoted as
 This approximation treats the first and last observations as neighbors,
 effectively wrapping the data around a circle.
 
-\paragraph{Folded Circulant
+\subsubsection{Folded Circulant
 Approximation}\label{folded-circulant-approximation}
 
 The folded circulant approximation, \(\mathbf{Q}_\rho^{(fold)}\), is
-based on a reflected version of the data. We double the data by
+based on a reflected version of the data
+\citep{kent2022, mondal2018, besag2005}. We double the data by
 reflecting it, giving us the data \(x_1,  \dots, x_n, x_n, \dots, x_1\).
 We then model this doubled data with a \(2n \times 2n\) circulant
 matrix. If written out as an \(n \times n\) matrix, it takes the form:
@@ -575,7 +621,7 @@ account for the reflection of the data. As \(x_1\) now is the first and
 last data point, then we avoid the circular dependence from the regular
 circulant approximation.
 
-\subsubsection{Extension to the Full Q
+\subsection{Extension to the Full Q
 Matrix}\label{extension-to-the-full-q-matrix}
 
 For a two-dimensional spatial field on an \(n_1 \times n_2\) grid, we
@@ -596,8 +642,10 @@ see this, let's consider the case where \(\nu = 0\) for simplicity:
 \mathbf{Q} = \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2}
 \]
 
-Now, let the two AR(1) matrices be approximated by a circulant matrix
-\(C\) with base vector \(c = [c_, c_1, ..., c_{n-1}]\). Then:
+Now, let the two AR(1) matrices be approximated by circulant matrices,
+\(\mathbf C_\rho\), with base vectors
+\(\mathbf c_\rho = \frac{1}{1-\rho^2}\left[1+\rho^2, -\rho, 0, ..., 0, -\rho \right]\).
+Then:
 
 \[
 \mathbf{Q}_{\rho_1} \approx \mathbf{C_{\rho_1}} = \frac{1}{1-\rho_1^2}
@@ -651,7 +699,8 @@ blocks:
 \end{pmatrix}
 \]
 
-where each \(\mathbf{B_i}\) is a circulant matrix. Specifically,
+where each \(\mathbf{B_i}\) is a circulant matrix. Specifically, each
+\(\mathbf B_i = \mathbf 0\) except for
 
 \[
 \begin{aligned}
@@ -679,7 +728,7 @@ the 2D Fast Fourier Transform (FFT), enabling rapid calculation of the
 log-determinant and quadratic forms needed for the Gaussian copula
 density.
 
-\subsection{Computation with Circulant
+\section{Computation with Circulant
 Approximation}\label{computation-with-circulant-approximation}
 
 When using the circulant approximation, we leverage the efficient
@@ -688,7 +737,7 @@ computation properties of block circulant matrices with circulant blocks
 complexity, especially for large spatial fields. Here's the step-by-step
 process:
 
-\subsubsection{1. Construct the Base
+\subsection{1. Construct the Base
 Matrix}\label{construct-the-base-matrix}
 
 First, we construct the base matrix \(\mathbf c\) for our BCCB
@@ -708,7 +757,7 @@ approximation of \(\mathbf Q\). For an \(n_1 \times n_2\) grid,
 This base matrix encapsulates the structure of our Matérn-like precision
 matrix.
 
-\subsubsection{2. Compute Initial
+\subsection{2. Compute Initial
 Eigenvalues}\label{compute-initial-eigenvalues}
 
 We compute the initial eigenvalues of \(\mathbf Q\) using the 2D Fast
@@ -720,7 +769,7 @@ Fourier Transform (FFT) of \(\mathbf c\):
 
 where ν is the smoothness parameter.
 
-\subsubsection{3. Compute Marginal Variance and Rescale
+\subsection{3. Compute Marginal Variance and Rescale
 Eigenvalues}\label{compute-marginal-variance-and-rescale-eigenvalues}
 
 An important property of Block Circulant with Circulant Blocks (BCCB)
@@ -749,8 +798,7 @@ eigenvalues:
 This process ensures that the resulting precision matrix will have unit
 marginal variances, as required for the Gaussian copula.
 
-\subsubsection{4. Compute
-Log-Determinant}\label{compute-log-determinant}
+\subsection{4. Compute Log-Determinant}\label{compute-log-determinant}
 
 The log-determinant of the scaled \(\mathbf{\widetilde Q}\) can be
 efficiently calculated as the sum of the logarithms of the scaled
@@ -760,7 +808,7 @@ eigenvalues:
 \log|\mathbf{Q}| = \sum_{i,j} \log(\widetilde \Lambda_{ij})
 \]
 
-\subsubsection{5. Compute Quadratic Form}\label{compute-quadratic-form}
+\subsection{5. Compute Quadratic Form}\label{compute-quadratic-form}
 
 To compute the quadratic form \(\mathbf{z}^T\mathbf{Q}\mathbf{z}\), we
 use the following steps:
@@ -782,8 +830,7 @@ use the following steps:
   \(\mathbf{z}^T\mathbf{Q}\mathbf{z} = \mathbf{z}^T\mathbf{y}\)
 \end{enumerate}
 
-\subsubsection{6. Compute the
-Log-Density}\label{compute-the-log-density}
+\subsection{6. Compute the Log-Density}\label{compute-the-log-density}
 
 Finally, we can compute the log-density of the Gaussian copula:
 
@@ -793,7 +840,7 @@ Finally, we can compute the log-density of the Gaussian copula:
 
 where \(\mathbf{z} = \Phi^{-1}(\mathbf{u})\).
 
-\subsection{Computation with Folded Circulant
+\section{Computation with Folded Circulant
 Approximation}\label{computation-with-folded-circulant-approximation}
 
 The folded circulant approximation offers an alternative approach that
@@ -822,9 +869,9 @@ This reflection creates a \(2n_1 \times 2n_2\) matrix. The matrix is
 then stacked in lexicographic order before entering into the quadratic
 forms.
 
-\section{Results}\label{results}
+Results
 
-\subsection{Computational Efficiency}\label{computational-efficiency}
+\section{Computational Efficiency}\label{computational-efficiency}
 
 Table 1 presents the results of a benchmark comparing the time it takes
 to evaluate the gaussian copula density described above. For each grid
@@ -860,18 +907,17 @@ Grid Size & Cholesky & Time & Speed-up & Time & Speed-Up & Time & Speed-Up \\
 \href{https://bgautijonsson.github.io/MaternEigenPaper/index.qmd.html}{Article
 Notebook}}
 
-\section{Appendix}\label{appendix}
+Appendix
 
-\subsection{Cholesky Methods}\label{cholesky-methods}
+\section{Cholesky Methods}\label{cholesky-methods}
 
 Standard methods of evaluating multivariate normal densities using the
 Cholesky decomposition were implemented to compare with the new methods
 for benchmarking.
 
-\subsubsection{Unscaled Precision
-Matrix}\label{unscaled-precision-matrix}
+\subsection{Unscaled Precision Matrix}\label{unscaled-precision-matrix}
 
-\paragraph{Precision Matrix
+\subsubsection{Precision Matrix
 Construction}\label{precision-matrix-construction}
 
 We start by constructing the precision matrix \(Q\) for a 2D Matérn
@@ -886,7 +932,7 @@ where \(\otimes\) denotes the Kronecker product, \(Q_1\) and \(Q_2\) are
 AR(1)-like structures), and \(I_{d_x}\) and \(I_{d_y}\) are identity
 matrices of appropriate sizes.
 
-\paragraph{Density Computation}\label{density-computation}
+\subsubsection{Density Computation}\label{density-computation}
 
 For a Matérn field with smoothness parameter \(\nu\), we need to work
 with \(Q^{\nu+1}\). We can efficiently compute the log-determinant,
@@ -907,7 +953,7 @@ x^T Q^3 x &=  x^T L L^T L L^T L L^T x = ||L^TLL^T x||_2^2.
 \end{aligned}
 \]
 
-\paragraph{Algorithm}\label{algorithm}
+\subsubsection{Algorithm}\label{algorithm}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -945,9 +991,9 @@ x^T Q^3 x &=  x^T L L^T L L^T L L^T x = ||L^TLL^T x||_2^2.
   \(\log p(x) = -\frac{1}{2}(d\log(2\pi) + \log|Q^{\nu+1}| + q)\)
 \end{enumerate}
 
-\subsubsection{Scaled Precision Matrix}\label{scaled-precision-matrix}
+\subsection{Scaled Precision Matrix}\label{scaled-precision-matrix}
 
-\paragraph{Precision Matrix
+\subsubsection{Precision Matrix
 Construction}\label{precision-matrix-construction-1}
 
 We start by constructing the precision matrix \(Q\) for a 2D Matérn
@@ -970,7 +1016,7 @@ scaled precision matrix is then: \[
 \tilde{Q} = DQ^{\nu+1}D
 \]
 
-\paragraph{Efficient Computation of Scaling Matrix
+\subsubsection{Efficient Computation of Scaling Matrix
 D}\label{efficient-computation-of-scaling-matrix-d}
 
 \begin{enumerate}
@@ -997,7 +1043,7 @@ D}\label{efficient-computation-of-scaling-matrix-d}
   \end{enumerate}
 \end{enumerate}
 
-\paragraph{Log determinant}\label{log-determinant}
+\subsubsection{Log determinant}\label{log-determinant}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1017,7 +1063,7 @@ D}\label{efficient-computation-of-scaling-matrix-d}
   \(\log|\tilde{Q}| = 2\sum_i \log(D_{ii}) + 2(\nu+1)\sum_i \log(L_{ii})\)
 \end{enumerate}
 
-\paragraph{Quadratic Form}\label{quadratic-form}
+\subsubsection{Quadratic Form}\label{quadratic-form}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1032,7 +1078,7 @@ D}\label{efficient-computation-of-scaling-matrix-d}
   Now we compute \(y^TQ^{\nu+1}y\) as in the unscaled case.
 \end{enumerate}
 
-\paragraph{Algorithm}\label{algorithm-1}
+\subsubsection{Algorithm}\label{algorithm-1}
 
 Putting it all together, here's the algorithm for computing the
 log-density of the Gaussian copula using the scaled precision matrix:
@@ -1065,6 +1111,8 @@ log-density of the Gaussian copula using the scaled precision matrix:
   \(\log c(u) = -\frac{1}{2}(d\log(2\pi) + \log|\tilde{Q}| + q - z^Tz)\)
 \end{enumerate}
 
+
+  \bibliography{references.bib}
 
 
 

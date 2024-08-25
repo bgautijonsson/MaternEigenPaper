@@ -26,6 +26,25 @@ Folded Circulant Approximations</article-title>
         </institution-wrap>
       </aff>
       <history/>
+      <abstract>
+This paper addresses the computational challenges in evaluating Gaussian
+copula densities for large-scale spatial data, focusing on Matérn-like
+Gaussian Markov Random Fields (GMRFs). We present a novel approach that
+bridges the gap between GMRFs and copulas, allowing for efficient
+computation of Gaussian copula densities using GMRF precision
+structures. Our method leverages the special structure of the precision
+matrix, employing eigendecomposition techniques to avoid explicit
+formation and inversion of large matrices. We introduce circulant and
+folded circulant approximations that offer significant computational
+advantages while preserving suitable boundary conditions. The results
+reveal substantial speed-ups compared to traditional methods,
+particularly for large spatial fields. However, these improvements come
+at the cost of increased complexity in implementation and the need for
+careful consideration of approximation accuracy. This work underscores
+the ongoing challenges in balancing computational efficiency with model
+fidelity in spatial statistics, highlighting the trade-offs inherent in
+analyzing increasingly large and complex spatial datasets.
+</abstract>
     </article-meta>
   </front>
   <body>
@@ -61,13 +80,24 @@ Folded Circulant Approximations</article-title>
     powerful statistical tools, each offering unique strengths in
     modeling complex data structures. GMRFs excel in capturing spatial
     and temporal dependencies, particularly in fields such as
-    environmental science, epidemiology, and image analysis. Their
-    ability to represent local dependencies through sparse precision
-    matrices makes them computationally attractive for high-dimensional
-    problems. Copulas, on the other hand, provide a flexible framework
-    for modeling multivariate dependencies, allowing separate
-    specification of marginal distributions and their joint
-    behavior.</p>
+    environmental science, epidemiology, and image analysis
+    (<xref alt="Havard Rue and Held 2005" rid="ref-rue2005" ref-type="bibr">Havard
+    Rue and Held 2005</xref>;
+    <xref alt="Knorr-Held 2000" rid="ref-knorr-heldBayesianModellingInseparable2000" ref-type="bibr">Knorr-Held
+    2000</xref>;
+    <xref alt="Håvard Rue, Martino, and Chopin 2009" rid="ref-rue2009" ref-type="bibr">Håvard
+    Rue, Martino, and Chopin 2009</xref>). Their ability to represent
+    local dependencies through sparse precision matrices makes them
+    computationally attractive for high-dimensional problems. Copulas,
+    on the other hand, provide a flexible framework for modeling
+    multivariate dependencies, allowing separate specification of
+    marginal distributions and their joint behavior
+    (<xref alt="Sklar 1959" rid="ref-sklar1959" ref-type="bibr">Sklar
+    1959</xref>;
+    <xref alt="Joe 1997" rid="ref-joe1997" ref-type="bibr">Joe
+    1997</xref>;
+    <xref alt="Nelsen 2006" rid="ref-nelsen2006" ref-type="bibr">Nelsen
+    2006</xref>).</p>
         <p>The Gaussian copula, in particular, has gained popularity due to
     its interpretability and connection to the multivariate normal
     distribution. However, combining GMRFs with copulas has historically
@@ -258,7 +288,7 @@ Folded Circulant Approximations</article-title>
     governing the GMRF copula <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>
     is that <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\Sigma} = \mathbf{Q}^{-1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>𝚺</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>𝐐</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:mrow></mml:math></alternatives></inline-formula>
     should have a unit diagonal, i.e. the marginal variance is equal to
-    one everywhere.. This ensures it operates on the same scale as the
+    one everywhere. This ensures it operates on the same scale as the
     transformed data, <inline-formula><alternatives><tex-math><![CDATA[\Phi^{-1}(u_i)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>u</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>.
     However, this can be challenging as GMRFs are typically defined in
     terms of precision matrices that often imply non-unit marginal
@@ -333,7 +363,13 @@ Folded Circulant Approximations</article-title>
     making it particularly suitable for high-dimensional spatial data.
     In addition to the exact method, we show how the precision matrix
     can be approximated by a folded circulant matrix wich gives a large
-    speed-up while preserving suitable boundary conditions.</p>
+    speed-up while preserving suitable boundary conditions
+    (<xref alt="Kent and Mardia 2022" rid="ref-kent2022" ref-type="bibr">Kent
+    and Mardia 2022</xref>;
+    <xref alt="Mondal 2018" rid="ref-mondal2018" ref-type="bibr">Mondal
+    2018</xref>;
+    <xref alt="Besag and Mondal 2005" rid="ref-besag2005" ref-type="bibr">Besag
+    and Mondal 2005</xref>).</p>
       </sec>
     </sec>
     <sec id="methods">
@@ -461,7 +497,10 @@ Folded Circulant Approximations</article-title>
       </sec>
       <sec id="precision-matrix-structure">
         <title>Precision Matrix Structure</title>
-        <p>We define the precision matrix <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
+        <p>Similarly to the GMRF approximation to a Matérn process in
+    (<xref alt="Lindgren, Rue, and Lindström 2011" rid="ref-lindgren2011" ref-type="bibr">Lindgren,
+    Rue, and Lindström 2011</xref>), we define the precision matrix
+    <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
     as:</p>
         <p>
           <disp-formula>
@@ -547,7 +586,7 @@ Folded Circulant Approximations</article-title>
     0 & -\rho & 1+\rho^2 & \cdots & 0 \\
     \vdots & \vdots & \vdots & \ddots & \vdots \\
     0 & 0 & 0 & \cdots & 1
-    \end{bmatrix}
+    \end{bmatrix}.
     ]]></tex-math>
               <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                 <mml:mrow>
@@ -672,6 +711,7 @@ Folded Circulant Approximations</article-title>
                     </mml:mtable>
                     <mml:mo stretchy="true" form="postfix">]</mml:mo>
                   </mml:mrow>
+                  <mml:mi>.</mml:mi>
                 </mml:mrow>
               </mml:math>
             </alternatives>
@@ -725,7 +765,10 @@ Folded Circulant Approximations</article-title>
       is the matrix of eigenvectors and <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\Lambda_\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝚲</mml:mi><mml:mi>𝛒</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
       is the diagonal matrix of eigenvalues. Then, because of how
       <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
-      is defined, its eigendecomposition is:</p>
+      is defined, its eigendecomposition is (see for example
+      (<xref alt="“Matrix Analysis for Scientists and Engineers | SIAM Publications Library,” n.d." rid="ref-matrixa" ref-type="bibr">“Matrix
+      Analysis for Scientists and Engineers | SIAM Publications
+      Library,” n.d.</xref>)):</p>
           <p>
             <disp-formula>
               <alternatives>
@@ -1137,7 +1180,7 @@ Folded Circulant Approximations</article-title>
         <p>While the eigendecomposition method provides an exact solution,
     it can be computationally expensive for very large spatial fields.
     To address this, we introduce circulant and folded circulant
-    approximations that offer potential computational advantages.</p>
+    approximations that offer computational efficiency and speed.</p>
         <sec id="circulant-matrices">
           <title>Circulant Matrices</title>
           <p>A circulant matrix <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>
@@ -1407,7 +1450,12 @@ Folded Circulant Approximations</article-title>
             </disp-formula>
           </p>
           <p>These properties allow for much faster computations than for
-      general matrices.</p>
+      general matrices. For more reading on applications of circulant
+      matrices to GMRFs see
+      (<xref alt="Havard Rue and Held 2005" rid="ref-rue2005" ref-type="bibr">Havard
+      Rue and Held 2005</xref>;
+      <xref alt="Gray 2006" rid="ref-gray2006" ref-type="bibr">Gray
+      2006</xref>).</p>
         </sec>
         <sec id="block-circulant-matrices">
           <title>Block Circulant Matrices</title>
@@ -1981,9 +2029,14 @@ Folded Circulant Approximations</article-title>
             <title>Folded Circulant Approximation</title>
             <p>The folded circulant approximation,
         <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_\rho^{(fold)}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msubsup><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>f</mml:mi><mml:mi>o</mml:mi><mml:mi>l</mml:mi><mml:mi>d</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:msubsup></mml:math></alternatives></inline-formula>,
-        is based on a reflected version of the data. We double the data
-        by reflecting it, giving us the data
-        <inline-formula><alternatives><tex-math><![CDATA[x_1,  \dots, x_n, x_n, \dots, x_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>x</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>.
+        is based on a reflected version of the data
+        (<xref alt="Kent and Mardia 2022" rid="ref-kent2022" ref-type="bibr">Kent
+        and Mardia 2022</xref>;
+        <xref alt="Mondal 2018" rid="ref-mondal2018" ref-type="bibr">Mondal
+        2018</xref>;
+        <xref alt="Besag and Mondal 2005" rid="ref-besag2005" ref-type="bibr">Besag
+        and Mondal 2005</xref>). We double the data by reflecting it,
+        giving us the data <inline-formula><alternatives><tex-math><![CDATA[x_1,  \dots, x_n, x_n, \dots, x_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>x</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>.
         We then model this doubled data with a
         <inline-formula><alternatives><tex-math><![CDATA[2n \times 2n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mn>2</mml:mn><mml:mi>n</mml:mi><mml:mo>×</mml:mo><mml:mn>2</mml:mn><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
         circulant matrix. If written out as an
@@ -2307,9 +2360,9 @@ Folded Circulant Approximations</article-title>
               </alternatives>
             </disp-formula>
           </p>
-          <p>Now, let the two AR(1) matrices be approximated by a circulant
-      matrix <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>
-      with base vector <inline-formula><alternatives><tex-math><![CDATA[c = [c_, c_1, ..., c_{n-1}]]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>c</mml:mi><mml:mo>=</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">[</mml:mo><mml:msub><mml:mi>c</mml:mi><mml:mo>,</mml:mo></mml:msub><mml:msub><mml:mi>c</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>.</mml:mi><mml:mi>.</mml:mi><mml:mi>.</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>c</mml:mi><mml:mrow><mml:mi>n</mml:mi><mml:mo>−</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">]</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>.
+          <p>Now, let the two AR(1) matrices be approximated by circulant
+      matrices, <inline-formula><alternatives><tex-math><![CDATA[\mathbf C_\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐂</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>,
+      with base vectors <inline-formula><alternatives><tex-math><![CDATA[\mathbf c_\rho = \frac{1}{1-\rho^2}\left[1+\rho^2, -\rho, 0, ..., 0, -\rho \right]]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝐜</mml:mi><mml:mi>ρ</mml:mi></mml:msub><mml:mo>=</mml:mo><mml:mfrac><mml:mn>1</mml:mn><mml:mrow><mml:mn>1</mml:mn><mml:mo>−</mml:mo><mml:msup><mml:mi>ρ</mml:mi><mml:mn>2</mml:mn></mml:msup></mml:mrow></mml:mfrac><mml:mrow><mml:mo stretchy="true" form="prefix">[</mml:mo><mml:mn>1</mml:mn><mml:mo>+</mml:mo><mml:msup><mml:mi>ρ</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mo>,</mml:mo><mml:mi>−</mml:mi><mml:mi>ρ</mml:mi><mml:mo>,</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mi>.</mml:mi><mml:mi>.</mml:mi><mml:mi>.</mml:mi><mml:mo>,</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mi>−</mml:mi><mml:mi>ρ</mml:mi><mml:mo stretchy="true" form="postfix">]</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>.
       Then:</p>
           <p>
             <disp-formula>
@@ -3104,7 +3157,9 @@ Folded Circulant Approximations</article-title>
             </disp-formula>
           </p>
           <p>where each <inline-formula><alternatives><tex-math><![CDATA[\mathbf{B_i}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐁</mml:mi><mml:mi>𝐢</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
-      is a circulant matrix. Specifically,</p>
+      is a circulant matrix. Specifically, each
+      <inline-formula><alternatives><tex-math><![CDATA[\mathbf B_i = \mathbf 0]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝐁</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>=</mml:mo><mml:mn>𝟎</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>
+      except for</p>
           <p>
             <disp-formula>
               <alternatives>
@@ -4897,7 +4952,248 @@ Folded Circulant Approximations</article-title>
     </sec>
   </body>
   <back>
-</back>
+    <ref-list>
+      <title/>
+      <ref id="ref-rue2005">
+        <element-citation publication-type="book">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Rue</surname>
+              <given-names>Havard</given-names>
+            </name>
+            <name>
+              <surname>Held</surname>
+              <given-names>Leonhard</given-names>
+            </name>
+          </person-group>
+          <source>Gaussian Markov Random Fields: Theory and Applications</source>
+          <publisher-name>CRC Press</publisher-name>
+          <year iso-8601-date="2005-02-18">2005</year>
+          <month>02</month>
+          <day>18</day>
+        </element-citation>
+      </ref>
+      <ref id="ref-kent2022">
+        <element-citation publication-type="book">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Kent</surname>
+              <given-names>John T.</given-names>
+            </name>
+            <name>
+              <surname>Mardia</surname>
+              <given-names>Kanti V.</given-names>
+            </name>
+          </person-group>
+          <source>Spatial Analysis</source>
+          <publisher-name>John Wiley; Sons</publisher-name>
+          <year iso-8601-date="2022-05-31">2022</year>
+          <month>05</month>
+          <day>31</day>
+        </element-citation>
+      </ref>
+      <ref id="ref-mondal2018">
+        <element-citation publication-type="article-journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Mondal</surname>
+              <given-names>D</given-names>
+            </name>
+          </person-group>
+          <article-title>On edge correction of conditional and intrinsic autoregressions</article-title>
+          <source>Biometrika</source>
+          <year iso-8601-date="2018-06-01">2018</year>
+          <month>06</month>
+          <day>01</day>
+          <volume>105</volume>
+          <issue>2</issue>
+          <uri>https://doi.org/10.1093/biomet/asy014</uri>
+          <pub-id pub-id-type="doi">10.1093/biomet/asy014</pub-id>
+          <fpage>447</fpage>
+          <lpage>454</lpage>
+        </element-citation>
+      </ref>
+      <ref id="ref-besag2005">
+        <element-citation publication-type="article-journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Besag</surname>
+              <given-names>Julian</given-names>
+            </name>
+            <name>
+              <surname>Mondal</surname>
+              <given-names>Debashis</given-names>
+            </name>
+          </person-group>
+          <article-title>First-order intrinsic autoregressions and the de wijs process</article-title>
+          <source>Biometrika</source>
+          <year iso-8601-date="2005-12-01">2005</year>
+          <month>12</month>
+          <day>01</day>
+          <volume>92</volume>
+          <issue>4</issue>
+          <uri>https://doi.org/10.1093/biomet/92.4.909</uri>
+          <pub-id pub-id-type="doi">10.1093/biomet/92.4.909</pub-id>
+          <fpage>909</fpage>
+          <lpage>920</lpage>
+        </element-citation>
+      </ref>
+      <ref id="ref-rue2009">
+        <element-citation publication-type="article-journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Rue</surname>
+              <given-names>Håvard</given-names>
+            </name>
+            <name>
+              <surname>Martino</surname>
+              <given-names>Sara</given-names>
+            </name>
+            <name>
+              <surname>Chopin</surname>
+              <given-names>Nicolas</given-names>
+            </name>
+          </person-group>
+          <article-title>Approximate Bayesian inference for latent Gaussian models by using integrated nested Laplace approximations</article-title>
+          <source>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</source>
+          <year iso-8601-date="2009">2009</year>
+          <volume>71</volume>
+          <issue>2</issue>
+          <uri>https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-9868.2008.00700.x</uri>
+          <pub-id pub-id-type="doi">10.1111/j.1467-9868.2008.00700.x</pub-id>
+          <fpage>319</fpage>
+          <lpage>392</lpage>
+        </element-citation>
+      </ref>
+      <ref id="ref-sklar1959">
+        <element-citation publication-type="article-journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Sklar</surname>
+              <given-names>M.</given-names>
+            </name>
+          </person-group>
+          <article-title>Fonctions de répartition à n dimensions et leurs marges</article-title>
+          <source>Annales de l’ISUP</source>
+          <year iso-8601-date="1959">1959</year>
+          <volume>VIII</volume>
+          <issue>3</issue>
+          <uri>https://hal.science/hal-04094463</uri>
+          <fpage>229</fpage>
+          <lpage>231</lpage>
+        </element-citation>
+      </ref>
+      <ref id="ref-joe1997">
+        <element-citation publication-type="book">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Joe</surname>
+              <given-names>Harry</given-names>
+            </name>
+          </person-group>
+          <source>Multivariate models and multivariate dependence concepts</source>
+          <publisher-name>Chapman; Hall/CRC</publisher-name>
+          <publisher-loc>New York</publisher-loc>
+          <year iso-8601-date="1997-05-01">1997</year>
+          <month>05</month>
+          <day>01</day>
+        </element-citation>
+      </ref>
+      <ref id="ref-nelsen2006">
+        <element-citation publication-type="book">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Nelsen</surname>
+              <given-names>Roger B.</given-names>
+            </name>
+          </person-group>
+          <source>An introduction to copulas</source>
+          <publisher-name>Springer</publisher-name>
+          <publisher-loc>New York</publisher-loc>
+          <year iso-8601-date="2006">2006</year>
+          <edition>2nd ed</edition>
+        </element-citation>
+      </ref>
+      <ref id="ref-lindgren2011">
+        <element-citation publication-type="article-journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Lindgren</surname>
+              <given-names>Finn</given-names>
+            </name>
+            <name>
+              <surname>Rue</surname>
+              <given-names>Håvard</given-names>
+            </name>
+            <name>
+              <surname>Lindström</surname>
+              <given-names>Johan</given-names>
+            </name>
+          </person-group>
+          <article-title>An explicit link between Gaussian fields and Gaussian Markov random fields: the stochastic partial differential equation approach</article-title>
+          <source>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</source>
+          <year iso-8601-date="2011">2011</year>
+          <volume>73</volume>
+          <issue>4</issue>
+          <uri>https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-9868.2011.00777.x</uri>
+          <pub-id pub-id-type="doi">10.1111/j.1467-9868.2011.00777.x</pub-id>
+          <fpage>423</fpage>
+          <lpage>498</lpage>
+        </element-citation>
+      </ref>
+      <ref id="ref-matrixa">
+        <element-citation>
+          <article-title>Matrix Analysis for Scientists and Engineers | SIAM Publications Library</article-title>
+          <uri>https://epubs.siam.org/doi/book/10.1137/1.9780898717907</uri>
+        </element-citation>
+      </ref>
+      <ref id="ref-gray2006">
+        <element-citation publication-type="article-journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Gray</surname>
+              <given-names>Robert M.</given-names>
+            </name>
+          </person-group>
+          <article-title>Toeplitz and circulant matrices: A review</article-title>
+          <source>Foundations and Trends® in Communications and Information Theory</source>
+          <year iso-8601-date="2006-01-30">2006</year>
+          <month>01</month>
+          <day>30</day>
+          <volume>2</volume>
+          <issue>3</issue>
+          <uri>https://www.nowpublishers.com/article/Details/CIT-006</uri>
+          <pub-id pub-id-type="doi">10.1561/0100000006</pub-id>
+          <fpage>155</fpage>
+          <lpage>239</lpage>
+        </element-citation>
+      </ref>
+      <ref id="ref-knorr-heldBayesianModellingInseparable2000">
+        <element-citation publication-type="article-journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Knorr-Held</surname>
+              <given-names>Leonhard</given-names>
+            </name>
+          </person-group>
+          <article-title>Bayesian modelling of inseparable space-time variation in disease risk</article-title>
+          <source>Statistics in Medicine</source>
+          <year iso-8601-date="2000">2000</year>
+          <date-in-citation content-type="access-date">
+            <year iso-8601-date="2024-08-25">2024</year>
+            <month>08</month>
+            <day>25</day>
+          </date-in-citation>
+          <volume>19</volume>
+          <issue>17-18</issue>
+          <issn>1097-0258</issn>
+          <pub-id pub-id-type="doi">10.1002/1097-0258(20000915/30)19:17/18&lt;2555::AID-SIM587&gt;3.0.CO;2-#</pub-id>
+          <fpage>2555</fpage>
+          <lpage>2567</lpage>
+        </element-citation>
+      </ref>
+    </ref-list>
+  </back>
   <sub-article article-type="notebook" id="nb-4-nb-article">
     <front-stub>
       <title-group>
@@ -4921,6 +5217,25 @@ Folded Circulant Approximations</article-title>
           <institution>University of Iceland</institution>
         </institution-wrap>
       </aff>
+      <abstract>
+This paper addresses the computational challenges in evaluating Gaussian
+copula densities for large-scale spatial data, focusing on Matérn-like
+Gaussian Markov Random Fields (GMRFs). We present a novel approach that
+bridges the gap between GMRFs and copulas, allowing for efficient
+computation of Gaussian copula densities using GMRF precision
+structures. Our method leverages the special structure of the precision
+matrix, employing eigendecomposition techniques to avoid explicit
+formation and inversion of large matrices. We introduce circulant and
+folded circulant approximations that offer significant computational
+advantages while preserving suitable boundary conditions. The results
+reveal substantial speed-ups compared to traditional methods,
+particularly for large spatial fields. However, these improvements come
+at the cost of increased complexity in implementation and the need for
+careful consideration of approximation accuracy. This work underscores
+the ongoing challenges in balancing computational efficiency with model
+fidelity in spatial statistics, highlighting the trade-offs inherent in
+analyzing increasingly large and complex spatial datasets.
+</abstract>
     </front-stub>
     <body>
       <sec specific-use="notebook-content">
@@ -4972,13 +5287,24 @@ library(gt)</code>
     powerful statistical tools, each offering unique strengths in
     modeling complex data structures. GMRFs excel in capturing spatial
     and temporal dependencies, particularly in fields such as
-    environmental science, epidemiology, and image analysis. Their
-    ability to represent local dependencies through sparse precision
-    matrices makes them computationally attractive for high-dimensional
-    problems. Copulas, on the other hand, provide a flexible framework
-    for modeling multivariate dependencies, allowing separate
-    specification of marginal distributions and their joint
-    behavior.</p>
+    environmental science, epidemiology, and image analysis
+    (<xref alt="Havard Rue and Held 2005" rid="ref-rue2005-nb-article" ref-type="bibr">Havard
+    Rue and Held 2005</xref>;
+    <xref alt="Knorr-Held 2000" rid="ref-knorr-heldBayesianModellingInseparable2000-nb-article" ref-type="bibr">Knorr-Held
+    2000</xref>;
+    <xref alt="Håvard Rue, Martino, and Chopin 2009" rid="ref-rue2009-nb-article" ref-type="bibr">Håvard
+    Rue, Martino, and Chopin 2009</xref>). Their ability to represent
+    local dependencies through sparse precision matrices makes them
+    computationally attractive for high-dimensional problems. Copulas,
+    on the other hand, provide a flexible framework for modeling
+    multivariate dependencies, allowing separate specification of
+    marginal distributions and their joint behavior
+    (<xref alt="Sklar 1959" rid="ref-sklar1959-nb-article" ref-type="bibr">Sklar
+    1959</xref>;
+    <xref alt="Joe 1997" rid="ref-joe1997-nb-article" ref-type="bibr">Joe
+    1997</xref>;
+    <xref alt="Nelsen 2006" rid="ref-nelsen2006-nb-article" ref-type="bibr">Nelsen
+    2006</xref>).</p>
           <p>The Gaussian copula, in particular, has gained popularity due to
     its interpretability and connection to the multivariate normal
     distribution. However, combining GMRFs with copulas has historically
@@ -5169,7 +5495,7 @@ library(gt)</code>
     governing the GMRF copula <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>
     is that <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\Sigma} = \mathbf{Q}^{-1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>𝚺</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>𝐐</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup></mml:mrow></mml:math></alternatives></inline-formula>
     should have a unit diagonal, i.e. the marginal variance is equal to
-    one everywhere.. This ensures it operates on the same scale as the
+    one everywhere. This ensures it operates on the same scale as the
     transformed data, <inline-formula><alternatives><tex-math><![CDATA[\Phi^{-1}(u_i)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>u</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>.
     However, this can be challenging as GMRFs are typically defined in
     terms of precision matrices that often imply non-unit marginal
@@ -5244,7 +5570,13 @@ library(gt)</code>
     making it particularly suitable for high-dimensional spatial data.
     In addition to the exact method, we show how the precision matrix
     can be approximated by a folded circulant matrix wich gives a large
-    speed-up while preserving suitable boundary conditions.</p>
+    speed-up while preserving suitable boundary conditions
+    (<xref alt="Kent and Mardia 2022" rid="ref-kent2022-nb-article" ref-type="bibr">Kent
+    and Mardia 2022</xref>;
+    <xref alt="Mondal 2018" rid="ref-mondal2018-nb-article" ref-type="bibr">Mondal
+    2018</xref>;
+    <xref alt="Besag and Mondal 2005" rid="ref-besag2005-nb-article" ref-type="bibr">Besag
+    and Mondal 2005</xref>).</p>
         </sec>
       </sec>
       <sec id="methods-nb-article">
@@ -5372,7 +5704,10 @@ library(gt)</code>
         </sec>
         <sec id="precision-matrix-structure-nb-article">
           <title>Precision Matrix Structure</title>
-          <p>We define the precision matrix <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
+          <p>Similarly to the GMRF approximation to a Matérn process in
+    (<xref alt="Lindgren, Rue, and Lindström 2011" rid="ref-lindgren2011-nb-article" ref-type="bibr">Lindgren,
+    Rue, and Lindström 2011</xref>), we define the precision matrix
+    <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
     as:</p>
           <p>
             <disp-formula>
@@ -5458,7 +5793,7 @@ library(gt)</code>
     0 & -\rho & 1+\rho^2 & \cdots & 0 \\
     \vdots & \vdots & \vdots & \ddots & \vdots \\
     0 & 0 & 0 & \cdots & 1
-    \end{bmatrix}
+    \end{bmatrix}.
     ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
@@ -5583,6 +5918,7 @@ library(gt)</code>
                       </mml:mtable>
                       <mml:mo stretchy="true" form="postfix">]</mml:mo>
                     </mml:mrow>
+                    <mml:mi>.</mml:mi>
                   </mml:mrow>
                 </mml:math>
               </alternatives>
@@ -5636,7 +5972,10 @@ library(gt)</code>
       is the matrix of eigenvectors and <inline-formula><alternatives><tex-math><![CDATA[\mathbf{\Lambda_\rho}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝚲</mml:mi><mml:mi>𝛒</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
       is the diagonal matrix of eigenvalues. Then, because of how
       <inline-formula><alternatives><tex-math><![CDATA[Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>Q</mml:mi></mml:math></alternatives></inline-formula>
-      is defined, its eigendecomposition is:</p>
+      is defined, its eigendecomposition is (see for example
+      (<xref alt="“Matrix Analysis for Scientists and Engineers | SIAM Publications Library,” n.d." rid="ref-matrixa-nb-article" ref-type="bibr">“Matrix
+      Analysis for Scientists and Engineers | SIAM Publications
+      Library,” n.d.</xref>)):</p>
             <p>
               <disp-formula>
                 <alternatives>
@@ -6048,7 +6387,7 @@ library(gt)</code>
           <p>While the eigendecomposition method provides an exact solution,
     it can be computationally expensive for very large spatial fields.
     To address this, we introduce circulant and folded circulant
-    approximations that offer potential computational advantages.</p>
+    approximations that offer computational efficiency and speed.</p>
           <sec id="circulant-matrices-nb-article">
             <title>Circulant Matrices</title>
             <p>A circulant matrix <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>
@@ -6318,7 +6657,12 @@ library(gt)</code>
               </disp-formula>
             </p>
             <p>These properties allow for much faster computations than for
-      general matrices.</p>
+      general matrices. For more reading on applications of circulant
+      matrices to GMRFs see
+      (<xref alt="Havard Rue and Held 2005" rid="ref-rue2005-nb-article" ref-type="bibr">Havard
+      Rue and Held 2005</xref>;
+      <xref alt="Gray 2006" rid="ref-gray2006-nb-article" ref-type="bibr">Gray
+      2006</xref>).</p>
           </sec>
           <sec id="block-circulant-matrices-nb-article">
             <title>Block Circulant Matrices</title>
@@ -6892,9 +7236,14 @@ library(gt)</code>
               <title>Folded Circulant Approximation</title>
               <p>The folded circulant approximation,
         <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_\rho^{(fold)}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msubsup><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>f</mml:mi><mml:mi>o</mml:mi><mml:mi>l</mml:mi><mml:mi>d</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:msubsup></mml:math></alternatives></inline-formula>,
-        is based on a reflected version of the data. We double the data
-        by reflecting it, giving us the data
-        <inline-formula><alternatives><tex-math><![CDATA[x_1,  \dots, x_n, x_n, \dots, x_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>x</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>.
+        is based on a reflected version of the data
+        (<xref alt="Kent and Mardia 2022" rid="ref-kent2022-nb-article" ref-type="bibr">Kent
+        and Mardia 2022</xref>;
+        <xref alt="Mondal 2018" rid="ref-mondal2018-nb-article" ref-type="bibr">Mondal
+        2018</xref>;
+        <xref alt="Besag and Mondal 2005" rid="ref-besag2005-nb-article" ref-type="bibr">Besag
+        and Mondal 2005</xref>). We double the data by reflecting it,
+        giving us the data <inline-formula><alternatives><tex-math><![CDATA[x_1,  \dots, x_n, x_n, \dots, x_1]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>x</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mi>n</mml:mi></mml:msub><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>x</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:mrow></mml:math></alternatives></inline-formula>.
         We then model this doubled data with a
         <inline-formula><alternatives><tex-math><![CDATA[2n \times 2n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mn>2</mml:mn><mml:mi>n</mml:mi><mml:mo>×</mml:mo><mml:mn>2</mml:mn><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>
         circulant matrix. If written out as an
@@ -7218,9 +7567,9 @@ library(gt)</code>
                 </alternatives>
               </disp-formula>
             </p>
-            <p>Now, let the two AR(1) matrices be approximated by a circulant
-      matrix <inline-formula><alternatives><tex-math><![CDATA[C]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>C</mml:mi></mml:math></alternatives></inline-formula>
-      with base vector <inline-formula><alternatives><tex-math><![CDATA[c = [c_, c_1, ..., c_{n-1}]]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>c</mml:mi><mml:mo>=</mml:mo><mml:mrow><mml:mo stretchy="true" form="prefix">[</mml:mo><mml:msub><mml:mi>c</mml:mi><mml:mo>,</mml:mo></mml:msub><mml:msub><mml:mi>c</mml:mi><mml:mn>1</mml:mn></mml:msub><mml:mo>,</mml:mo><mml:mi>.</mml:mi><mml:mi>.</mml:mi><mml:mi>.</mml:mi><mml:mo>,</mml:mo><mml:msub><mml:mi>c</mml:mi><mml:mrow><mml:mi>n</mml:mi><mml:mo>−</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:msub><mml:mo stretchy="true" form="postfix">]</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>.
+            <p>Now, let the two AR(1) matrices be approximated by circulant
+      matrices, <inline-formula><alternatives><tex-math><![CDATA[\mathbf C_\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐂</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>,
+      with base vectors <inline-formula><alternatives><tex-math><![CDATA[\mathbf c_\rho = \frac{1}{1-\rho^2}\left[1+\rho^2, -\rho, 0, ..., 0, -\rho \right]]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝐜</mml:mi><mml:mi>ρ</mml:mi></mml:msub><mml:mo>=</mml:mo><mml:mfrac><mml:mn>1</mml:mn><mml:mrow><mml:mn>1</mml:mn><mml:mo>−</mml:mo><mml:msup><mml:mi>ρ</mml:mi><mml:mn>2</mml:mn></mml:msup></mml:mrow></mml:mfrac><mml:mrow><mml:mo stretchy="true" form="prefix">[</mml:mo><mml:mn>1</mml:mn><mml:mo>+</mml:mo><mml:msup><mml:mi>ρ</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mo>,</mml:mo><mml:mi>−</mml:mi><mml:mi>ρ</mml:mi><mml:mo>,</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mi>.</mml:mi><mml:mi>.</mml:mi><mml:mi>.</mml:mi><mml:mo>,</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mi>−</mml:mi><mml:mi>ρ</mml:mi><mml:mo stretchy="true" form="postfix">]</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>.
       Then:</p>
             <p>
               <disp-formula>
@@ -8015,7 +8364,9 @@ library(gt)</code>
               </disp-formula>
             </p>
             <p>where each <inline-formula><alternatives><tex-math><![CDATA[\mathbf{B_i}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐁</mml:mi><mml:mi>𝐢</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
-      is a circulant matrix. Specifically,</p>
+      is a circulant matrix. Specifically, each
+      <inline-formula><alternatives><tex-math><![CDATA[\mathbf B_i = \mathbf 0]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>𝐁</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>=</mml:mo><mml:mn>𝟎</mml:mn></mml:mrow></mml:math></alternatives></inline-formula>
+      except for</p>
             <p>
               <disp-formula>
                 <alternatives>
@@ -9845,6 +10196,247 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
       </sec>
     </body>
     <back>
-</back>
+      <ref-list>
+        <title/>
+        <ref id="ref-rue2005-nb-article">
+          <element-citation publication-type="book">
+            <person-group person-group-type="author">
+              <name>
+                <surname>Rue</surname>
+                <given-names>Havard</given-names>
+              </name>
+              <name>
+                <surname>Held</surname>
+                <given-names>Leonhard</given-names>
+              </name>
+            </person-group>
+            <source>Gaussian Markov Random Fields: Theory and Applications</source>
+            <publisher-name>CRC Press</publisher-name>
+            <year iso-8601-date="2005-02-18">2005</year>
+            <month>02</month>
+            <day>18</day>
+          </element-citation>
+        </ref>
+        <ref id="ref-kent2022-nb-article">
+          <element-citation publication-type="book">
+            <person-group person-group-type="author">
+              <name>
+                <surname>Kent</surname>
+                <given-names>John T.</given-names>
+              </name>
+              <name>
+                <surname>Mardia</surname>
+                <given-names>Kanti V.</given-names>
+              </name>
+            </person-group>
+            <source>Spatial Analysis</source>
+            <publisher-name>John Wiley; Sons</publisher-name>
+            <year iso-8601-date="2022-05-31">2022</year>
+            <month>05</month>
+            <day>31</day>
+          </element-citation>
+        </ref>
+        <ref id="ref-mondal2018-nb-article">
+          <element-citation publication-type="article-journal">
+            <person-group person-group-type="author">
+              <name>
+                <surname>Mondal</surname>
+                <given-names>D</given-names>
+              </name>
+            </person-group>
+            <article-title>On edge correction of conditional and intrinsic autoregressions</article-title>
+            <source>Biometrika</source>
+            <year iso-8601-date="2018-06-01">2018</year>
+            <month>06</month>
+            <day>01</day>
+            <volume>105</volume>
+            <issue>2</issue>
+            <uri>https://doi.org/10.1093/biomet/asy014</uri>
+            <pub-id pub-id-type="doi">10.1093/biomet/asy014</pub-id>
+            <fpage>447</fpage>
+            <lpage>454</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-besag2005-nb-article">
+          <element-citation publication-type="article-journal">
+            <person-group person-group-type="author">
+              <name>
+                <surname>Besag</surname>
+                <given-names>Julian</given-names>
+              </name>
+              <name>
+                <surname>Mondal</surname>
+                <given-names>Debashis</given-names>
+              </name>
+            </person-group>
+            <article-title>First-order intrinsic autoregressions and the de wijs process</article-title>
+            <source>Biometrika</source>
+            <year iso-8601-date="2005-12-01">2005</year>
+            <month>12</month>
+            <day>01</day>
+            <volume>92</volume>
+            <issue>4</issue>
+            <uri>https://doi.org/10.1093/biomet/92.4.909</uri>
+            <pub-id pub-id-type="doi">10.1093/biomet/92.4.909</pub-id>
+            <fpage>909</fpage>
+            <lpage>920</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-rue2009-nb-article">
+          <element-citation publication-type="article-journal">
+            <person-group person-group-type="author">
+              <name>
+                <surname>Rue</surname>
+                <given-names>Håvard</given-names>
+              </name>
+              <name>
+                <surname>Martino</surname>
+                <given-names>Sara</given-names>
+              </name>
+              <name>
+                <surname>Chopin</surname>
+                <given-names>Nicolas</given-names>
+              </name>
+            </person-group>
+            <article-title>Approximate Bayesian inference for latent Gaussian models by using integrated nested Laplace approximations</article-title>
+            <source>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</source>
+            <year iso-8601-date="2009">2009</year>
+            <volume>71</volume>
+            <issue>2</issue>
+            <uri>https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-9868.2008.00700.x</uri>
+            <pub-id pub-id-type="doi">10.1111/j.1467-9868.2008.00700.x</pub-id>
+            <fpage>319</fpage>
+            <lpage>392</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-sklar1959-nb-article">
+          <element-citation publication-type="article-journal">
+            <person-group person-group-type="author">
+              <name>
+                <surname>Sklar</surname>
+                <given-names>M.</given-names>
+              </name>
+            </person-group>
+            <article-title>Fonctions de répartition à n dimensions et leurs marges</article-title>
+            <source>Annales de l’ISUP</source>
+            <year iso-8601-date="1959">1959</year>
+            <volume>VIII</volume>
+            <issue>3</issue>
+            <uri>https://hal.science/hal-04094463</uri>
+            <fpage>229</fpage>
+            <lpage>231</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-joe1997-nb-article">
+          <element-citation publication-type="book">
+            <person-group person-group-type="author">
+              <name>
+                <surname>Joe</surname>
+                <given-names>Harry</given-names>
+              </name>
+            </person-group>
+            <source>Multivariate models and multivariate dependence concepts</source>
+            <publisher-name>Chapman; Hall/CRC</publisher-name>
+            <publisher-loc>New York</publisher-loc>
+            <year iso-8601-date="1997-05-01">1997</year>
+            <month>05</month>
+            <day>01</day>
+          </element-citation>
+        </ref>
+        <ref id="ref-nelsen2006-nb-article">
+          <element-citation publication-type="book">
+            <person-group person-group-type="author">
+              <name>
+                <surname>Nelsen</surname>
+                <given-names>Roger B.</given-names>
+              </name>
+            </person-group>
+            <source>An introduction to copulas</source>
+            <publisher-name>Springer</publisher-name>
+            <publisher-loc>New York</publisher-loc>
+            <year iso-8601-date="2006">2006</year>
+            <edition>2nd ed</edition>
+          </element-citation>
+        </ref>
+        <ref id="ref-lindgren2011-nb-article">
+          <element-citation publication-type="article-journal">
+            <person-group person-group-type="author">
+              <name>
+                <surname>Lindgren</surname>
+                <given-names>Finn</given-names>
+              </name>
+              <name>
+                <surname>Rue</surname>
+                <given-names>Håvard</given-names>
+              </name>
+              <name>
+                <surname>Lindström</surname>
+                <given-names>Johan</given-names>
+              </name>
+            </person-group>
+            <article-title>An explicit link between Gaussian fields and Gaussian Markov random fields: the stochastic partial differential equation approach</article-title>
+            <source>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</source>
+            <year iso-8601-date="2011">2011</year>
+            <volume>73</volume>
+            <issue>4</issue>
+            <uri>https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-9868.2011.00777.x</uri>
+            <pub-id pub-id-type="doi">10.1111/j.1467-9868.2011.00777.x</pub-id>
+            <fpage>423</fpage>
+            <lpage>498</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-matrixa-nb-article">
+          <element-citation>
+            <article-title>Matrix Analysis for Scientists and Engineers | SIAM Publications Library</article-title>
+            <uri>https://epubs.siam.org/doi/book/10.1137/1.9780898717907</uri>
+          </element-citation>
+        </ref>
+        <ref id="ref-gray2006-nb-article">
+          <element-citation publication-type="article-journal">
+            <person-group person-group-type="author">
+              <name>
+                <surname>Gray</surname>
+                <given-names>Robert M.</given-names>
+              </name>
+            </person-group>
+            <article-title>Toeplitz and circulant matrices: A review</article-title>
+            <source>Foundations and Trends® in Communications and Information Theory</source>
+            <year iso-8601-date="2006-01-30">2006</year>
+            <month>01</month>
+            <day>30</day>
+            <volume>2</volume>
+            <issue>3</issue>
+            <uri>https://www.nowpublishers.com/article/Details/CIT-006</uri>
+            <pub-id pub-id-type="doi">10.1561/0100000006</pub-id>
+            <fpage>155</fpage>
+            <lpage>239</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-knorr-heldBayesianModellingInseparable2000-nb-article">
+          <element-citation publication-type="article-journal">
+            <person-group person-group-type="author">
+              <name>
+                <surname>Knorr-Held</surname>
+                <given-names>Leonhard</given-names>
+              </name>
+            </person-group>
+            <article-title>Bayesian modelling of inseparable space-time variation in disease risk</article-title>
+            <source>Statistics in Medicine</source>
+            <year iso-8601-date="2000">2000</year>
+            <date-in-citation content-type="access-date">
+              <year iso-8601-date="2024-08-25">2024</year>
+              <month>08</month>
+              <day>25</day>
+            </date-in-citation>
+            <volume>19</volume>
+            <issue>17-18</issue>
+            <issn>1097-0258</issn>
+            <pub-id pub-id-type="doi">10.1002/1097-0258(20000915/30)19:17/18&lt;2555::AID-SIM587&gt;3.0.CO;2-#</pub-id>
+            <fpage>2555</fpage>
+            <lpage>2567</lpage>
+          </element-citation>
+        </ref>
+      </ref-list>
+    </back>
   </sub-article>
 </article>

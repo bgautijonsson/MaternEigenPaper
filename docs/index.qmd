@@ -5,10 +5,10 @@ author:
   affiliation: University of Iceland
   email: brynjolfur@hi.is
   url: bggj.is
-date: 2024/08/22
+date: 2024/08/25
 number-sections: false
-code-block-border-left: true
 bibliography: references.bib
+abstract: "This paper addresses the computational challenges in evaluating Gaussian copula densities for large-scale spatial data, focusing on Matérn-like Gaussian Markov Random Fields (GMRFs). We present a novel approach that bridges the gap between GMRFs and copulas, allowing for efficient computation of Gaussian copula densities using GMRF precision structures. Our method leverages the special structure of the precision matrix, employing eigendecomposition techniques to avoid explicit formation and inversion of large matrices. We introduce circulant and folded circulant approximations that offer significant computational advantages while preserving suitable boundary conditions. The results reveal substantial speed-ups compared to traditional methods, particularly for large spatial fields. However, these improvements come at the cost of increased complexity in implementation and the need for careful consideration of approximation accuracy. This work underscores the ongoing challenges in balancing computational efficiency with model fidelity in spatial statistics, highlighting the trade-offs inherent in analyzing increasingly large and complex spatial datasets."
 ---
 
 ```{r setup}
