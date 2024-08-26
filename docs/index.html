@@ -252,7 +252,7 @@ C(u_1, u_2, \ldots, u_n) = \Phi_\mathbf{Q}(\Phi^{-1}(u_1), \Phi^{-1}(u_2), \ldot
 \]</span></p>
 <p>where <span class="math inline">\(\Phi_\mathbf{Q}\)</span> is the joint cumulative distribution function of a multivariate normal distribution with mean vector <span class="math inline">\(\mathbf{0}\)</span> and precision matrix <span class="math inline">\(\mathbf{Q}\)</span>, and <span class="math inline">\(\Phi^{-1}\)</span> is the inverse of the standard normal cumulative distribution function.</p>
 <p>A critical requirement for the precision matrix <span class="math inline">\(\mathbf{Q}\)</span> governing the GMRF copula <span class="math inline">\(C\)</span> is that <span class="math inline">\(\mathbf{\Sigma} = \mathbf{Q}^{-1}\)</span> should have a unit diagonal, i.e.&nbsp;the marginal variance is equal to one everywhere. This ensures it operates on the same scale as the transformed data, <span class="math inline">\(\Phi^{-1}(u_i)\)</span>. However, this can be challenging as GMRFs are typically defined in terms of precision matrices that often imply non-unit marginal variances. While related scaling issues have been addressed in spatial statistics literature <span class="citation" data-cites="sørbye2014 riebler2016">(<a href="#ref-sørbye2014" role="doc-biblioref">Sørbye and Rue 2014</a>; <a href="#ref-riebler2016" role="doc-biblioref">Riebler et al. 2016</a>)</span>, their focus was on scaling for use in priors for the BYM2 model, aiming for a consistent interpretation of the precision parameter across different graph structures. In contrast, our work requires exact unit marginal variance at each point, a more stringent condition necessitated by the copula framework.</p>
-<p>Similarly to <span class="citation" data-cites="rue2005a">Håvard Rue (<a href="#ref-rue2005a" role="doc-biblioref">2005</a>)</span>, this paper proposes a way to efficiently calculate the marginal variances in GMRFs, but instead of working with the Cholesky decomposition of any general GMRF precision matrix, we focus specifically on the sparse approximation to the Gaussian field with Matérn coveriance as defined in <span class="citation" data-cites="lindgren2011">Lindgren, Rue, and Lindström (<a href="#ref-lindgren2011" role="doc-biblioref">2011</a>)</span>:</p>
+<p>Similarly to <span class="citation" data-cites="rue2005a">Håvard Rue (<a href="#ref-rue2005a" role="doc-biblioref">2005</a>)</span>, this paper proposes a way to efficiently calculate the marginal variances in GMRFs, but instead of working with the Cholesky decomposition of any general GMRF precision matrix, we work with a family of precision matrices that are similar to the sparse approximation to the Gaussian field with Matérn coveriance defined in <span class="citation" data-cites="lindgren2011">Lindgren, Rue, and Lindström (<a href="#ref-lindgren2011" role="doc-biblioref">2011</a>)</span>. The precision matrices are defined as</p>
 <p><span class="math display">\[
 \mathbf{Q} = \left( \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2}\right)^{\nu+1},
 \]</span></p>
@@ -595,23 +595,23 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
 <p>Table 1 presents the results of a benchmark comparing the time it takes to evaluate the gaussian copula density described above. For each grid size, we report the computation time for the exact method and the two approximations, along with the speed-up factor relative to the exact method. Each calculation was performed twenty times and the median times are shown in the table. The Cholesky method is described in the appendix.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="iyxiepoxpr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#iyxiepoxpr table {
+<div id="tiwckscvme" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#tiwckscvme table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#iyxiepoxpr thead, #iyxiepoxpr tbody, #iyxiepoxpr tfoot, #iyxiepoxpr tr, #iyxiepoxpr td, #iyxiepoxpr th {
+#tiwckscvme thead, #tiwckscvme tbody, #tiwckscvme tfoot, #tiwckscvme tr, #tiwckscvme td, #tiwckscvme th {
   border-style: none;
 }
 
-#iyxiepoxpr p {
+#tiwckscvme p {
   margin: 0;
   padding: 0;
 }
 
-#iyxiepoxpr .gt_table {
+#tiwckscvme .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -637,12 +637,12 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   border-left-color: #D3D3D3;
 }
 
-#iyxiepoxpr .gt_caption {
+#tiwckscvme .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#iyxiepoxpr .gt_title {
+#tiwckscvme .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -654,7 +654,7 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   border-bottom-width: 0;
 }
 
-#iyxiepoxpr .gt_subtitle {
+#tiwckscvme .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -666,7 +666,7 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   border-top-width: 0;
 }
 
-#iyxiepoxpr .gt_heading {
+#tiwckscvme .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -678,13 +678,13 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   border-right-color: #D3D3D3;
 }
 
-#iyxiepoxpr .gt_bottom_border {
+#tiwckscvme .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#iyxiepoxpr .gt_col_headings {
+#tiwckscvme .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -699,7 +699,7 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   border-right-color: #D3D3D3;
 }
 
-#iyxiepoxpr .gt_col_heading {
+#tiwckscvme .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -719,7 +719,7 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   overflow-x: hidden;
 }
 
-#iyxiepoxpr .gt_column_spanner_outer {
+#tiwckscvme .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -731,15 +731,15 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   padding-right: 4px;
 }
 
-#iyxiepoxpr .gt_column_spanner_outer:first-child {
+#tiwckscvme .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#iyxiepoxpr .gt_column_spanner_outer:last-child {
+#tiwckscvme .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#iyxiepoxpr .gt_column_spanner {
+#tiwckscvme .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -751,11 +751,11 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   width: 100%;
 }
 
-#iyxiepoxpr .gt_spanner_row {
+#tiwckscvme .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#iyxiepoxpr .gt_group_heading {
+#tiwckscvme .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -781,7 +781,7 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   text-align: left;
 }
 
-#iyxiepoxpr .gt_empty_group_heading {
+#tiwckscvme .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -796,15 +796,15 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   vertical-align: middle;
 }
 
-#iyxiepoxpr .gt_from_md > :first-child {
+#tiwckscvme .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#iyxiepoxpr .gt_from_md > :last-child {
+#tiwckscvme .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#iyxiepoxpr .gt_row {
+#tiwckscvme .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -823,7 +823,7 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   overflow-x: hidden;
 }
 
-#iyxiepoxpr .gt_stub {
+#tiwckscvme .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -836,7 +836,7 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   padding-right: 5px;
 }
 
-#iyxiepoxpr .gt_stub_row_group {
+#tiwckscvme .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -850,15 +850,15 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   vertical-align: top;
 }
 
-#iyxiepoxpr .gt_row_group_first td {
+#tiwckscvme .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#iyxiepoxpr .gt_row_group_first th {
+#tiwckscvme .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#iyxiepoxpr .gt_summary_row {
+#tiwckscvme .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -868,16 +868,16 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   padding-right: 5px;
 }
 
-#iyxiepoxpr .gt_first_summary_row {
+#tiwckscvme .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#iyxiepoxpr .gt_first_summary_row.thick {
+#tiwckscvme .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#iyxiepoxpr .gt_last_summary_row {
+#tiwckscvme .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -887,7 +887,7 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   border-bottom-color: #D3D3D3;
 }
 
-#iyxiepoxpr .gt_grand_summary_row {
+#tiwckscvme .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -897,7 +897,7 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   padding-right: 5px;
 }
 
-#iyxiepoxpr .gt_first_grand_summary_row {
+#tiwckscvme .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -907,7 +907,7 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   border-top-color: #D3D3D3;
 }
 
-#iyxiepoxpr .gt_last_grand_summary_row_top {
+#tiwckscvme .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -917,11 +917,11 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   border-bottom-color: #D3D3D3;
 }
 
-#iyxiepoxpr .gt_striped {
+#tiwckscvme .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#iyxiepoxpr .gt_table_body {
+#tiwckscvme .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -930,7 +930,7 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   border-bottom-color: #D3D3D3;
 }
 
-#iyxiepoxpr .gt_footnotes {
+#tiwckscvme .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -944,7 +944,7 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   border-right-color: #D3D3D3;
 }
 
-#iyxiepoxpr .gt_footnote {
+#tiwckscvme .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -953,7 +953,7 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   padding-right: 5px;
 }
 
-#iyxiepoxpr .gt_sourcenotes {
+#tiwckscvme .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -967,7 +967,7 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   border-right-color: #D3D3D3;
 }
 
-#iyxiepoxpr .gt_sourcenote {
+#tiwckscvme .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -975,72 +975,72 @@ x_{11} &amp; \cdots &amp; x_{1n_2} &amp; x_{1n_2} &amp; \cdots &amp; x_{11}
   padding-right: 5px;
 }
 
-#iyxiepoxpr .gt_left {
+#tiwckscvme .gt_left {
   text-align: left;
 }
 
-#iyxiepoxpr .gt_center {
+#tiwckscvme .gt_center {
   text-align: center;
 }
 
-#iyxiepoxpr .gt_right {
+#tiwckscvme .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#iyxiepoxpr .gt_font_normal {
+#tiwckscvme .gt_font_normal {
   font-weight: normal;
 }
 
-#iyxiepoxpr .gt_font_bold {
+#tiwckscvme .gt_font_bold {
   font-weight: bold;
 }
 
-#iyxiepoxpr .gt_font_italic {
+#tiwckscvme .gt_font_italic {
   font-style: italic;
 }
 
-#iyxiepoxpr .gt_super {
+#tiwckscvme .gt_super {
   font-size: 65%;
 }
 
-#iyxiepoxpr .gt_footnote_marks {
+#tiwckscvme .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#iyxiepoxpr .gt_asterisk {
+#tiwckscvme .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#iyxiepoxpr .gt_indent_1 {
+#tiwckscvme .gt_indent_1 {
   text-indent: 5px;
 }
 
-#iyxiepoxpr .gt_indent_2 {
+#tiwckscvme .gt_indent_2 {
   text-indent: 10px;
 }
 
-#iyxiepoxpr .gt_indent_3 {
+#tiwckscvme .gt_indent_3 {
   text-indent: 15px;
 }
 
-#iyxiepoxpr .gt_indent_4 {
+#tiwckscvme .gt_indent_4 {
   text-indent: 20px;
 }
 
-#iyxiepoxpr .gt_indent_5 {
+#tiwckscvme .gt_indent_5 {
   text-indent: 25px;
 }
 
-#iyxiepoxpr .katex-display {
+#tiwckscvme .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#iyxiepoxpr div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#tiwckscvme div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
