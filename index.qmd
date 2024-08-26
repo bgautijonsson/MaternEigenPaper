@@ -47,17 +47,17 @@ $$
 
 where $\Phi_\mathbf{Q}$ is the joint cumulative distribution function of a multivariate normal distribution with mean vector $\mathbf{0}$ and precision matrix $\mathbf{Q}$, and $\Phi^{-1}$ is the inverse of the standard normal cumulative distribution function.
 
-A critical requirement for the precision matrix $\mathbf{Q}$ governing the GMRF copula $C$ is that $\mathbf{\Sigma} = \mathbf{Q}^{-1}$ should have a unit diagonal, i.e. the marginal variance is equal to one everywhere. This ensures it operates on the same scale as the transformed data, $\Phi^{-1}(u_i)$. However, this can be challenging as GMRFs are typically defined in terms of precision matrices that often imply non-unit marginal variances.
+A critical requirement for the precision matrix $\mathbf{Q}$ governing the GMRF copula $C$ is that $\mathbf{\Sigma} = \mathbf{Q}^{-1}$ should have a unit diagonal, i.e. the marginal variance is equal to one everywhere. This ensures it operates on the same scale as the transformed data, $\Phi^{-1}(u_i)$. However, this can be challenging as GMRFs are typically defined in terms of precision matrices that often imply non-unit marginal variances. While related scaling issues have been addressed in spatial statistics literature [@sørbye2014; @riebler2016], their focus was on scaling for use in priors for the BYM2 model, aiming for a consistent interpretation of the precision parameter across different graph structures. In contrast, our work requires exact unit marginal variance at each point, a more stringent condition necessitated by the copula framework.
 
-This paper presents a novel algorithm that bridges the gap between GMRFs and copulas, allowing for fast and efficient computation of Gaussian copula densities using GMRF precision structures. Our method focuses on creating a Matérn-like precision matrix $\mathbf{Q}$ with unit marginal variance and efficiently computing the multivariate Gaussian copula density of $\mathbf{Z} = \Phi^{-1}(\mathbf{u})$, where $u_i \sim \text{Uniform}(0, 1)$, $i = 1, \dots, n$.
-
-The key innovation lies in leveraging the special structure of the precision matrix:
+Similarly to @rue2005a, this paper proposes a way to efficiently calculate the marginal variances in GMRFs, but instead of working with the Cholesky decomposition of any general GMRF precision matrix, we focus specifically on the sparse approximation to the Gaussian field with Matérn coveriance as defined in @lindgren2011:
 
 $$
-\mathbf{Q} = \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2},
+\mathbf{Q} = \left( \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2}\right)^{\nu+1},
 $$
 
-where $\mathbf{Q}_\rho$ is the precision matrix of a standardized one-dimensional AR(1) process with correlation $\rho$ and $\otimes$ denotes the Kronecker product. By employing efficient eigendecomposition techniques, our method avoids explicit formation and inversion of the large precision matrix $\mathbf{Q}$, making it particularly suitable for high-dimensional spatial data. In addition to the exact method, we show how the precision matrix can be approximated by a folded circulant matrix wich gives a large speed-up while preserving suitable boundary conditions [@kent2022; @mondal2018; @besag2005].
+where $\mathbf{Q}_\rho$ is the precision matrix of a standardized one-dimensional AR(1) process with correlation $\rho$, $\nu$ is a smoothness parameter, and $\otimes$ denotes the Kronecker product. 
+
+By focusing on this type of matrix, we can utilize known results on the eigendecomposition of $\mathbf Q$ and how it relates directly to the eigendecompositions of $\mathbf{Q}_{\rho_1}$ and $\mathbf{Q}_{\rho_2}$. This lets us avoid explicit formation and inversion of the large precision matrix $\mathbf{Q}$, making it particularly suitable for high-dimensional spatial data. In addition to the exact method, we show how the precision matrix can be approximated by a folded circulant matrix wich gives a large speed-up while preserving suitable boundary conditions [@kent2022; @mondal2018; @besag2005].
 
 # Methods
 
@@ -582,4 +582,3 @@ Putting it all together, here's the algorithm for computing the log-density of t
     i)  Compute $y = Dz$
     ii) Compute $y^TQ^{\nu+1}y$ as in the unscaled case.
 6.  Compute log-density: $\log c(u) = -\frac{1}{2}(d\log(2\pi) + \log|\tilde{Q}| + q - z^Tz)$
-

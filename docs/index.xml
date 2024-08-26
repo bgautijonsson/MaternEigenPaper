@@ -292,60 +292,76 @@ analyzing increasingly large and complex spatial datasets.
     transformed data, <inline-formula><alternatives><tex-math><![CDATA[\Phi^{-1}(u_i)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>u</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>.
     However, this can be challenging as GMRFs are typically defined in
     terms of precision matrices that often imply non-unit marginal
-    variances.</p>
-        <p>This paper presents a novel algorithm that bridges the gap
-    between GMRFs and copulas, allowing for fast and efficient
-    computation of Gaussian copula densities using GMRF precision
-    structures. Our method focuses on creating a Matérn-like precision
-    matrix <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
-    with unit marginal variance and efficiently computing the
-    multivariate Gaussian copula density of
-    <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Z} = \Phi^{-1}(\mathbf{u})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>𝐙</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>𝐮</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>,
-    where <inline-formula><alternatives><tex-math><![CDATA[u_i \sim \text{Uniform}(0, 1)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>u</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>∼</mml:mo><mml:mtext mathvariant="normal">Uniform</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mn>1</mml:mn><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>,
-    <inline-formula><alternatives><tex-math><![CDATA[i = 1, \dots, n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>i</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>.</p>
-        <p>The key innovation lies in leveraging the special structure of
-    the precision matrix:</p>
+    variances. While related scaling issues have been addressed in
+    spatial statistics literature
+    (<xref alt="Sørbye and Rue 2014" rid="ref-sørbye2014" ref-type="bibr">Sørbye
+    and Rue 2014</xref>;
+    <xref alt="Riebler et al. 2016" rid="ref-riebler2016" ref-type="bibr">Riebler
+    et al. 2016</xref>), their focus was on scaling for use in priors
+    for the BYM2 model, aiming for a consistent interpretation of the
+    precision parameter across different graph structures. In contrast,
+    our work requires exact unit marginal variance at each point, a more
+    stringent condition necessitated by the copula framework.</p>
+        <p>Similarly to Håvard Rue
+    (<xref alt="2005" rid="ref-rue2005a" ref-type="bibr">2005</xref>),
+    this paper proposes a way to efficiently calculate the marginal
+    variances in GMRFs, but instead of working with the Cholesky
+    decomposition of any general GMRF precision matrix, we focus
+    specifically on the sparse approximation to the Gaussian field with
+    Matérn coveriance as defined in Lindgren, Rue, and Lindström
+    (<xref alt="2011" rid="ref-lindgren2011" ref-type="bibr">2011</xref>):</p>
         <p>
           <disp-formula>
             <alternatives>
               <tex-math><![CDATA[
-    \mathbf{Q} = \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2},
+    \mathbf{Q} = \left( \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2}\right)^{\nu+1},
     ]]></tex-math>
               <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                 <mml:mrow>
                   <mml:mi>𝐐</mml:mi>
                   <mml:mo>=</mml:mo>
-                  <mml:msub>
-                    <mml:mi>𝐐</mml:mi>
-                    <mml:msub>
-                      <mml:mi>ρ</mml:mi>
+                  <mml:msup>
+                    <mml:mrow>
+                      <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                      <mml:msub>
+                        <mml:mi>𝐐</mml:mi>
+                        <mml:msub>
+                          <mml:mi>ρ</mml:mi>
+                          <mml:mn>1</mml:mn>
+                        </mml:msub>
+                      </mml:msub>
+                      <mml:mo>⊗</mml:mo>
+                      <mml:msub>
+                        <mml:mi>𝐈</mml:mi>
+                        <mml:msub>
+                          <mml:mi>𝐧</mml:mi>
+                          <mml:mn>𝟐</mml:mn>
+                        </mml:msub>
+                      </mml:msub>
+                      <mml:mo>+</mml:mo>
+                      <mml:msub>
+                        <mml:mi>𝐈</mml:mi>
+                        <mml:msub>
+                          <mml:mi>𝐧</mml:mi>
+                          <mml:mn>𝟏</mml:mn>
+                        </mml:msub>
+                      </mml:msub>
+                      <mml:mo>⊗</mml:mo>
+                      <mml:msub>
+                        <mml:mi>𝐐</mml:mi>
+                        <mml:msub>
+                          <mml:mi>ρ</mml:mi>
+                          <mml:mn>2</mml:mn>
+                        </mml:msub>
+                      </mml:msub>
+                      <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                    </mml:mrow>
+                    <mml:mrow>
+                      <mml:mi>ν</mml:mi>
+                      <mml:mo>+</mml:mo>
                       <mml:mn>1</mml:mn>
-                    </mml:msub>
-                  </mml:msub>
-                  <mml:mo>⊗</mml:mo>
-                  <mml:msub>
-                    <mml:mi>𝐈</mml:mi>
-                    <mml:msub>
-                      <mml:mi>𝐧</mml:mi>
-                      <mml:mn>𝟐</mml:mn>
-                    </mml:msub>
-                  </mml:msub>
-                  <mml:mo>+</mml:mo>
-                  <mml:msub>
-                    <mml:mi>𝐈</mml:mi>
-                    <mml:msub>
-                      <mml:mi>𝐧</mml:mi>
-                      <mml:mn>𝟏</mml:mn>
-                    </mml:msub>
-                  </mml:msub>
-                  <mml:mo>⊗</mml:mo>
-                  <mml:msub>
-                    <mml:mi>𝐐</mml:mi>
-                    <mml:msub>
-                      <mml:mi>ρ</mml:mi>
-                      <mml:mn>2</mml:mn>
-                    </mml:msub>
-                  </mml:msub>
+                    </mml:mrow>
+                  </mml:msup>
                   <mml:mo>,</mml:mo>
                 </mml:mrow>
               </mml:math>
@@ -354,12 +370,17 @@ analyzing increasingly large and complex spatial datasets.
         </p>
         <p>where <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
     is the precision matrix of a standardized one-dimensional AR(1)
-    process with correlation <inline-formula><alternatives><tex-math><![CDATA[\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ρ</mml:mi></mml:math></alternatives></inline-formula>
-    and <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
-    denotes the Kronecker product. By employing efficient
-    eigendecomposition techniques, our method avoids explicit formation
-    and inversion of the large precision matrix
-    <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>,
+    process with correlation <inline-formula><alternatives><tex-math><![CDATA[\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ρ</mml:mi></mml:math></alternatives></inline-formula>,
+    <inline-formula><alternatives><tex-math><![CDATA[\nu]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ν</mml:mi></mml:math></alternatives></inline-formula>
+    is a smoothness parameter, and <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
+    denotes the Kronecker product.</p>
+        <p>By focusing on this type of matrix, we can utilize known results
+    on the eigendecomposition of <inline-formula><alternatives><tex-math><![CDATA[\mathbf Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
+    and how it relates directly to the eigendecompositions of
+    <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_{\rho_1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:msub></mml:math></alternatives></inline-formula>
+    and <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_{\rho_2}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:msub></mml:math></alternatives></inline-formula>.
+    This lets us avoid explicit formation and inversion of the large
+    precision matrix <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>,
     making it particularly suitable for high-dimensional spatial data.
     In addition to the exact method, we show how the precision matrix
     can be approximated by a folded circulant matrix wich gives a large
@@ -5195,6 +5216,70 @@ analyzing increasingly large and complex spatial datasets.
           <lpage>2567</lpage>
         </element-citation>
       </ref>
+      <ref id="ref-sørbye2014">
+        <element-citation publication-type="article-journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Sørbye</surname>
+              <given-names>Sigrunn Holbek</given-names>
+            </name>
+            <name>
+              <surname>Rue</surname>
+              <given-names>Håvard</given-names>
+            </name>
+          </person-group>
+          <article-title>Scaling intrinsic gaussian markov random field priors in spatial modelling</article-title>
+          <source>Spatial Statistics</source>
+          <year iso-8601-date="2014-05-01">2014</year>
+          <month>05</month>
+          <day>01</day>
+          <volume>8</volume>
+          <uri>https://www.sciencedirect.com/science/article/pii/S2211675313000407</uri>
+          <pub-id pub-id-type="doi">10.1016/j.spasta.2013.06.004</pub-id>
+          <fpage>39</fpage>
+          <lpage>51</lpage>
+        </element-citation>
+      </ref>
+      <ref id="ref-riebler2016">
+        <element-citation>
+          <person-group person-group-type="author">
+            <name>
+              <surname>Riebler</surname>
+              <given-names>Andrea</given-names>
+            </name>
+            <name>
+              <surname>Sørbye</surname>
+              <given-names>Sigrunn H.</given-names>
+            </name>
+            <name>
+              <surname>Simpson</surname>
+              <given-names>Daniel</given-names>
+            </name>
+            <name>
+              <surname>Rue</surname>
+              <given-names>Håvard</given-names>
+            </name>
+          </person-group>
+          <article-title>An intuitive bayesian spatial model for disease mapping that accounts for scaling</article-title>
+          <year iso-8601-date="2016-08">2016</year>
+          <month>08</month>
+          <uri>https://journals.sagepub.com/doi/full/10.1177/0962280216660421</uri>
+        </element-citation>
+      </ref>
+      <ref id="ref-rue2005a">
+        <element-citation publication-type="article-journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Rue</surname>
+              <given-names>Håvard</given-names>
+            </name>
+          </person-group>
+          <article-title>Marginal variances for gaussian markov random fields</article-title>
+          <year iso-8601-date="2005-01-01">2005</year>
+          <month>01</month>
+          <day>01</day>
+        </element-citation>
+      </ref>
     </ref-list>
   </back>
   <sub-article article-type="notebook" id="nb-3-nb-article">
@@ -5502,60 +5587,76 @@ library(gt)</code>
     transformed data, <inline-formula><alternatives><tex-math><![CDATA[\Phi^{-1}(u_i)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:msub><mml:mi>u</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>.
     However, this can be challenging as GMRFs are typically defined in
     terms of precision matrices that often imply non-unit marginal
-    variances.</p>
-          <p>This paper presents a novel algorithm that bridges the gap
-    between GMRFs and copulas, allowing for fast and efficient
-    computation of Gaussian copula densities using GMRF precision
-    structures. Our method focuses on creating a Matérn-like precision
-    matrix <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
-    with unit marginal variance and efficiently computing the
-    multivariate Gaussian copula density of
-    <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Z} = \Phi^{-1}(\mathbf{u})]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>𝐙</mml:mi><mml:mo>=</mml:mo><mml:msup><mml:mi>Φ</mml:mi><mml:mrow><mml:mi>−</mml:mi><mml:mn>1</mml:mn></mml:mrow></mml:msup><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mi>𝐮</mml:mi><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>,
-    where <inline-formula><alternatives><tex-math><![CDATA[u_i \sim \text{Uniform}(0, 1)]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:msub><mml:mi>u</mml:mi><mml:mi>i</mml:mi></mml:msub><mml:mo>∼</mml:mo><mml:mtext mathvariant="normal">Uniform</mml:mtext><mml:mrow><mml:mo stretchy="true" form="prefix">(</mml:mo><mml:mn>0</mml:mn><mml:mo>,</mml:mo><mml:mn>1</mml:mn><mml:mo stretchy="true" form="postfix">)</mml:mo></mml:mrow></mml:mrow></mml:math></alternatives></inline-formula>,
-    <inline-formula><alternatives><tex-math><![CDATA[i = 1, \dots, n]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mrow><mml:mi>i</mml:mi><mml:mo>=</mml:mo><mml:mn>1</mml:mn><mml:mo>,</mml:mo><mml:mi>…</mml:mi><mml:mo>,</mml:mo><mml:mi>n</mml:mi></mml:mrow></mml:math></alternatives></inline-formula>.</p>
-          <p>The key innovation lies in leveraging the special structure of
-    the precision matrix:</p>
+    variances. While related scaling issues have been addressed in
+    spatial statistics literature
+    (<xref alt="Sørbye and Rue 2014" rid="ref-sørbye2014-nb-article" ref-type="bibr">Sørbye
+    and Rue 2014</xref>;
+    <xref alt="Riebler et al. 2016" rid="ref-riebler2016-nb-article" ref-type="bibr">Riebler
+    et al. 2016</xref>), their focus was on scaling for use in priors
+    for the BYM2 model, aiming for a consistent interpretation of the
+    precision parameter across different graph structures. In contrast,
+    our work requires exact unit marginal variance at each point, a more
+    stringent condition necessitated by the copula framework.</p>
+          <p>Similarly to Håvard Rue
+    (<xref alt="2005" rid="ref-rue2005a-nb-article" ref-type="bibr">2005</xref>),
+    this paper proposes a way to efficiently calculate the marginal
+    variances in GMRFs, but instead of working with the Cholesky
+    decomposition of any general GMRF precision matrix, we focus
+    specifically on the sparse approximation to the Gaussian field with
+    Matérn coveriance as defined in Lindgren, Rue, and Lindström
+    (<xref alt="2011" rid="ref-lindgren2011-nb-article" ref-type="bibr">2011</xref>):</p>
           <p>
             <disp-formula>
               <alternatives>
                 <tex-math><![CDATA[
-    \mathbf{Q} = \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2},
+    \mathbf{Q} = \left( \mathbf{Q}_{\rho_1} \otimes \mathbf{I_{n_2}} + \mathbf{I_{n_1}} \otimes \mathbf{Q}_{\rho_2}\right)^{\nu+1},
     ]]></tex-math>
                 <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
                   <mml:mrow>
                     <mml:mi>𝐐</mml:mi>
                     <mml:mo>=</mml:mo>
-                    <mml:msub>
-                      <mml:mi>𝐐</mml:mi>
-                      <mml:msub>
-                        <mml:mi>ρ</mml:mi>
+                    <mml:msup>
+                      <mml:mrow>
+                        <mml:mo stretchy="true" form="prefix">(</mml:mo>
+                        <mml:msub>
+                          <mml:mi>𝐐</mml:mi>
+                          <mml:msub>
+                            <mml:mi>ρ</mml:mi>
+                            <mml:mn>1</mml:mn>
+                          </mml:msub>
+                        </mml:msub>
+                        <mml:mo>⊗</mml:mo>
+                        <mml:msub>
+                          <mml:mi>𝐈</mml:mi>
+                          <mml:msub>
+                            <mml:mi>𝐧</mml:mi>
+                            <mml:mn>𝟐</mml:mn>
+                          </mml:msub>
+                        </mml:msub>
+                        <mml:mo>+</mml:mo>
+                        <mml:msub>
+                          <mml:mi>𝐈</mml:mi>
+                          <mml:msub>
+                            <mml:mi>𝐧</mml:mi>
+                            <mml:mn>𝟏</mml:mn>
+                          </mml:msub>
+                        </mml:msub>
+                        <mml:mo>⊗</mml:mo>
+                        <mml:msub>
+                          <mml:mi>𝐐</mml:mi>
+                          <mml:msub>
+                            <mml:mi>ρ</mml:mi>
+                            <mml:mn>2</mml:mn>
+                          </mml:msub>
+                        </mml:msub>
+                        <mml:mo stretchy="true" form="postfix">)</mml:mo>
+                      </mml:mrow>
+                      <mml:mrow>
+                        <mml:mi>ν</mml:mi>
+                        <mml:mo>+</mml:mo>
                         <mml:mn>1</mml:mn>
-                      </mml:msub>
-                    </mml:msub>
-                    <mml:mo>⊗</mml:mo>
-                    <mml:msub>
-                      <mml:mi>𝐈</mml:mi>
-                      <mml:msub>
-                        <mml:mi>𝐧</mml:mi>
-                        <mml:mn>𝟐</mml:mn>
-                      </mml:msub>
-                    </mml:msub>
-                    <mml:mo>+</mml:mo>
-                    <mml:msub>
-                      <mml:mi>𝐈</mml:mi>
-                      <mml:msub>
-                        <mml:mi>𝐧</mml:mi>
-                        <mml:mn>𝟏</mml:mn>
-                      </mml:msub>
-                    </mml:msub>
-                    <mml:mo>⊗</mml:mo>
-                    <mml:msub>
-                      <mml:mi>𝐐</mml:mi>
-                      <mml:msub>
-                        <mml:mi>ρ</mml:mi>
-                        <mml:mn>2</mml:mn>
-                      </mml:msub>
-                    </mml:msub>
+                      </mml:mrow>
+                    </mml:msup>
                     <mml:mo>,</mml:mo>
                   </mml:mrow>
                 </mml:math>
@@ -5564,12 +5665,17 @@ library(gt)</code>
           </p>
           <p>where <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:mi>ρ</mml:mi></mml:msub></mml:math></alternatives></inline-formula>
     is the precision matrix of a standardized one-dimensional AR(1)
-    process with correlation <inline-formula><alternatives><tex-math><![CDATA[\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ρ</mml:mi></mml:math></alternatives></inline-formula>
-    and <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
-    denotes the Kronecker product. By employing efficient
-    eigendecomposition techniques, our method avoids explicit formation
-    and inversion of the large precision matrix
-    <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>,
+    process with correlation <inline-formula><alternatives><tex-math><![CDATA[\rho]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ρ</mml:mi></mml:math></alternatives></inline-formula>,
+    <inline-formula><alternatives><tex-math><![CDATA[\nu]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>ν</mml:mi></mml:math></alternatives></inline-formula>
+    is a smoothness parameter, and <inline-formula><alternatives><tex-math><![CDATA[\otimes]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>⊗</mml:mi></mml:math></alternatives></inline-formula>
+    denotes the Kronecker product.</p>
+          <p>By focusing on this type of matrix, we can utilize known results
+    on the eigendecomposition of <inline-formula><alternatives><tex-math><![CDATA[\mathbf Q]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>
+    and how it relates directly to the eigendecompositions of
+    <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_{\rho_1}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>1</mml:mn></mml:msub></mml:msub></mml:math></alternatives></inline-formula>
+    and <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}_{\rho_2}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:msub><mml:mi>𝐐</mml:mi><mml:msub><mml:mi>ρ</mml:mi><mml:mn>2</mml:mn></mml:msub></mml:msub></mml:math></alternatives></inline-formula>.
+    This lets us avoid explicit formation and inversion of the large
+    precision matrix <inline-formula><alternatives><tex-math><![CDATA[\mathbf{Q}]]></tex-math><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="inline"><mml:mi>𝐐</mml:mi></mml:math></alternatives></inline-formula>,
     making it particularly suitable for high-dimensional spatial data.
     In addition to the exact method, we show how the precision matrix
     can be approximated by a folded circulant matrix wich gives a large
@@ -10440,6 +10546,70 @@ chr (8): Grid, Cholesky, eig, sp_1, circ, sp_2, fol, sp_3
             <pub-id pub-id-type="doi">10.1002/1097-0258(20000915/30)19:17/18&lt;2555::AID-SIM587&gt;3.0.CO;2-#</pub-id>
             <fpage>2555</fpage>
             <lpage>2567</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-sørbye2014-nb-article">
+          <element-citation publication-type="article-journal">
+            <person-group person-group-type="author">
+              <name>
+                <surname>Sørbye</surname>
+                <given-names>Sigrunn Holbek</given-names>
+              </name>
+              <name>
+                <surname>Rue</surname>
+                <given-names>Håvard</given-names>
+              </name>
+            </person-group>
+            <article-title>Scaling intrinsic gaussian markov random field priors in spatial modelling</article-title>
+            <source>Spatial Statistics</source>
+            <year iso-8601-date="2014-05-01">2014</year>
+            <month>05</month>
+            <day>01</day>
+            <volume>8</volume>
+            <uri>https://www.sciencedirect.com/science/article/pii/S2211675313000407</uri>
+            <pub-id pub-id-type="doi">10.1016/j.spasta.2013.06.004</pub-id>
+            <fpage>39</fpage>
+            <lpage>51</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-riebler2016-nb-article">
+          <element-citation>
+            <person-group person-group-type="author">
+              <name>
+                <surname>Riebler</surname>
+                <given-names>Andrea</given-names>
+              </name>
+              <name>
+                <surname>Sørbye</surname>
+                <given-names>Sigrunn H.</given-names>
+              </name>
+              <name>
+                <surname>Simpson</surname>
+                <given-names>Daniel</given-names>
+              </name>
+              <name>
+                <surname>Rue</surname>
+                <given-names>Håvard</given-names>
+              </name>
+            </person-group>
+            <article-title>An intuitive bayesian spatial model for disease mapping that accounts for scaling</article-title>
+            <year iso-8601-date="2016-08">2016</year>
+            <month>08</month>
+            <uri>https://journals.sagepub.com/doi/full/10.1177/0962280216660421</uri>
+          </element-citation>
+        </ref>
+        <ref id="ref-rue2005a-nb-article">
+          <element-citation publication-type="article-journal">
+            <person-group person-group-type="author">
+              <name>
+                <surname>Rue</surname>
+                <given-names>Håvard</given-names>
+              </name>
+            </person-group>
+            <article-title>Marginal variances for gaussian markov random fields</article-title>
+            <year iso-8601-date="2005-01-01">2005</year>
+            <month>01</month>
+            <day>01</day>
           </element-citation>
         </ref>
       </ref-list>
