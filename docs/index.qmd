@@ -125,16 +125,24 @@ We don't work with the full eigendecomposition, but rather utilize the fact that
 In order to scale $\mathbf Q$ so that its inverse is a correlation matrix, we first calculate $\sigma_i = \sqrt\Sigma_{ii}$, $i = 1, \dots, n_1n_2$. We then use these marginal standard deviations to scale the eigenvectors and values. The inverse of $Q$ is given by:
 
 $$
-\boldsymbol \Sigma = \mathbf Q^{-1} = (VAV^T)^{-1} = VA^{-1}V
+\boldsymbol \Sigma = \mathbf Q^{-1} = (\mathbf{V}\mathbf{A}\mathbf{V}^T)^{-1} = \mathbf{V}\mathbf{A}^{-1}\mathbf{V}
 $$
 
 The diagonal elements, $\boldsymbol \Sigma_{ii}$, are given by:
 
 $$
-\Sigma_{ii} = \sum_{k=1}^{n} v_{ik} \frac{1}{\lambda_k} (v^T)_{ki} = \sum_{k=1}^{n} v_{ik} \frac{1}{\lambda_k} v_{ik} = \sum_{k=1}^{n} v_{ik}^2 \frac{1}{\lambda_k}
+\Sigma_{ii} = \sum_{k=1}^{n_1n_2} v_{ik} \frac{1}{\lambda_k} (v^T)_{ki} = \sum_{k=1}^{n_1n_2} v_{ik} \frac{1}{\lambda_k} v_{ik} = \sum_{k=1}^{n_1n_2} v_{ik}^2 \frac{1}{\lambda_k}
 $$
 
-This means that the $i$'th marginal variance, $\sigma_i^2$, is a weighted sum of the reciprocals of the eigenvalues of $\mathbf Q$ where the weights are the squares of the $i$'th value in each eigenvector. This means that we can calculate the marginal standard deviations by iterating over the eigenvalues and -vectors of $Q_{\rho_1}$ and $Q_{\rho_2}$ and cumulating their values according to the formula above, then taking the element-wise square roots.
+This means that the $i$'th marginal variance, $\sigma_i^2$, is a weighted sum of the reciprocals of the eigenvalues of $\mathbf Q$ where the weights are the squares of the $i$'th value in each eigenvector. 
+
+Thus, we can calculate the marginal standard deviations by iterating over the eigenvalues and -vectors of $Q_{\rho_1}$ and $Q_{\rho_2}$, cumulating their values according to
+
+$$ 
+\boldsymbol \sigma^2 = \sum_{i = 1}^{n_1} \sum_{j=1}^{n_2} \frac{\left(\left\{\mathbf{v}_{\rho_1}\right\}_i \otimes \left\{\mathbf{v}_{\rho_2}\right\}_j\right)^{2}}{\quad\left(\left\{\lambda_{\rho_1}\right\}_i + \left\{\lambda_{\rho_2}\right\}_j\right)^{\nu+1}},
+$$
+
+where $\boldsymbol \sigma^2$ and $\left(\left\{\mathbf{v}_{\rho_1}\right\}_i \otimes \left\{\mathbf{v}_{\rho_2}\right\}_j\right)^{2}$ are $n_1n_2 \times 1$ vectors. We can then calculate the marginal standard deviations by taking element-wise square roots, $\sigma_{i} = \sqrt{\sigma^2_{i}}$
 
 ### Step 3: Scaling the Eigendecomposition
 
@@ -152,11 +160,41 @@ In practice, we don't scale the whole eigendecomposition. Instead, we rescale ea
 
 ### Step 4: Efficient Computation of Log-Density
 
-Using this scaled eigendecomposition, we efficiently compute:
+Without scaling of $\mathbf Q$ we get
 
-1.  Log-determinant: $\log|\mathbf{\widetilde Q}| = \sum_{i,j} \log(\widetilde\lambda_{ij})$, where $\widetilde\lambda_{ij}$ is $\left( \left\{\lambda_{\rho_1}\right\}_i + \left\{\lambda_{\rho_2}\right\}_j \right)^{\nu+1}$ after rescaling with marginal standard deviations.
+$$
+\log|\mathbf{Q}| = \sum_{k=1}^{n_1n_2}\log\lambda_k = \sum_{i=1}^{n_1}\sum_{j=2}^{n_2} \log\left[\left(\left\{\lambda_{\rho_1}\right\}_i + \left\{\lambda_{\rho_2}\right\}_j\right)^{\nu + 1}\right]
+$$
 
-2.  Quadratic form: $\mathbf{z}^T\mathbf{\widetilde Q}\mathbf{z} = \sum_{i,j} (\widetilde\lambda_{ij}) y_{ij}^2$, where $y_{ij} = \left(\left\{\mathbf{v}_{\rho_1}\right\}_i \otimes \left\{\mathbf{v}_{\rho_2}\right\}_j\right)^T\mathbf{z}$.
+$$
+\mathbf{z}^T\mathbf{Q}\mathbf{z} = \sum_{k=1}^{n_1n_2}\lambda_k \left(v_k^T\mathbf z\right)^2 = 
+\sum_{i=1}^{n_1}\sum_{j=2}^{n_2} 
+\left(\left\{\lambda_{\rho_1}\right\}_i + \left\{\lambda_{\rho_2}\right\}_j\right)
+\left[\left(\left\{\mathbf{v}_{\rho_1}\right\}_i \otimes \left\{\mathbf{v}_{\rho_2}\right\}_j\right)^T\mathbf z\right]^2
+$$
+
+
+Let $\lambda = \left(\left\{\lambda_{\rho_1}\right\}_i + \left\{\lambda_{\rho_2}\right\}_j\right)^{\nu + 1}$ and $\mathbf v = \left\{\mathbf{v}_{\rho_1}\right\}_i \otimes \left\{\mathbf{v}_{\rho_2}\right\}_j$. Inside each iteration over $(i, j)$, we normalise $\mathbf v$ and $\lambda$ with
+
+$$
+\begin{gathered}
+\widetilde{\mathbf{v}} = \frac{\sigma \odot \mathbf{v}}{\vert\vert \sigma \odot\mathbf{v}\vert\vert_2}, \qquad
+\widetilde{\lambda} = \vert\vert \sigma \odot\mathbf{v}\vert\vert_2^2 \cdot \lambda
+\end{gathered}
+$$
+
+Then $\widetilde{\mathbf{v}}$ and $\widetilde{\lambda}$ are an eigenvector/value pair of the scaled precision matrix $\mathbf{\widetilde{Q}}$ and we can calculate the density as
+
+$$
+\log|\mathbf{\widetilde{Q}}| = \sum_{k=1}^{n_1n_2}\log\lambda_k = \sum_{i=1}^{n_1}\sum_{j=2}^{n_2} \log\widetilde\lambda_{ij}
+$$
+
+$$
+\mathbf{z}^T\mathbf{\widetilde Q}\mathbf{z} = \sum_{k=1}^{n_1n_2}\lambda_k \left(v_k^T\mathbf z\right)^2 = 
+\sum_{i=1}^{n_1}\sum_{j=2}^{n_2} 
+\widetilde\lambda_{ij}
+\left[\mathbf{\widetilde{v}}\mathbf z\right]^2
+$$
 
 This approach allows us to calculate the density of the spatial copula by calculating and iterating over the spectral decomposition of the smaller matrices, avoiding the formation of $\mathbf Q$ alltogether.
 
@@ -452,31 +490,36 @@ This reflection creates a $2n_1 \times 2n_2$ matrix. The matrix is then stacked 
 Table 1 presents the results of a benchmark comparing the time it takes to evaluate the gaussian copula density described above. For each grid size, we report the computation time for the exact method and the two approximations, along with the speed-up factor relative to the exact method. Each calculation was performed twenty times and the median times are shown in the table. The Cholesky method is described in the appendix.
 
 ```{r}
-read_csv("tables/benchmark_scaled.csv") |> 
-gt() |> 
+read_csv(here::here("tables", "benchmark_all.csv")) |> 
+  slice(c(1:10, 20)) |> 
+  gt() |> 
   cols_label(
-    Grid = "Grid Size",
-    eig = "Time",
-    sp_1 = "Speed-up",
+    `Cholesky (Unscaled)` = "Cholesky",
+    `Eigen (Unscaled)` = "Eigen",
+    sp_3 = "Speed-up",
     circ = "Time",
-    sp_2 = "Speed-Up",
+    sp_1 = "Speed-Up",
     fol = "Time",
-    sp_3 = "Speed-Up"
-  ) |> 
-  tab_spanner(
-    label = "Eigen",
-    columns = 3:4
+    sp_2 = "Speed-Up"
   ) |> 
   tab_spanner(
     label = "Circulant",
-    columns = 5:6
+    columns = 6:7
   ) |> 
   tab_spanner(
     label = "Folded",
-    columns = 7:8
+    columns = 8:9
+  ) |> 
+  tab_spanner(
+    label = "Unscaled",
+    2:4
+  ) |> 
+  tab_spanner(
+    label = "Scaled",
+    columns = 5:9
   ) |> 
   tab_caption(
-    md("Benchmarking how long it takes to evaluate the density of a Mátern($\\nu$)-like field with correlation parameter $\\rho$ scaled to have unit marginal variance")
+    md("Benchmarking how long it takes to evaluate the density of a Mátern($\\nu$)-like field with correlation parameter $\\rho$, either unscaled or scaled to have unit marginal variance")
   )
 ```
 
