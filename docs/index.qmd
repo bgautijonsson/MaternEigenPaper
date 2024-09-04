@@ -491,16 +491,16 @@ Table 1 presents the results of a benchmark comparing the time it takes to evalu
 
 ```{r}
 read_csv(here::here("tables", "benchmark_all.csv")) |> 
-  slice(c(1:10, 20)) |> 
   gt() |> 
   cols_label(
     `Cholesky (Unscaled)` = "Cholesky",
-    `Eigen (Unscaled)` = "Eigen",
-    sp_3 = "Speed-up",
+    `Eigen (Unscaled)` = "Time",
+    eig = "Eigen",
+    sp_3 = "Relative",
     circ = "Time",
-    sp_1 = "Speed-Up",
+    sp_1 = "Relative",
     fol = "Time",
-    sp_2 = "Speed-Up"
+    sp_2 = "Relative"
   ) |> 
   tab_spanner(
     label = "Circulant",
@@ -509,6 +509,10 @@ read_csv(here::here("tables", "benchmark_all.csv")) |>
   tab_spanner(
     label = "Folded",
     columns = 8:9
+  ) |> 
+  tab_spanner(
+    label = "Eigen",
+    columns = 3:4
   ) |> 
   tab_spanner(
     label = "Unscaled",
@@ -520,7 +524,8 @@ read_csv(here::here("tables", "benchmark_all.csv")) |>
   ) |> 
   tab_caption(
     md("Benchmarking how long it takes to evaluate the density of a Mátern($\\nu$)-like field with correlation parameter $\\rho$, either unscaled or scaled to have unit marginal variance")
-  )
+  )  |> 
+  opt_row_striping(TRUE)
 ```
 
 # References
